@@ -9,7 +9,8 @@ town in Shalamar, colonial timber and good pubs, where people come to hide from 
 Lizardfolk are tolerated. Fat Gog runs the guild. Dominico, not yet sworn to anything darker, is leaning on the guild.
 Klhyt, the town's founder and mayor, is missing, and the Custodian runs the town in his absence.
 
-Rules: the d20 pack (checks, opposed blows, threaten, parley, factions with standing), the sheet pack (D&D-style ability
+Rules: the d20 pack (checks, threaten, parley, factions with standing, thirst), fought by the dnd5e pack (D&D 5e combat:
+initiative and turns, armour class, damage dice, death saves, conditions, spells), the sheet pack (D&D-style ability
 scores on a sheet: STR force, DEX poise, CON endurance, INT cognition, WIS acuity, CHA projection), the village pack
 (walk, carry, give, talk) and locks. The world's own scripts: buy (coin for what a keeper sells), drink (ale and rum
 drunk for the taste; three in an hour and you are unsteady) and the storyline.
@@ -18,6 +19,7 @@ Canon comes from LoreKeeper; what had to be invented is listed in notes/invented
 """
 
 from packs.d20.pack import install_rules
+from packs.dnd5e.pack import armor as armor5, character, class_hp, install_rules as install_5e, weapon as weapon5
 
 WORLD = {
     "id": "klhyts-refuge",
@@ -26,7 +28,7 @@ WORLD = {
     "description": "Shalamar, before the war. Klhyts Refuge, the nicest town on the continent: taverns, inns and "
                    "docks, refugees from Landfall, Lizardfolk tolerated. Fat Gog's guild is under threat and the "
                    "founder is missing.",
-    "requires": ["village", "d20", "sheet", "locks"],
+    "requires": ["village", "d20", "sheet", "dnd5e", "locks"],
 }
 
 # ---- 5e on the sheet pack ----------------------------------------------------------------------------------------
@@ -192,8 +194,8 @@ def coin(n):
 
 
 def hp(five_e):
-    """5e hit points scaled to embody's blows (1 to 4 a hit): a quarter, at least 6."""
-    return max(6, int(five_e / 4 + 0.5))
+    """5e hit points, whole: the dnd5e pack fights by 5e's numbers (they were a quarter under d20's blows)."""
+    return int(five_e)
 
 
 def cup(name, desc, empty="An empty mug, sticky inside.", left=1):
@@ -209,8 +211,13 @@ def token(name, desc, **extra):
     return {"type": "thing", "name": name, "state": {"description": desc, "bulk": 0, **extra}}
 
 
-DAGGER = {"weapon": True, "damage": 2, "bonus": 0, "skill": "blade", "portable": True, "description": "A plain knife, honest steel."}
-CUDGEL = {"weapon": True, "damage": 2, "bonus": 0, "skill": "brawl", "portable": True, "description": "A length of oak wrapped in tarred cord."}
+def arm(base, desc, **over):
+    """A weapon from 5e's table (packs/dnd5e WEAPONS) with this world's look; over sets any key (kind, bonus)."""
+    return weapon5(base, description=desc, **over)
+
+
+DAGGER = arm("dagger", "A plain knife, honest steel.")
+CUDGEL = arm("club", "A length of oak wrapped in tarred cord.")
 
 # ---- the taverns: canon prices (LoreKeeper "Klhyts Refuge Taverns"), kept in copper ------------------------------------
 
@@ -894,11 +901,11 @@ TEMPLATES_STATE = {
     "sellsword": ({"str": 15, "dex": 13, "con": 14, "int": 10, "wis": 12, "cha": 8},
                   {"athletics": 2, "intimidation": 2, "blade": 2, "survival": 2}, 12,
                   "A sword for hire, between hires.", "docks", 60,
-                  [("Shortsword", {**DAGGER, "damage": 3, "description": "A soldier's shortsword, nicked and oiled."})]),
+                  [("Shortsword", arm("shortsword", "A soldier's shortsword, nicked and oiled."))]),
     "lizardfolk": ({"str": 14, "dex": 12, "con": 15, "int": 8, "wis": 13, "cha": 10},
                    {"nature": 2, "survival": 2, "perception": 2, "athletics": 2}, 11,
                    "A Lizardfolk of the Meters, a fisher, in town to sell the catch and drink the proceeds.", "docks", 40,
-                   [("Fishing spear", {**DAGGER, "damage": 2, "description": "A barbed fishing spear, the shaft worn smooth."})]),
+                   [("Fishing spear", arm("spear", "A barbed fishing spear, the shaft worn smooth."))]),
     "elf": ({"str": 8, "dex": 14, "con": 10, "int": 15, "wis": 13, "cha": 12},
             {"arcana": 2, "history": 2, "stealth": 2, "insight": 2}, 9,
             "An elf in exile, on the run from the Vorkathian Inquisition, travelling under someone else's name.", "docks", 300,
@@ -912,7 +919,7 @@ TEMPLATES_STATE = {
     "jonulvicha": ({"str": 16, "dex": 12, "con": 14, "int": 8, "wis": 10, "cha": 13},
                    {"athletics": 2, "intimidation": 2, "brawl": 2, "survival": 2}, 12,
                    "A Jonulvicha, half-orc and half Öchland barbarian by blood, off the Vorkathian frontier and done with it.",
-                   "docks", 50, [("Cleaver", {**DAGGER, "damage": 3, "description": "A heavy frontier cleaver."})]),
+                   "docks", 50, [("Cleaver", arm("handaxe", "A heavy frontier cleaver."))]),
 }
 TEMPLATE_PEOPLE = {"refugee": "human", "sellsword": "human", "lizardfolk": "lizardfolk", "elf": "elf", "xoton": "xoton",
                    "jonulvicha": "jonulvicha"}
@@ -1131,6 +1138,159 @@ SHIPS = [
 
 # Ithriel's household (the five the Moonmoth waits for) and Xoton sailors ashore --------------------------------------
 
+# ---- D&D 5e: classes, levels and kit ---------------------------------------------------------------------------------
+# The dnd5e pack fights by these. Canon (LoreKeeper character sheets, D&D 5e 2014): Deloris's AC 16 (studded leather),
+# HP 58 and her one saving throw, dex; Kael's AC 15 and HP 38. Every class and level, and all other armour, is a host
+# default (notes/bible.md lists them). Xoton advantage on saves against poison is canon (the Xotons doc); Jonulvicha get
+# the half-orc's relentless endurance and Lizardfolk a natural armour of 13, host defaults.
+
+# name: (class, or None for a body with no class, level, {armor, spells, cast, slots, saves, ac})
+FIVE_E = {
+    "Fat Gog": ("fighter", 7, {}),
+    "River": ("rogue", 4, {}),
+    "Dominico": ("fighter", 7, {"spells": ["fire bolt", "shield", "magic missile"], "cast": "int", "slots": {"1": 3}}),
+    "The Custodian": (None, 3, {}),
+    "Klhyt": ("fighter", 6, {}),
+    "Brask": ("fighter", 2, {"armor": "leather"}),
+    "Tully": ("fighter", 1, {}),
+    "Harbourmaster Teague": (None, 2, {}),
+    "Captain Eirik": ("fighter", 4, {"armor": "leather"}),
+    "Ssark": ("ranger", 2, {}),
+    "Thoradin": ("ranger", 5, {"armor": "leather", "spells": ["cure wounds"]}),
+    "Bosun Maggs": ("fighter", 2, {}),
+    "Sister Agathe": ("cleric", 3, {"spells": ["sacred flame", "bless", "cure wounds", "healing word"]}),
+    "The Bard of Moonport": ("bard", 4, {"spells": ["vicious mockery", "healing word", "charm person", "hideous laughter",
+                                                    "shatter"]}),
+    "Big Ludo": ("fighter", 3, {}),
+    "Husok Sourfist": (None, 1, {}),
+    "Hanklevode": ("rogue", 4, {"armor": "leather"}),
+    "Master Quillon": (None, 2, {}),
+    "Lieutenant Voss": ("fighter", 4, {"armor": "breastplate"}),
+    "Phillip Everuex": (None, 3, {}),
+    "Wendeline Moss": (None, 2, {}),
+    "Ithriel": ("wizard", 5, {"spells": ["fire bolt", "ray of frost", "magic missile", "shield", "mage armor", "hold person",
+                                        "faerie fire"]}),
+    "Deloris": ("rogue", 9, {"armor": "studded leather", "saves": ["dex"]}),
+    "Kael Ironjaw": ("fighter", 4, {"ac": 15}),
+    "Newcomer": ("rogue", 1, {}),
+    "Captain Danny DeVito": (None, 3, {}),
+    "Hulda Ironwake": ("fighter", 3, {}),
+    "Ruk Halfhand": (None, 2, {}),
+    "Mother Ines": (None, 1, {}),
+    "Hallvard Saltbeard": (None, 2, {}),
+    "Grusha": ("fighter", 1, {}),
+    "Saelwyn": ("druid", 3, {"spells": ["thorn whip", "produce flame", "cure wounds", "healing word", "entangle",
+                                       "faerie fire"]}),
+    "Captain Aelith": ("fighter", 5, {"armor": "chain shirt"}),
+    "Ondrine": ("wizard", 3, {"spells": ["ray of frost", "fire bolt", "magic missile", "shield", "charm person",
+                                        "hideous laughter"]}),
+}
+RACE_5E = {"xoton": {"save_adv": ["poison"]}, "jonulvicha": {"relentless": True}, "lizardfolk": {"natural_ac": 13}}
+ARMOUR = {"leather": ("Leather jerkin", "A jerkin of boiled leather, salt-stained."),
+          "studded leather": ("Studded leather", "Dark leather studded with red metal rivets."),
+          "breastplate": ("Breastplate", "A Vorkathian officer's breastplate, the eight-armed sigil chased on it."),
+          "chain shirt": ("Moth-silk mail", "Fine elven mail worn under a coat, light as cloth."),
+          "coral": ("Coral armour", "Xoton coral armour: plates of sea-coral on sharkskin, light and quiet.")}
+# a template's class (level 1), the armour a new character starts in and the spells it knows
+TEMPLATE_5E = {"refugee": ("rogue", [], []), "sellsword": ("fighter", ["leather"], []), "lizardfolk": ("fighter", [], []),
+               "elf": ("wizard", [], ["fire bolt", "ray of frost", "magic missile", "shield", "mage armor"]),
+               "xoton": ("fighter", ["coral"], []), "jonulvicha": ("barbarian", [], [])}
+WEAPON_KEYS = ["kind", "dice", "dtype", "category", "properties", "versatile", "ranged", "ammo", "bonus"]
+
+
+def armour_state(kind):
+    """An ARMOUR entry as a carried thing: (name, state). Xoton coral is light armour, 11 + dex (the Xotons doc)."""
+    name, desc = ARMOUR[kind]
+    if kind == "coral":
+        return name, armor5("leather", kind="coral armor", description=desc)
+    return name, armor5(kind, description=desc)
+
+
+def scores_of(state):
+    """A body's six 5e scores: its sheet's, else from d20's body, wits and will (10 + 2 x the stat)."""
+    attrs = (state.get("sheet") or {}).get("attributes")
+    if attrs:
+        return {k: int(attrs.get(v, 10)) for k, v in ABILITY.items()}
+    b, wi, wl = (int(state.get(k) or 1) for k in ("body", "wits", "will"))
+    return {"str": 10 + 2 * b, "dex": 10 + 2 * b, "con": 10 + 2 * b, "int": 10 + 2 * wi, "wis": 10 + 2 * wi,
+            "cha": 10 + 2 * wl}
+
+
+def five_block(cls, level, scores, extra=None):
+    """A body's 5e keys for a class and level (packs/dnd5e character()); one with no class has a level, a d8 hit die
+    and no saving throws. A fighter who dabbles in magic gets spells off its own ability and slots."""
+    extra = extra or {}
+    lv = max(1, int(level))
+    if cls is None:
+        st = {"level": lv, "saves": [], "hit_die": "1d8", "hit_dice": lv, "hit_dice_max": lv,
+              "hp": max(1, 8 + (lv - 1) * 5 + ((scores.get("con", 10) - 10) // 2) * lv)}
+    else:
+        st = character(cls, lv, scores, extra.get("spells"))
+    if extra.get("spells") and "spellcasting" not in st:
+        slots = dict(extra.get("slots") or {})
+        st["spellcasting"] = {"ability": extra.get("cast") or "int", "spells": list(extra["spells"]), "slots": slots,
+                              "slots_max": dict(slots), "pact": False}
+    if extra.get("saves"):
+        st["saves"] = list(extra["saves"])
+    if extra.get("ac") is not None:
+        st["ac"] = int(extra["ac"])
+    return st
+
+
+def build_five_e(s):
+    """D&D 5e onto everyone named in FIVE_E and everyone made from a template: class, level, saves, spells and slots,
+    hp at 5e's scale, their people's traits, and 5e numbers on the weapons they carry; armour for the named. Each body
+    once (`five_e` marks it). Hp keep their share: a body at 8 of 10 under d20 stands at 30 of 38 under 5e. A player's
+    own kit is theirs: the upgrade gives a body made from a template no armour."""
+    w = s.world
+    built = {name: (state, carries) for _, _, name, state, carries in people()}
+    for e in w.find(limit=None):
+        st = e["state"]
+        if st.get("five_e") or st.get("dead") or not w.is_a(e["type"], "combatant"):
+            continue
+        name, tpl = e["name"], st.get("template")
+        if name in FIVE_E:
+            cls, lv, extra = FIVE_E[name]
+            kit = list(built.get(name, ({}, []))[1])
+            armours = [extra["armor"]] if extra.get("armor") else []
+        elif tpl in TEMPLATE_5E:
+            cls, _, spells = TEMPLATE_5E[tpl]
+            lv, extra, armours = 1, {"spells": spells}, []
+            kit = [("thing", n, k) for n, k in TEMPLATES_STATE[tpl][6]]
+        else:
+            continue  # minor folk and the crowd's faces roll their d20 stats as 5e scores
+        block = five_block(cls, lv, scores_of(st), extra)
+        block.update(RACE_5E.get(st.get("people"), {}))
+        b_state = built.get(name, ({}, []))[0]
+        new_max = int(b_state["max_hp"]) if b_state.get("sheet") and b_state.get("max_hp") else int(block["hp"])
+        old_hp = int(st.get("hp") if st.get("hp") is not None else new_max)
+        old_max = int(st.get("max_hp") or old_hp or 1)
+        hp5 = new_max if old_hp >= old_max else (0 if old_hp <= 0 else max(1, round(old_hp * new_max / old_max)))
+        if b_state.get("hp") is not None and int(b_state["hp"]) < int(b_state.get("max_hp") or 0):
+            hp5 = min(hp5, int(b_state["hp"]))  # written low on purpose (Klhyt, starved in a crate)
+        block.update({"hp": hp5, "max_hp": new_max, "five_e": 1, "wounded": False})
+        s.patch(e["id"], block)
+        mine = {c["name"] for c in w.children(e["id"])}
+        for kind in armours:
+            aname, ast = armour_state(kind)
+            if aname not in mine:
+                s.spawn("thing", e["id"], aname, state=ast)
+    # every weapon from before dice, wherever it is now (left with a barman, dropped in the street), by its name
+    known = {}
+    for _, _, _, _, carries in people():
+        for _, cname, cst in carries:
+            if cst.get("weapon"):
+                known.setdefault(cname, cst)
+    for tpl in TEMPLATES_STATE.values():
+        for cname, cst in tpl[6]:
+            if cst.get("weapon"):
+                known.setdefault(cname, cst)
+    for e in w.find(limit=None):
+        cst = known.get(e["name"])
+        if cst and e["state"].get("weapon") and not e["state"].get("dice"):
+            s.patch(e["id"], {k: cst[k] for k in WEAPON_KEYS if k in cst})
+
+
 def minor(people, desc, dialog, default, **stats):
     return {"body": stats.get("body", 2), "wits": stats.get("wits", 2), "will": stats.get("will", 2),
             "skills": stats.get("skills", {}), "people": people, "description": desc, "dialog": dialog, "default_line": default}
@@ -1188,7 +1348,7 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring"]
+STAGES = ["places", "layout", "people", "things", "wiring", "five_e"]
 
 
 def by_name(s):
@@ -1247,8 +1407,8 @@ def people():
     return [
         ("person", "stripperwitch", "Fat Gog", FAT_GOG, [("thing", "Coin", coin(2400))]),
         ("person", "stripperwitch", "River", RIVER, [("thing", "Coin", coin(300)), ("thing", "Bar knife", DAGGER)]),
-        ("person", "apothecary", "Dominico", DOMINICO, [("thing", "Coin", coin(900)), ("thing", "Sword-cane", {
-            **DAGGER, "damage": 2, "bonus": 1, "description": "A black cane with a silver head and a thin blade inside it."})]),
+        ("person", "apothecary", "Dominico", DOMINICO, [("thing", "Coin", coin(900)), ("thing", "Sword-cane", arm(
+            "rapier", "A black cane with a silver head and a thin blade inside it.", bonus=1))]),
         ("person", "hall", "The Custodian", CUSTODIAN, [("thing", "Coin", coin(1500)), ("thing", "Study key", {
             "portable": True, "bulk": 0, "description": "A brass key with a ship's wheel worked into the bow: the mayor's study."})]),
         ("person", "warehouse", "Klhyt", KLHYT, []),
@@ -1256,13 +1416,11 @@ def people():
             "portable": True, "bulk": 0, "description": "A heavy iron key stamped BONDED."})]),
         ("fighter", "ogre", "Tully", TULLY, [("thing", "Coin", coin(9)), ("thing", "Cudgel", CUDGEL)]),
         ("person", "docks", "Harbourmaster Teague", TEAGUE, [("thing", "Coin", coin(40))]),
-        ("person", "turtle", "Captain Eirik", EIRIK, [("thing", "Coin", coin(800)), ("thing", "Hooked sword", {
-            **DAGGER, "damage": 3, "description": "A Xoton hooked sword, for boarding and for arguments."}),
+        ("person", "turtle", "Captain Eirik", EIRIK, [("thing", "Coin", coin(800)), ("thing", "Hooked sword", arm(
+            "longsword", "A Xoton hooked sword, for boarding and for arguments.", kind="hooked sword")),
             ("thing", "Glow kelp lamp", {"portable": True, "lit": True, "description": "A glass globe of kelp that glows green and never needs oil."})]),
         ("person", "turtle", "Ssark", SSARK, [("thing", "Coin", coin(25)), ("thing", "Gutting knife", DAGGER)]),
-        ("person", "turtle", "Thoradin", THORADIN, [("thing", "Coin", coin(120)), ("thing", "Longbow", {
-            "weapon": True, "ranged": True, "ammo": "arrow", "damage": 2, "bonus": 0, "skill": "aim", "portable": True,
-            "description": "A dwarf-sized longbow, unstrung."}), ("thing", "Arrows", {"kind": "arrow", "ammo": "arrow",
+        ("person", "turtle", "Thoradin", THORADIN, [("thing", "Coin", coin(120)), ("thing", "Longbow", arm("longbow", "A dwarf-sized longbow, unstrung.")), ("thing", "Arrows", {"kind": "arrow", "ammo": "arrow",
                                                                                     "count": 12, "bulk": 0.05, "portable": True,
                                                                                     "description": "Grey-fletched arrows."})]),
         ("person", "turtle", "Bosun Maggs", MAGGS, [("thing", "Coin", coin(150))]),
@@ -1273,8 +1431,8 @@ def people():
         ("person", "ogre", "Husok Sourfist", HUSOK, [("thing", "Coin", coin(3))]),
         ("person", "ogre", "Hanklevode", HANKLEVODE, [("thing", "Coin", coin(60)), ("thing", "Knife", DAGGER)]),
         ("person", "apothecary", "Master Quillon", QUILLON, [("thing", "Coin", coin(400))]),
-        ("person", "apothecary", "Lieutenant Voss", VOSS, [("thing", "Coin", coin(1000)), ("thing", "Officer's sword", {
-            **DAGGER, "damage": 3, "description": "A Vorkathian officer's sword, the eight-armed sigil on the pommel."})]),
+        ("person", "apothecary", "Lieutenant Voss", VOSS, [("thing", "Coin", coin(1000)), ("thing", "Officer's sword", arm(
+            "longsword", "A Vorkathian officer's sword, the eight-armed sigil on the pommel."))]),
         ("person", "apothecary", "Phillip Everuex", PHILLIP, [("thing", "Coin", coin(2000))]),
         ("person", "unicorn", "Wendeline Moss", WENDELINE, [("thing", "Coin", coin(60))]),
         ("person", "unicorn", "Ithriel", ITHRIEL, [("thing", "Coin", coin(350)), ("thing", "Knife", DAGGER),
@@ -1282,12 +1440,11 @@ def people():
                                                     "description": "A leaf of living silverwood, still green at the stem: an elf's word that you may be trusted."})]),
         ("person", "docks", "Deloris", DELORIS, [
             ("thing", "Coin", coin(400)), ("thing", "Daggers", {**DAGGER, "count": 2, "description": "A matched pair of throwing daggers."}),
-            ("thing", "Longbow", {"weapon": True, "ranged": True, "ammo": "arrow", "damage": 2, "bonus": 0, "skill": "aim",
-                                  "portable": True, "description": "A plain longbow, well kept."}),
+            ("thing", "Longbow", arm("longbow", "A plain longbow, well kept.")),
             ("thing", "Arrows", {"kind": "arrow", "ammo": "arrow", "count": 20, "bulk": 0.05, "portable": True, "description": "Black-fletched arrows."}),
             ("thing", "Thieves' tools", {"portable": True, "bulk": 0, "description": "Picks, a tension wrench and a little mirror in a leather roll."})]),
         ("person", "docks", "Kael Ironjaw", KAEL, [
-            ("thing", "Coin", coin(30)), ("thing", "Glaive", {**DAGGER, "damage": 3, "description": "A glaive he found in a ditch. It cuts fine."}),
+            ("thing", "Coin", coin(30)), ("thing", "Glaive", arm("glaive", "A glaive he found in a ditch. It cuts fine.")),
             ("thing", "Father's hat", {"portable": True, "bulk": 0, "description": "A battered hat. It was his father's."})]),
         ("person", "docks", "Newcomer", NEWCOMER, [("thing", "Coin", coin(200)), ("thing", "Knife", DAGGER)]),
         ("person", "docks", "Captain Danny DeVito", DEVITO, [("thing", "Coin", coin(3000))]),
@@ -1296,15 +1453,15 @@ def people():
         ("person", "docks", "Ruk Halfhand", RUK, [("thing", "Coin", coin(35))]),
         ("person", "market", "Mother Ines", INES, [("thing", "Coin", coin(60))]),
         ("person", "market", "Hallvard Saltbeard", HALLVARD, [("thing", "Coin", coin(240))]),
-        ("person", "market", "Grusha", GRUSHA, [("thing", "Coin", coin(45)), ("thing", "Cleaver", {
-            **DAGGER, "damage": 3, "description": "A butcher's cleaver, very clean."})]),
+        ("person", "market", "Grusha", GRUSHA, [("thing", "Coin", coin(45)), ("thing", "Cleaver", arm(
+            "handaxe", "A butcher's cleaver, very clean."))]),
         ("person", "market", "Saelwyn", SAELWYN, [("thing", "Coin", coin(180))]),
         *[("person", "unicorn", n, minor("elf", d, dl, "The elf glances at the door before answering. \"Yes?\"",
                                           skills={"stealth": 1}), [("thing", "Coin", coin(40))]) for n, d, dl in HOUSEHOLD],
         *[("person", "turtle", n, minor("xoton", d, dl, "\"Xoton, with the X. What do you want?\"", body=3,
                                          skills={"brawl": 2}), [("thing", "Coin", coin(30))]) for n, d, dl in SAILORS],
-        ("person", "moonmoth", "Captain Aelith", AELITH, [("thing", "Coin", coin(500)), ("thing", "Moth-silk blade", {
-            **DAGGER, "damage": 3, "bonus": 1, "description": "A slim elven blade that makes no sound leaving its sheath."})]),
+        ("person", "moonmoth", "Captain Aelith", AELITH, [("thing", "Coin", coin(500)), ("thing", "Moth-silk blade", arm(
+            "rapier", "A slim elven blade that makes no sound leaving its sheath.", bonus=1))]),
     ]
 
 
@@ -1432,13 +1589,19 @@ STORY_KINDS = ["act", "arrived", "read", "taken", "talked", "shown", "cowed", "a
 
 
 def templates(P):
+    """A new character: a level 1 of its template's class (TEMPLATE_5E), with its kit and the armour it starts in."""
     out = {}
     for key, (scores, skills, hp5, doc, where, purse, kit) in TEMPLATES_STATE.items():
+        cls, armours, spells = TEMPLATE_5E[key]
+        five = five_block(cls, 1, scores, {"spells": spells})
+        five.update(RACE_5E.get(TEMPLATE_PEOPLE[key], {}))
+        five.update({"max_hp": five["hp"], "five_e": 1})
+        gear = [{"type": "thing", "name": armour_state(k)[0], "state": armour_state(k)[1]} for k in armours]
         out[key] = {"type": "person", "place": P[where], "doc": doc,
-                    "state": {**body(scores, skills, hp5), "description": doc, "post": P[where], "home": P[where],
+                    "state": {**body(scores, skills, hp5), **five, "description": doc, "post": P[where], "home": P[where],
                               "people": TEMPLATE_PEOPLE[key]},
                     "kit": [{"type": "thing", "name": "Coin", "state": coin(purse)}] +
-                           [{"type": "thing", "name": n, "state": dict(st)} for n, st in kit]}
+                           [{"type": "thing", "name": n, "state": dict(st)} for n, st in kit] + gear}
     return out
 
 
@@ -1476,6 +1639,7 @@ def build_wiring(s, root):
     if missing:
         s.patch(st_id, missing)
     install_rules(s, root)
+    install_5e(s, root)
     s.set_rule(root, "story", kinds=STORY_KINDS)
     s.set_rule(root, "finds", kinds=["checked"])
     s.set_rule(root, "bound_guard", kinds=["before_act"])
@@ -1544,6 +1708,8 @@ def build(s):
         build_things(s)
     if "wiring" in STAGES:
         build_wiring(s, root)
+    if "five_e" in STAGES:
+        build_five_e(s)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

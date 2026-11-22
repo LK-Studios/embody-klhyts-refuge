@@ -129,6 +129,24 @@ Bollo as Keymaster; the Xoton frigate "that escaped"; Dominico's coup and human-
   Dominico's ultimatum lands at 10:40, the Custodian slips out to the Stripperwitch at 10:55, midnight is the
   deadline, the packet sails at one.
 
+## The rules: D&D 5e (owner, 2026-11-22)
+
+The owner chose D&D rules for fights, live. The world runs on the `dnd5e` pack over d20 and the sheet: initiative and
+turns, attacks against armour class, damage dice, death saves, conditions, saving throws and spell slots. Thirst,
+factions, duels and the sheet's skills stay as they were. Hit points are whole 5e numbers now (they were a quarter).
+
+- **Canon** (LoreKeeper character sheets, D&D 5e 2014): Deloris, AC 16 (studded leather), HP 58, dex saving throw,
+  her scores; Kael Ironjaw, AC 15, HP 38, his scores. Xotons have advantage on saves against poison and wear coral
+  armour (light, 11 + dex) (the Xotons doc).
+- **Host defaults**: every class and level (FIVE_E in build.py: Fat Gog fighter 7, Dominico a fighter 7 who dabbles
+  in magic, Deloris rogue 9, Kael fighter 4, the Bard a bard 4, Sister Agathe a cleric 3, Ithriel a wizard 5, Saelwyn a
+  druid 3, Ondrine a wizard 3, the guards fighters 1 to 2, townsfolk with no class), their spells, all armour but
+  Deloris's, Jonulvicha relentless endurance (the half-orc trait), Lizardfolk natural armour 13, and the templates'
+  classes (refugee rogue, sellsword fighter, lizardfolk fighter, elf wizard, Xoton fighter, Jonulvicha barbarian).
+- Weapons are 5e's: knives are daggers (1d4), cudgels clubs (1d4), Kael's glaive 1d10, the hooked sword a longsword's
+  numbers (canon gives it 1d8, versatile 1d10), cleavers handaxes (1d6), the sword-cane and the moth-silk blade +1
+  rapiers, longbows 1d8.
+
 ## Open questions for the owner
 
 - What kind of guild is Fat Gog's (thieves', merchants', something else)? Built as the underworld of the taverns.
@@ -136,3 +154,8 @@ Bollo as Keymaster; the Xoton frigate "that escaped"; Dominico's coup and human-
 - What really happened to Klhyt? (The crate is a host default.)
 - Who is the Custodian: a name, a race, a past?
 - What are "crownies" (the Rampant Ogre's regulars)?
+- Kael Ironjaw has two canon sheets in LoreKeeper. His character entry (built here): AC 15, HP 38, STR 16 DEX 12
+  CON 14, a greatsword and chain mail, while his story says glaive. The doc "BattleMaster Half-Orc Creation": a
+  Battle Master fighter 2, HP 19, STR 14 DEX 16, studded leather, a glaive. Which is canon? (Built: the character
+  entry's numbers, the story's glaive, fighter 4 as a host default.)
+- Deloris's class and level are not on her sheet ("Catalan Assassin"): built as a rogue 9 to fit her 58 hp.
