@@ -54,6 +54,30 @@ def test_the_town_stands_and_the_newcomer_lands_at_the_docks(tmp_path):
     assert story(gm)["seen_docks"] is True  # the first deed at the docks is the arrival
 
 
+def test_everyone_comes_ashore_at_the_docks_and_each_arrives_alone(tmp_path):
+    eng, gm, you = town(tmp_path)
+    docks = eid(gm, "The Docks")
+    for name in ("Deloris", "Kael Ironjaw", "Newcomer"):
+        p = gm.inspect(name)["parent"]
+        assert (p.get("id") if isinstance(p, dict) else p) == docks, name
+    templates = gm.inspect(gm.summary()["root"])["state"]["templates"]
+    assert {t["place"] for t in templates.values()} == {docks}
+    ana = eng.session("ana")
+    b = ana.join("klhyts-refuge", template="elf", name="Ithwen")
+    assert b["here"]["name"] == "The Docks"
+    assert "comes ashore at the docks" in b["briefing"]["text"]
+    arrival = "comes at you all at once"
+    first = you.act("talk", "Harbourmaster Teague", {"about": "hello"})
+    assert any(arrival in t for t in scenes(first))
+    again = you.act("talk", "Harbourmaster Teague", {"about": "ships"})
+    assert not any(arrival in t for t in scenes(again))  # once each
+    hers = ana.act("talk", "Harbourmaster Teague", {"about": "hello"})
+    assert any(arrival in t for t in scenes(hers))
+    # told to her alone: the newcomer beside her on the pier never reads it
+    assert not any(arrival in (e["payload"].get("text") or "") for e in you.perceive()["events"] if e["kind"] == "scene")
+    assert len(story(gm)["ashore"]) == 2
+
+
 def test_buying_and_drinking_at_the_turtle_dragon(tmp_path):
     eng, gm, you = town(tmp_path)
     you.act("go", "Harbour Street")

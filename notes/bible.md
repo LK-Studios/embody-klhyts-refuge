@@ -28,6 +28,12 @@ this file is fixed. Picks the owner has not made are marked **host default**.
 > What is the Catan Packet and where did come from ? / We might need to delete it
 > (Asked to choose, the owner picked: delete the invented packet and use a canon ship, the Emerald Eye.)
 
+> I think they should be dropped off at the docks
+> (Asked whether that meant the templates or every seat, the owner picked: everyone to docks. Every seat and every
+> template starts at the docks, just off a boat; Deloris and Kael Ironjaw, who sat in the Touchy Unicorn and the
+> Rampant Ogre, come ashore tonight like the rest. Each player is told the town coming at them once, on their first
+> deed at the docks.)
+
 ## Names
 
 - Town: **Klhyts Refuge** (LoreKeeper's majority spelling, and the owner's). Founder: **Klhyt** (the owner's; the one

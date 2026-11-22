@@ -176,6 +176,13 @@ AMBIENT = {"era": "before the war: before the mushroom, before the walls came do
 # nothing, and the timers count from it
 START = 22.5 * 3600
 
+# what join hands everyone who comes in (players and minds alike): the town, the hour, and where a newcomer stands
+BRIEFING = ("Shalamar, before the war. Klhyts Refuge, the nicest town on the continent: six taverns, the inns, the market "
+            "and the docks, with refugees from Landfall, Lizardfolk tolerated, elves in exile and Xoton sailors ashore. Fat "
+            "Gog's guild is under threat, the founder Klhyt is missing, and the Custodian runs the town in his absence. It "
+            "is half past ten at night. Whoever comes to play comes ashore at the docks, off a boat from somewhere else, "
+            "and nobody here asks where from.")
+
 COIN = {"kind": "cp", "portable": True, "bulk": 0,
         "description": "Mixed coin, counted in copper: 100 to the gold piece, 10 to the silver."}
 
@@ -839,10 +846,11 @@ DELORIS = {
             "lockpick": 3, "aim": 3, "blade": 3}, hp(58)),
     "playable": True, "faction": None,
     "description": "Deloris: lean and pale, tousled dark hair, a hooded cloak over leather armour, a longbow across her back. "
-                   "She sits where she can see both doors.",
+                   "She always stands where she can see every way out.",
     "brief": "You are Deloris, a Catalan assassin on the run from your merchant family, with a complicated history and a "
              "promise to protect the defenceless. Calm, with a cutting wit when trust is earned; paranoid about organised "
-             "power. You came to Klhyts Refuge to not be found. Phillip Everuex is in town asking for you.",
+             "power. You came to Klhyts Refuge to not be found, and stepped off a boat onto its docks tonight. Phillip "
+             "Everuex is in town asking for you.",
     "dialog": {
         "name|who": "\"Nobody you need to remember.\"",
         "family|everuex|phillip|running": "\"I do not seek mercy. I seek the path that will end this chase, for good or for me.\"",
@@ -860,7 +868,8 @@ KAEL = {
                    "dyed straps, and a glaive he found in a ditch.",
     "brief": "You are Kael Ironjaw, a Jonulvicha (half-orc) sellsword from the frontier camps of Vorkathia, loyal to a fault, reckless, not "
              "clever. You charge first and ask questions never. The hat was your father's; you have no idea what he looked "
-             "like. You fight because leaving others to fight alone would be rude. You are in town looking for work.",
+             "like. You fight because leaving others to fight alone would be rude. You have just come ashore at the docks, "
+             "looking for work.",
     "dialog": {
         "fight|trouble|work|job": "\"I don't need a map to know where the fight is. I follow the noise.\"",
         "hat": "\"This hat don't scare easy. Neither do I.\"",
@@ -884,15 +893,15 @@ TEMPLATES_STATE = {
                 [("Knife", DAGGER)]),
     "sellsword": ({"str": 15, "dex": 13, "con": 14, "int": 10, "wis": 12, "cha": 8},
                   {"athletics": 2, "intimidation": 2, "blade": 2, "survival": 2}, 12,
-                  "A sword for hire, between hires.", "ogre", 60,
+                  "A sword for hire, between hires.", "docks", 60,
                   [("Shortsword", {**DAGGER, "damage": 3, "description": "A soldier's shortsword, nicked and oiled."})]),
     "lizardfolk": ({"str": 14, "dex": 12, "con": 15, "int": 8, "wis": 13, "cha": 10},
                    {"nature": 2, "survival": 2, "perception": 2, "athletics": 2}, 11,
-                   "A Lizardfolk of the Meters, a fisher, in town to sell the catch and drink the proceeds.", "turtle", 40,
+                   "A Lizardfolk of the Meters, a fisher, in town to sell the catch and drink the proceeds.", "docks", 40,
                    [("Fishing spear", {**DAGGER, "damage": 2, "description": "A barbed fishing spear, the shaft worn smooth."})]),
     "elf": ({"str": 8, "dex": 14, "con": 10, "int": 15, "wis": 13, "cha": 12},
             {"arcana": 2, "history": 2, "stealth": 2, "insight": 2}, 9,
-            "An elf in exile, on the run from the Vorkathian Inquisition, travelling under someone else's name.", "unicorn", 300,
+            "An elf in exile, on the run from the Vorkathian Inquisition, travelling under someone else's name.", "docks", 300,
             [("Knife", DAGGER), ("Silverleaf token", {"portable": True, "bulk": 0, "elf_token": True,
                                                       "description": "A leaf of living silverwood: your people's word, to give to one you trust."})]),
     "xoton": ({"str": 14, "dex": 12, "con": 15, "int": 10, "wis": 13, "cha": 8},
@@ -1271,13 +1280,13 @@ def people():
         ("person", "unicorn", "Ithriel", ITHRIEL, [("thing", "Coin", coin(350)), ("thing", "Knife", DAGGER),
                                                    ("thing", "Silverleaf token", {"portable": True, "bulk": 0, "elf_token": True,
                                                     "description": "A leaf of living silverwood, still green at the stem: an elf's word that you may be trusted."})]),
-        ("person", "unicorn", "Deloris", DELORIS, [
+        ("person", "docks", "Deloris", DELORIS, [
             ("thing", "Coin", coin(400)), ("thing", "Daggers", {**DAGGER, "count": 2, "description": "A matched pair of throwing daggers."}),
             ("thing", "Longbow", {"weapon": True, "ranged": True, "ammo": "arrow", "damage": 2, "bonus": 0, "skill": "aim",
                                   "portable": True, "description": "A plain longbow, well kept."}),
             ("thing", "Arrows", {"kind": "arrow", "ammo": "arrow", "count": 20, "bulk": 0.05, "portable": True, "description": "Black-fletched arrows."}),
             ("thing", "Thieves' tools", {"portable": True, "bulk": 0, "description": "Picks, a tension wrench and a little mirror in a leather roll."})]),
-        ("person", "ogre", "Kael Ironjaw", KAEL, [
+        ("person", "docks", "Kael Ironjaw", KAEL, [
             ("thing", "Coin", coin(30)), ("thing", "Glaive", {**DAGGER, "damage": 3, "description": "A glaive he found in a ditch. It cuts fine."}),
             ("thing", "Father's hat", {"portable": True, "bulk": 0, "description": "A battered hat. It was his father's."})]),
         ("person", "docks", "Newcomer", NEWCOMER, [("thing", "Coin", coin(200)), ("thing", "Knife", DAGGER)]),
@@ -1440,6 +1449,8 @@ def build_wiring(s, root):
     if not rs.get("policy"):
         s.patch(root, {"policy": POLICY, "ambient": AMBIENT, "coin_kind": "cp", "sweat": False,
                        "thirst_death_days": False})
+    if not rs.get("briefing"):
+        s.patch(root, {"briefing": BRIEFING})
     s.patch(root, {"era": "Before the war", "calendar": "Era of Vorkath (EV); this evening falls before the war, the "
                    "mushroom and the fall of the walls"})
     s.patch(root, {"templates": templates(P)})
@@ -1500,6 +1511,22 @@ def mend_stale(s):
     tg = have.get("Harbourmaster Teague")
     if tg and str(tg["state"].get("default_line", "")).startswith("Teague taps his tally board."):
         s.patch(tg["id"], {"default_line": TEAGUE["default_line"]})
+    # every seat comes ashore at the docks (owner, 2026-11-22). A world nobody has played yet (its clock still at the
+    # start) moves the two seats an older build sat in their taverns; one already under way keeps them where play has them
+    if s.summary()["t"] <= START:
+        P = place_ids(s)
+        for name, was, now in (("Deloris", "unicorn", DELORIS), ("Kael Ironjaw", "ogre", KAEL)):
+            p = have.get(name)
+            if p is None or parent_of(s, p["id"]) != P[was]:
+                continue
+            s.move(p["id"], P["docks"])
+            s.patch(p["id"], {"post": P["docks"], "home": P["docks"], "description": now["description"],
+                              "brief": now["brief"]})
+
+
+def parent_of(s, eid):
+    p = s.inspect(eid)["parent"]
+    return p.get("id") if isinstance(p, dict) else p
 
 
 def build(s):

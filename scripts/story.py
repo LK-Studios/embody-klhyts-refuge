@@ -26,6 +26,16 @@ def walk(ctx, who, dest):
     ctx.emit("arrived", target=dest, reach=-1, who=p.id, place=dest)
     return True
 
+def come_ashore(ctx, st, who):
+    # each one who comes to play gets the town coming at them once, told to them alone: the pier has watched boats come
+    # in all evening, and the line is written to the one stepping off
+    have = list(st.ashore or [])
+    if who.id in have:
+        return
+    have.append(who.id)
+    ctx.patch(story(ctx), {"ashore": have, "seen_docks": True})
+    ctx.emit("scene", target=who.id, reach=0, text=DOCKS_ARRIVAL)
+
 def add_clue(ctx, st, name):
     have = list(st.clues or [])
     if name in have:
@@ -105,20 +115,18 @@ def on(ctx, event):
     k = event.kind
     p = event.payload or {}
     if k == "act":
-        # someone who starts at the docks never walks in: their first deed there is their arrival
+        # everyone who comes to play starts at the docks and never walks in: their first deed there is their arrival
         who = ctx.get(event.actor) if event.actor else None
-        if not st.seen_docks and who is not None and ctx.embodied(who) and who.parent is not None and who.parent.id == st.docks:
-            ctx.patch(story(ctx), {"seen_docks": True})
-            scene(ctx, st.docks, DOCKS_ARRIVAL)
+        if who is not None and ctx.embodied(who) and who.parent is not None and who.parent.id == st.docks:
+            come_ashore(ctx, st, who)
         return
     if k == "arrived":
         place = p.get("place")
         who = ctx.get(p.get("who"))
         if who is None or not ctx.embodied(who):
             return
-        if place == st.docks and not st.seen_docks:
-            ctx.patch(story(ctx), {"seen_docks": True})
-            scene(ctx, st.docks, DOCKS_ARRIVAL)
+        if place == st.docks:
+            come_ashore(ctx, st, who)
         elif place == st.warehouse and not st.klhyt_found and not st.shipped:
             ctx.patch(story(ctx), {"klhyt_found": True})
             scene(ctx, st.warehouse, "Between the bales and the stacked crates, in the one dry corner, a big grey-bearded man "

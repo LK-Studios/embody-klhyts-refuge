@@ -28,8 +28,8 @@ The game here is everything on top of that:
 
 ## Playing
 
-Seats: the Newcomer (at the docks), Deloris (the Touchy Unicorn), Kael Ironjaw (the Rampant Ogre), or a new character
-from a template: refugee, sellsword, lizardfolk or elf.
+Everyone starts at the docks, just off a boat. Seats: the Newcomer, Deloris, Kael Ironjaw, or a new character from a
+template: refugee, sellsword, lizardfolk, elf, Xoton sailor or Jonulvicha.
 
 On the hosted server, the host sends you an invite link: give it to your agent and it joins as your character. There
 is no public sign-up.
