@@ -122,6 +122,31 @@ Who is for hire, and their price, are **host defaults** for the owner to correct
   gets his seat, for a sub-agent.
 - This replaces the earlier word that put every seat at the docks for these two; newcomers still come ashore there.
 
+## Statblocks and skills (owner, 2026-11-22)
+
+> "Did we work traditional statblocks of characters and their skills into this? I am not sure we did."
+
+The owner's picks: skill checks are asked like initiative (the DM says "Roll for Stealth: d20 plus 7" and asks whether
+the player rolls or the DM does); the town's people wear classic SRD statblocks, Deloris and Kael their LoreKeeper
+sheets; a player sees their own sheet (`stats`), and every statblock is the DM's (`act_as(<them>, "stats")`).
+
+Skills roll 5e's way (ability modifier, plus proficiency by level or challenge, twice it with expertise), and each
+SRD block's skills are set so the arithmetic gives the book's bonus. Which block each person wears is a **host
+default** (build.py, `SRD_OF`); they keep the weapons they carry, so their attack lines are worked from those:
+
+- **Thug:** Brask, Tully, Big Ludo, Bosun Maggs, Hulda Ironwake, Ruk Halfhand.
+- **Spy:** River, Hanklevode. **Bandit Captain:** Fat Gog (with Hold Breath, a swim speed and a bite), Captain Eirik,
+  Captain Danny DeVito. **Veteran:** Dominico (with his three dabbled spells), Klhyt, Captain Aelith.
+- **Knight:** Lieutenant Voss. **Noble:** the Custodian, Master Quillon, Phillip Everuex.
+- **Lizardfolk:** Ssark. **Scout:** Thoradin. **Acolyte:** Sister Agathe. **Druid:** Saelwyn.
+- **Commoner:** Harbourmaster Teague, Husok Sourfist, Wendeline Moss, Mother Ines, Hallvard Saltbeard, Grusha, and
+  Ithriel's household. **Bandit:** the Xoton sailors.
+- Kept on class levels, where no SRD block fits: the Bard of Moonport (bard 4), Ithriel (wizard 5), Ondrine (wizard 3).
+- **Deloris** (rogue 9): her sheet's proficiencies (Dexterity saves; Acrobatics, Sleight of Hand, Stealth, Deception,
+  Insight, Perception; thieves' and navigator's tools). **Kael** (fighter 4): Athletics, Intimidation, Survival, and the
+  glaive.
+- Fat Gog carries no weapon, so his block shows only the bite: arm him if he should fight like a captain.
+
 ## Ithriel's passage (owner's playtest, 2026-11-22)
 
 Playing it on the hosted world, the household never followed and the player ended up aboard the Moonmoth. Now:
@@ -198,8 +223,8 @@ factions, duels and the sheet's skills stay as they were. Hit points are whole 5
 - What really happened to Klhyt? (The crate is a host default.)
 - Who is the Custodian: a name, a race, a past?
 - What are "crownies" (the Rampant Ogre's regulars)?
-- Kael Ironjaw has two canon sheets in LoreKeeper. His character entry (built here): AC 15, HP 38, STR 16 DEX 12
-  CON 14, a greatsword and chain mail, while his story says glaive. The doc "BattleMaster Half-Orc Creation": a
-  Battle Master fighter 2, HP 19, STR 14 DEX 16, studded leather, a glaive. Which is canon? (Built: the character
-  entry's numbers, the story's glaive, fighter 4 as a host default.)
+- Kael Ironjaw fights with the **glaive** (owner, 2026-11-22: "Use the glaive for Kael, please"), not the
+  greatsword on his LoreKeeper character entry. Still open: his numbers. The character entry (built here) has AC 15,
+  HP 38, STR 16 DEX 12 CON 14 and chain mail; the doc "BattleMaster Half-Orc Creation" has a Battle Master fighter 2,
+  HP 19, STR 14 DEX 16, studded leather. (Built: the entry's numbers, fighter 4 as a host default.)
 - Deloris's class and level are not on her sheet ("Catalan Assassin"): built as a rogue 9 to fit her 58 hp.

@@ -71,3 +71,13 @@ These were made up for the playable evening (bible.md, "Host defaults"). Add any
   Wendeline Moss, Big Ludo, Bosun Maggs, Master Quillon), Ssark, Ithriel and her household, Lieutenant Aurel Voss,
   the Night Market's vendors, the Xoton sailors, Ruk Halfhand, Captain Aelith.
 - The Moonmoth: an elven ship grown from a silverwood seed, carrying exiles south. Ondrine: the siren's name.
+
+## 8. Kael Ironjaw's character sheet (the owner's word, 2026-11-22)
+
+The owner ruled that Kael fights with the glaive from his story, not the greatsword on his character entry. In
+LoreKeeper, on Kael Ironjaw's character sheet, change the equipment line:
+
+> **Equipment:** Glaive (found in a ditch; reach, two-handed, 1d10 slashing), Chain Mail, Explorer's Pack
+
+Still open for the owner: whether his numbers are the character entry's (AC 15, HP 38) or the "BattleMaster Half-Orc
+Creation" doc's (fighter 2, HP 19, studded leather).

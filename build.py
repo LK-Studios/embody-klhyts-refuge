@@ -1378,7 +1378,7 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring", "five_e", "hire"]
+STAGES = ["places", "layout", "people", "things", "wiring", "five_e", "statblocks", "hire"]
 
 
 def by_name(s):
@@ -1629,7 +1629,9 @@ def templates(P):
         gear = [{"type": "thing", "name": armour_state(k)[0], "state": armour_state(k)[1]} for k in armours]
         out[key] = {"type": "person", "place": P[where], "doc": doc,
                     "state": {**body(scores, skills, hp5), **five, "description": doc, "post": P[where], "home": P[where],
-                              "people": TEMPLATE_PEOPLE[key]},
+                              "people": TEMPLATE_PEOPLE[key],
+                              "skill_prof": {k: 1 for k, v in (skills or {}).items() if v},  # 5e skills (statblocks)
+                              "statblock": people_block(TEMPLATE_PEOPLE[key])},
                     "kit": [{"type": "thing", "name": "Coin", "state": coin(purse)}] +
                            [{"type": "thing", "name": n, "state": dict(st)} for n, st in kit] + gear}
     return out
@@ -1696,6 +1698,182 @@ def build_wiring(s, root):
         if kind not in pending and now < START + at and not rs.get("timers_set_" + kind):
             s.schedule(START + at - now, kind, entity=root)
             s.patch(root, {"timers_set_" + kind: True})
+
+
+# ---- classic statblocks (owner, 2026-11-22: SRD statblocks for the town, LoreKeeper's sheets for Deloris and Kael) --
+# The creatures of the System Reference Document 5.1 (Wizards of the Coast, CC BY 4.0), with the numbers the book
+# prints: armour class, hit points and hit dice, scores, saves, skills (proficient 1, expertise 2, so the dnd5e pack's
+# arithmetic gives the book's bonus), multiattack, traits, actions and reactions. Each body keeps what it carries; its
+# attacks are worked from those weapons. Which SRD block each person wears is a host default (notes/bible.md).
+BITE = ("Bite", "Melee Weapon Attack: +4 to hit, reach 5 ft., one target. Hit: 5 (1d6 + 2) piercing damage.")
+PARRY = ("Parry", "Adds 2 to its AC against one melee attack that would hit it. To do so, it must see the attacker and "
+                  "be wielding a melee weapon.")
+SRD = {
+    "commoner": {"cr": 0, "ac": 10, "hp": 4, "dice": "1d8", "die": "1d8", "n": 1,
+                 "scores": {"str": 10, "dex": 10, "con": 10, "int": 10, "wis": 10, "cha": 10}},
+    "bandit": {"cr": 0.125, "ac": 12, "armor": "leather armor", "hp": 11, "dice": "2d8 + 2", "die": "1d8", "n": 2,
+               "scores": {"str": 11, "dex": 12, "con": 12, "int": 10, "wis": 10, "cha": 10}},
+    "thug": {"cr": 0.5, "ac": 11, "armor": "leather armor", "hp": 32, "dice": "5d8 + 10", "die": "1d8", "n": 5,
+             "scores": {"str": 15, "dex": 11, "con": 14, "int": 10, "wis": 10, "cha": 11}, "skills": {"intimidation": 1},
+             "multi": 1, "multiattack": "makes two melee attacks.",
+             "traits": [("Pack Tactics", "Advantage on an attack roll against a creature if at least one of its allies is "
+                                         "within 5 feet of the creature and the ally isn't incapacitated.")]},
+    "spy": {"cr": 1, "ac": 12, "hp": 27, "dice": "6d8", "die": "1d8", "n": 6,
+            "scores": {"str": 10, "dex": 15, "con": 10, "int": 12, "wis": 14, "cha": 16},
+            "skills": {"deception": 1, "insight": 1, "investigation": 2, "perception": 2, "persuasion": 1, "sleight": 1,
+                       "stealth": 1},
+            "multi": 1, "multiattack": "makes two melee attacks.", "sneak_attack": "2d6", "cunning": True},
+    "bandit captain": {"cr": 2, "ac": 15, "armor": "studded leather", "hp": 65, "dice": "10d8 + 20", "die": "1d8", "n": 10,
+                       "scores": {"str": 15, "dex": 16, "con": 14, "int": 14, "wis": 11, "cha": 14},
+                       "saves": ["str", "dex", "wis"], "skills": {"athletics": 1, "deception": 1}, "multi": 2,
+                       "multiattack": "makes three melee attacks: two with its main weapon and one with a dagger. Or it "
+                                      "makes two ranged attacks with its daggers.",
+                       "reactions": [PARRY]},
+    "veteran": {"cr": 3, "ac": 17, "armor": "splint", "hp": 58, "dice": "9d8 + 18", "die": "1d8", "n": 9,
+                "scores": {"str": 16, "dex": 13, "con": 14, "int": 10, "wis": 11, "cha": 10},
+                "skills": {"athletics": 1, "perception": 1}, "multi": 1,
+                "multiattack": "makes two attacks with its main weapon; with a second blade drawn, it can make one more."},
+    "knight": {"cr": 3, "ac": 18, "armor": "plate", "hp": 52, "dice": "8d10 + 8", "die": "1d10", "n": 8,
+               "scores": {"str": 16, "dex": 11, "con": 14, "int": 11, "wis": 11, "cha": 15}, "saves": ["con", "wis"],
+               "multi": 1, "multiattack": "makes two melee attacks.",
+               "traits": [("Brave", "Advantage on saving throws against being frightened.")],
+               "actions": [("Leadership (Recharges after a Short or Long Rest)",
+                            "For 1 minute, whenever a creature it can see within 30 feet that is not hostile to it makes an "
+                            "attack roll or a saving throw, that creature can add a d4 to the roll, provided it can hear and "
+                            "understand the knight. One Leadership die at a time; it ends if the knight is incapacitated.")],
+               "reactions": [PARRY]},
+    "noble": {"cr": 0.125, "ac": 15, "armor": "breastplate", "hp": 9, "dice": "2d8", "die": "1d8", "n": 2,
+              "scores": {"str": 11, "dex": 12, "con": 11, "int": 12, "wis": 14, "cha": 16},
+              "skills": {"deception": 1, "insight": 1, "persuasion": 1}, "reactions": [PARRY]},
+    "lizardfolk": {"cr": 0.5, "ac": 15, "armor": "natural armor, shield", "hp": 22, "dice": "4d8 + 4", "die": "1d8", "n": 4,
+                   "scores": {"str": 15, "dex": 10, "con": 13, "int": 7, "wis": 12, "cha": 7},
+                   "skills": {"perception": 1, "stealth": 2, "survival": 2}, "speed": "30 ft., swim 30 ft.",
+                   "languages": ["Draconic"], "multi": 1,
+                   "multiattack": "makes two melee attacks, each one with a different weapon (a bite among them).",
+                   "traits": [("Hold Breath", "Can hold its breath for 15 minutes.")], "actions": [BITE]},
+    "scout": {"cr": 0.5, "ac": 13, "armor": "leather armor", "hp": 16, "dice": "3d8 + 3", "die": "1d8", "n": 3,
+              "scores": {"str": 11, "dex": 14, "con": 12, "int": 11, "wis": 13, "cha": 11},
+              "skills": {"nature": 2, "perception": 2, "stealth": 2, "survival": 2}, "multi": 1,
+              "multiattack": "makes two melee attacks or two ranged attacks.",
+              "traits": [("Keen Hearing and Sight", "Advantage on Wisdom (Perception) checks that rely on hearing or sight.")]},
+    "acolyte": {"cr": 0.25, "ac": 10, "hp": 9, "dice": "2d8", "die": "1d8", "n": 2,
+                "scores": {"str": 10, "dex": 10, "con": 10, "int": 10, "wis": 14, "cha": 11},
+                "skills": {"medicine": 1, "religion": 1}, "cast": "wis", "spells": ["sacred flame", "bless", "cure wounds"],
+                "slots": {"1": 3}},
+    "druid": {"cr": 2, "ac": 11, "armor": "16 with barkskin", "hp": 27, "dice": "5d8 + 5", "die": "1d8", "n": 5,
+              "scores": {"str": 10, "dex": 12, "con": 13, "int": 12, "wis": 15, "cha": 11},
+              "skills": {"medicine": 1, "nature": 1, "perception": 1}, "languages": ["Druidic"], "cast": "wis",
+              "slots": {"1": 4, "2": 3}},
+}
+SRD_OF = {
+    "Fat Gog": ("bandit captain", {"traits": [("Hold Breath", "Can hold his breath for 15 minutes; Lizardfolk are at home "
+                                                              "in the water.")],
+                                   "speed": "30 ft., swim 30 ft.", "languages": ["Common", "Draconic"], "actions": [BITE]}),
+    "River": ("spy", {}), "Hanklevode": ("spy", {}),
+    "Dominico": ("veteran", {"cast": "int", "spells": ["fire bolt", "shield", "magic missile"], "slots": {"1": 3},
+                             "traits": [("Parlour Conjuring", "Dabbles in the magic arts: a few spells off his own wits, "
+                                                              "and something in the dark has started to answer.")]}),
+    "The Custodian": ("noble", {}), "Master Quillon": ("noble", {}), "Phillip Everuex": ("noble", {}),
+    "Klhyt": ("veteran", {}), "Captain Aelith": ("veteran", {}),
+    "Brask": ("thug", {}), "Tully": ("thug", {}), "Big Ludo": ("thug", {}), "Bosun Maggs": ("thug", {}),
+    "Hulda Ironwake": ("thug", {}), "Ruk Halfhand": ("thug", {}),
+    "Captain Eirik": ("bandit captain", {}), "Captain Danny DeVito": ("bandit captain", {}),
+    "Lieutenant Voss": ("knight", {}), "Ssark": ("lizardfolk", {}), "Thoradin": ("scout", {}),
+    "Sister Agathe": ("acolyte", {}),
+    "Saelwyn": ("druid", {"spells": ["thorn whip", "produce flame", "entangle", "thunderwave", "cure wounds", "healing word"]}),
+    "Harbourmaster Teague": ("commoner", {}), "Husok Sourfist": ("commoner", {}), "Wendeline Moss": ("commoner", {}),
+    "Mother Ines": ("commoner", {}), "Hallvard Saltbeard": ("commoner", {}), "Grusha": ("commoner", {}),
+    **{n: ("commoner", {}) for n, _, _ in HOUSEHOLD}, **{n: ("bandit", {}) for n, _, _ in SAILORS},
+}
+# LoreKeeper's character sheets (D&D 5e 2014), the canon for these two: proficiencies, speed and, for Kael, the glaive
+CANON_SHEETS = {
+    "Deloris": {"skill_prof": {"acrobatics": 1, "sleight": 1, "stealth": 1, "deception": 1, "insight": 1, "perception": 1},
+                "statblock": {"size": "Medium", "kind": "humanoid (human)", "speed": "30 ft.", "languages": ["Common"],
+                              "traits": [("Tools", "Thieves' tools, navigator's tools.")]}},
+    "Kael Ironjaw": {"skill_prof": {"athletics": 1, "intimidation": 1, "survival": 1},
+                     "statblock": {"size": "Medium", "kind": "humanoid (Jonulvicha)", "speed": "30 ft.",
+                                   "languages": ["Common", "Orc"]}},
+}
+PEOPLE_SENSES = {"elf": ["darkvision 60 ft."], "jonulvicha": ["darkvision 60 ft."], "dwarf": ["darkvision 60 ft."]}
+PEOPLE_TONGUE = {"elf": "Elvish", "jonulvicha": "Orc", "dwarf": "Dwarvish", "lizardfolk": "Draconic", "xoton": "Xoton"}
+CLASS_KEYS = ["cls", "level", "sneak_attack", "cunning", "spellcasting", "extra_attacks", "unarmored", "martial_arts"]
+
+
+def rows(pairs):
+    return [{"name": a, "text": b} for a, b in pairs]
+
+
+def people_block(people):
+    """What a statblock says of anyone of these people: medium, humanoid, their senses and tongue beside Common."""
+    tongue = PEOPLE_TONGUE.get(people)
+    return {"size": "Medium", "kind": "humanoid (" + (people or "human") + ")", "speed": "30 ft.",
+            "senses": PEOPLE_SENSES.get(people, []), "languages": ["Common"] + ([tongue] if tongue else [])}
+
+
+def srd_state(name, kind, over, st):
+    """A body's state from its SRD block, its people and what the town adds; hp keep their share of the new whole."""
+    b = dict(SRD[kind])
+    b.update({k: v for k, v in over.items() if k not in ("traits",)})
+    people = st.get("people") or "human"
+    langs = list(b.get("languages") or ["Common"])
+    if "Common" not in langs:
+        langs.insert(0, "Common")
+    tongue = PEOPLE_TONGUE.get(people)
+    if tongue and tongue not in langs:
+        langs.append(tongue)
+    block = {"size": "Medium", "kind": "humanoid (" + people + ")", "speed": b.get("speed") or "30 ft.",
+             "hit_dice": b["dice"], "armor": b.get("armor"), "senses": PEOPLE_SENSES.get(people, []), "languages": langs,
+             "traits": rows(list(SRD[kind].get("traits") or []) + list(over.get("traits") or [])),
+             "actions": rows(b.get("actions") or []), "reactions": rows(b.get("reactions") or []),
+             "multiattack": (name + " " + b["multiattack"]) if b.get("multiattack") else None, "srd": kind}
+    old_hp = int(st.get("hp") if st.get("hp") is not None else b["hp"])
+    old_max = int(st.get("max_hp") or old_hp or 1)
+    hp = b["hp"] if old_hp >= old_max else (0 if old_hp <= 0 else max(1, round(old_hp * b["hp"] / old_max)))
+    out = {k: None for k in CLASS_KEYS}
+    out.update({"srd": kind, "cr": b["cr"], "ac": b["ac"], "hp": hp, "max_hp": b["hp"], "hit_die": b["die"],
+                "hit_dice": b["n"], "hit_dice_max": b["n"], "scores": dict(b["scores"]), "saves": list(b.get("saves") or []),
+                "skill_prof": dict(b.get("skills") or {}), "weapon_prof": ["all"], "statblock": block, "five_e": 1})
+    if b.get("multi"):
+        out["extra_attacks"] = b["multi"]
+    if b.get("sneak_attack"):
+        out["sneak_attack"] = b["sneak_attack"]
+    if b.get("cunning"):
+        out["cunning"] = True
+    if b.get("cast"):
+        slots = dict(b.get("slots") or {})
+        out["spellcasting"] = {"ability": b["cast"], "spells": list(b.get("spells") or []), "slots": slots,
+                               "slots_max": dict(slots), "pact": False}
+    return out
+
+
+def build_statblocks(s):
+    """Classic statblocks onto the town (owner, 2026-11-22). The named and the minor wear their SRD block once, or again
+    when SRD_OF gives them another; Deloris and Kael get their LoreKeeper sheets' proficiencies; every other 5e body
+    (a player's, a template's, a class-levelled one) gets 5e skills from its sheet: a rank is a proficiency."""
+    w = s.world
+    for e in w.find(limit=None):
+        st = e["state"]
+        if st.get("dead") or not w.is_a(e["type"], "combatant"):
+            continue
+        name = e["name"]
+        if name in SRD_OF and not w.embodied(e["id"]):
+            kind, over = SRD_OF[name]
+            if st.get("srd") != kind:
+                s.patch(e["id"], srd_state(name, kind, over, st))
+            continue
+        if name in CANON_SHEETS:
+            c = CANON_SHEETS[name]
+            want = {"skill_prof": c["skill_prof"],
+                    "statblock": {**c["statblock"], "traits": rows(c["statblock"].get("traits") or []),
+                                  "senses": PEOPLE_SENSES.get(st.get("people"), [])}}
+            if st.get("skill_prof") != want["skill_prof"] or (st.get("statblock") or {}).get("kind") != want["statblock"]["kind"]:
+                s.patch(e["id"], want)
+            continue
+        if st.get("five_e") and st.get("skill_prof") is None:
+            ranks = ((st.get("sheet") or {}).get("skills") or {})
+            s.patch(e["id"], {"skill_prof": {k: 1 for k, v in ranks.items() if int(v or 0) > 0}})
+        if st.get("five_e") and not st.get("statblock"):
+            s.patch(e["id"], {"statblock": people_block(st.get("people"))})
 
 
 # ---- hired help: the one way a player brings a second agent in (owner, 2026-11-22) ---------------------------------
@@ -1797,6 +1975,8 @@ def build(s):
         build_wiring(s, root)
     if "five_e" in STAGES:
         build_five_e(s)
+    if "statblocks" in STAGES:
+        build_statblocks(s)
     if "hire" in STAGES:
         build_hire(s, root)
     mend_stale(s)
