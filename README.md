@@ -22,7 +22,9 @@ The game here is everything on top of that:
   know, what they will say, and what they want.
 - **The rules.** The world's own verbs (buy, drink, eat, bathe, throw, free, and mingle or hail in a crowd), guards who
   answer what they are given or shown when nobody plays them, an elf ship that takes only elves and those an elf
-  vouches for, and finds that answer a good check, all on top of the engine's d20 rules pack. Fights run by D&D 5e
+  vouches for, and finds that answer a good check, all on top of the engine's d20 rules pack. Hired help is the only
+  way a player brings a second agent in: a few people work for hire, each on their own terms (coin by the day, a thing,
+  a favour), and a hire offers the hirer that person's seat for as long as the days last. Fights run by D&D 5e
   (the dnd5e pack): initiative and turns, armour class, damage dice, death saves, conditions and spell slots.
 - **The story.** One evening, from half past ten until a ship sails on the one o'clock tide. The clock is turn-based:
   each act moves the world 30 seconds, so the evening waits for its players.

@@ -13,7 +13,8 @@ Rules: the d20 pack (checks, threaten, parley, factions with standing, thirst), 
 initiative and turns, armour class, damage dice, death saves, conditions, spells), the sheet pack (D&D-style ability
 scores on a sheet: STR force, DEX poise, CON endurance, INT cognition, WIS acuity, CHA projection), the village pack
 (walk, carry, give, talk) and locks. The world's own scripts: buy (coin for what a keeper sells), drink (ale and rum
-drunk for the taste; three in an hour and you are unsteady) and the storyline.
+drunk for the taste; three in an hour and you are unsteady), hire (the one way a player gets a second agent: hire
+someone in the world, on their terms, and claim their seat) and the storyline.
 
 Canon comes from LoreKeeper; what had to be invented is listed in notes/invented.md.
 """
@@ -104,6 +105,11 @@ PERSON_ACTIONS = {
               "scope": "exits", "duration": 15},
     "free": {"script": "free", "doc": "Cut or untie someone who is tied up", "targets": "creature", "scope": "here",
              "listed": "ok", "duration": 30},
+    "hire": {"script": "hire", "doc": "Hire someone here who works for hire, on their terms: ask bare to hear their price",
+             "targets": "creature", "scope": "here", "listed": "ok", "duration": 60,
+             "params": {"days": "how many days to pay for, up front, when they work for coin"}},
+    "dismiss": {"script": "dismiss", "doc": "Let someone in your hire go before their days are up; nothing is paid back",
+                "targets": "creature", "scope": "here", "listed": "ok"},
     # the d20 pack's own, listed only where they would work, so a card does not offer to drink a coin
     "drink": {"script": "drink", "doc": "Drink from a cup, a skin or a well within reach: ale and rum for the taste, water for thirst",
               "targets": "thing", "scope": "any", "listed": "ok", "duration": 30},
@@ -184,6 +190,11 @@ BRIEFING = ("Shalamar, before the war. Klhyts Refuge, the nicest town on the con
             "Gog's guild is under threat, the founder Klhyt is missing, and the Custodian runs the town in his absence. It "
             "is half past ten at night. Whoever comes to play comes ashore at the docks, off a boat from somewhere else, "
             "and nobody here asks where from.")
+HIRE_BRIEF = ("Hired help: some people here work for hire, each on their own terms (coin by the day, a thing they want, "
+              "a favour done first); `hire` them bare to hear the price. Hiring someone is the only way to bring a second "
+              "agent into the Refuge: the hire offers you their seat, and claim_seat gives you a paste for an agent of "
+              "their own, until the days you paid for run out. You keep 1 + your Charisma modifier in your hire at once.")
+BRIEFING = BRIEFING + " " + HIRE_BRIEF
 
 COIN = {"kind": "cp", "portable": True, "bulk": 0,
         "description": "Mixed coin, counted in copper: 100 to the gold piece, 10 to the silver."}
@@ -1348,7 +1359,7 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring", "five_e"]
+STAGES = ["places", "layout", "people", "things", "wiring", "five_e", "hire"]
 
 
 def by_name(s):
@@ -1661,6 +1672,42 @@ def build_wiring(s, root):
             s.patch(root, {"timers_set_" + kind: True})
 
 
+# ---- hired help: the one way a player brings a second agent in (owner, 2026-11-22) ---------------------------------
+# Each names their own price (scripts/_hired.py has the shape): coin by the day, from a few silver to a fortune, a
+# thing they want, or a favour the narrator marks done with `favoured: {<the hirer's id>: true}` on them. The hire
+# offers the hirer their seat; claim_seat gives a sub-agent. Nobody else in the Refuge can be had that way.
+HIRELINGS = {
+    "Tully": {"wage": 20, "max_days": 3, "line": "Cash, and Dominico never hears about it.",
+              "ask": "Two silver a day. Cash. And Dominico doesn't hear about it, or we're both in the harbour."},
+    "Kael Ironjaw": {"wage": 50, "max_days": 7, "line": "Point me at something.",
+                     "ask": "Five silver a day and I hit whatever you point at. Cheap, for what you get."},
+    "Hanklevode": {"wage": 200, "max_days": 7, "line": "Doors, then. Quietly.",
+                   "ask": "Two gold a day. I open doors quietly. I don't do blood, and I don't do Dominico."},
+    "Deloris": {"wage": 2500, "max_days": 3, "line": "Three days. Then I'm gone, and you never saw me.",
+                "ask": "Twenty-five gold a day. I don't haggle, and I don't stay long anywhere."},
+    "Thoradin": {"favour": "find him the druid he is looking for", "days": 3, "max_days": 3,
+                 "line": "Three days, then. I keep my word better than most keep their purse.",
+                 "ask": "Coin? No. Find me my druid, and I'll walk with you three days."},
+    "Ssark": {"wants": "Tot of rum", "days": 1, "max_days": 2, "line": "Poured for me first. Good. One day.",
+              "ask": "Coin is for people with pockets. Buy me a rum, poured for me first, and I walk with you a day."},
+}
+HIRE_SLOTS = 6  # the engine's cap on seats one grant claims; the hire's own (1 + Charisma, from 5e's 20) bites first
+
+
+def build_hire(s, root):
+    have = by_name(s)
+    for name, offer in HIRELINGS.items():
+        p = have.get(name)
+        if p is not None and p["state"].get("for_hire") is None:
+            s.patch(p["id"], {"for_hire": offer, "seatable": True})
+    rs = s.inspect(root)["state"]
+    if rs.get("seat_slots") is None:
+        s.patch(root, {"seat_slots": HIRE_SLOTS})
+    if "Hired help:" not in str(rs.get("briefing") or ""):  # added to what the root says, so an edit there stays
+        s.patch(root, {"briefing": ((str(rs.get("briefing")) + " ") if rs.get("briefing") else "") + HIRE_BRIEF})
+    s.set_rule(root, "hire_rule", kinds=["hire_ends", "killed"])
+
+
 def mend_stale(s):
     """Fixes for a world built from an earlier draft of this file: each checks first."""
     have = by_name(s)
@@ -1710,6 +1757,8 @@ def build(s):
         build_wiring(s, root)
     if "five_e" in STAGES:
         build_five_e(s)
+    if "hire" in STAGES:
+        build_hire(s, root)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

@@ -87,6 +87,28 @@ this file is fixed. Picks the owner has not made are marked **host default**.
 - Canon ships used: the River Queen (Everuex), Dragons Claw (Elliot's small galleon), the Emerald Eye ("Danny DeVito's
   ship. Danny DeVito: Small captain… Likes Gold"), Whispers of the Deep (a name from the Xoton ship-names doc).
 
+## Hired help: the only way to a second agent (owner, 2026-11-22)
+
+> "I want to make this possible but very limited, you have to go in and hire people in world. And only then can you
+> get any sub-agents to your character. Thats the only way to do it." Then: "Not everyone works for money.. or some a
+> LOT more money."
+
+The owner's picks: only people the world marks for hire; days paid up front, the seat ending when they run out; a
+character keeps 1 + their Charisma modifier in their hire at once (at least one); the rule binds players, and the
+narrator still gives the world's own people minds when a scene needs one. A hireling hires nobody, so agents never
+chain. Each hire offers the hirer the hireling's seat (`claim_seat` makes the sub-agent's paste); unplayed, the
+hireling follows the hirer. Dismissing them, or their death, ends it too.
+
+Who is for hire, and their price, are **host defaults** for the owner to correct (build.py, `HIRELINGS`):
+
+- **Tully**, Dominico's bruiser: 2 sp a day, 3 days at most, and Dominico must not hear of it.
+- **Kael Ironjaw**, sellsword: 5 sp a day, up to 7.
+- **Hanklevode**, mercenary thief: 2 gp a day, up to 7. Doors, not blood.
+- **Deloris**, assassin: 25 gp a day, 3 days at most. The fortune.
+- **Thoradin**, ranger: no coin. A favour first (find him his druid; Saelwyn is one), then three days. The narrator
+  marks the favour done with `favoured: {<the hirer's id>: true}` on him.
+- **Ssark**, Meters fisherman: no coin. A tot of rum, poured for him first, buys a day.
+
 ## Not in this build (post-war, anachronistic)
 
 Dominico as guild master, and Fat Gog's death at his hands; the Lizardfolk army and Santa Guistina's fall; the attack on the Refuge and the slave train; the Smith's alliance,
