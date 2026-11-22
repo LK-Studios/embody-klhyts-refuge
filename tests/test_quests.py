@@ -145,5 +145,6 @@ def test_a_rogue_picks_the_warehouse_lock_with_her_own_rank():
     gm.patch(eid(gm, "Newcomer"), {"sheet": {"skills": {"lockpick": 5}}})
     you.act("pick", "Warehouse lock")
     gm.clock(step=600)
-    rolls = [e for e in gm.history(limit=400, newest=True)["events"] if e["kind"] in ("lock_picked", "pick_failed")]
+    log = gm.history(limit=400, newest=True)
+    rolls = [e for e in (log["events"] if isinstance(log, dict) else log) if e["kind"] in ("lock_picked", "pick_failed")]
     assert rolls and rolls[-1]["payload"]["mod"] >= 5
