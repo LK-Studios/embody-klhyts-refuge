@@ -195,6 +195,9 @@ HIRE_BRIEF = ("Hired help: some people here work for hire, each on their own ter
               "agent into the Refuge: the hire offers you their seat, and claim_seat gives you a paste for an agent of "
               "their own, until the days you paid for run out. You keep 1 + your Charisma modifier in your hire at once.")
 BRIEFING = BRIEFING + " " + HIRE_BRIEF
+# an invite's steps for Claude: name the connector this, then say "Play <this>" in a chat (the owner's words, 2026-11-22)
+CONNECTOR_NAME = "Embody Klhyts Refuge"
+PLAY_NAME = "Klhyts Refuge"
 
 COIN = {"kind": "cp", "portable": True, "bulk": 0,
         "description": "Mixed coin, counted in copper: 100 to the gold piece, 10 to the silver."}
@@ -1625,6 +1628,9 @@ def build_wiring(s, root):
                        "thirst_death_days": False})
     if not rs.get("briefing"):
         s.patch(root, {"briefing": BRIEFING})
+    # what a guest names the connector in Claude and what they say to play (the invite's steps; the owner's words)
+    if rs.get("connector_name") != CONNECTOR_NAME or rs.get("play_name") != PLAY_NAME:
+        s.patch(root, {"connector_name": CONNECTOR_NAME, "play_name": PLAY_NAME})
     s.patch(root, {"era": "Before the war", "calendar": "Era of Vorkath (EV); this evening falls before the war, the "
                    "mushroom and the fall of the walls"})
     s.patch(root, {"templates": templates(P)})
