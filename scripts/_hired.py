@@ -54,12 +54,13 @@ def max_days(offer):
     return int(offer.get("max_days") or 7)
 
 def price_text(offer):
+    first = ("a favour first (" + str(offer.get("favour")) + "), then ") if offer.get("favour") else ""
     if offer.get("wage"):
-        return money(offer.get("wage")) + " a day, paid up front"
+        return first + money(offer.get("wage")) + " a day, paid up front"
     if offer.get("wants"):
-        return str(offer.get("wants")) + ", for " + days_text(offer.get("days") or 1)
+        return first + str(offer.get("wants")) + ", for " + days_text(offer.get("days") or 1)
     if offer.get("favour"):
-        return "a favour first (" + str(offer.get("favour")) + "), for " + days_text(offer.get("days") or 1)
+        return "a favour (" + str(offer.get("favour")) + "), for " + days_text(offer.get("days") or 1)
     return "nothing anyone has named"
 
 def keeps(ctx, who):

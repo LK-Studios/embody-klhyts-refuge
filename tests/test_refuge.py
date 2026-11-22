@@ -57,9 +57,13 @@ def test_the_town_stands_and_the_newcomer_lands_at_the_docks(tmp_path):
 def test_everyone_comes_ashore_at_the_docks_and_each_arrives_alone(tmp_path):
     eng, gm, you = town(tmp_path)
     docks = eid(gm, "The Docks")
-    for name in ("Deloris", "Kael Ironjaw", "Newcomer"):
+    # newcomers land at the docks; Kael drinks at the Ogre and Deloris keeps to the Stripperwitch, and neither is a
+    # seat a player picks (owner, 2026-11-22: Deloris is Ed's alone, Kael comes by hire)
+    for name, where in (("Newcomer", "The Docks"), ("Kael Ironjaw", "Rampant Ogre & Curved Cleaver"),
+                        ("Deloris", "The Stripperwitch")):
         p = gm.inspect(name)["parent"]
-        assert (p.get("id") if isinstance(p, dict) else p) == docks, name
+        assert (p.get("id") if isinstance(p, dict) else p) == eid(gm, where), name
+    assert not gm.inspect("Kael Ironjaw")["state"].get("playable") and not gm.inspect("Deloris")["state"].get("playable")
     templates = gm.inspect(gm.summary()["root"])["state"]["templates"]
     assert {t["place"] for t in templates.values()} == {docks}
     ana = eng.session("ana")

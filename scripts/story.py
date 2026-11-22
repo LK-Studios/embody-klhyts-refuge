@@ -110,6 +110,61 @@ def klhyt_returns(ctx, st):
         dominico_backs_off(ctx, story(ctx).state, "his patron fell")
     ctx.patch(ctx.root(), {"story": "complete"})
 
+# Ithriel's household, the five the Moonmoth waits for. Asked about passage, Ithriel and her four fall in behind the
+# one who asked, their usual places kept for them (or the idle walk would take them straight home); at the docks each
+# goes up the gangplank on their own, and the story keeps that they got away.
+ESCORT_TOPICS = ["passage", "ship", "moonmoth", "boat", "pier", "walk", "escort", "catan", "help"]
+
+def household(ctx, st):
+    out = []
+    for x in (st.household or []):
+        e = ctx.get(x)
+        if e is not None:
+            out.append(e)
+    return out
+
+def escort_begins(ctx, st, by):
+    if st.escort_by or st.elves_aboard:
+        return
+    ith = ctx.get(st.ithriel)
+    me = ctx.get(by)
+    if ith is None or me is None or ith.parent is None or ith.state.dead or ith.state.down:
+        return
+    came = []
+    for e in household(ctx, st):
+        if e.parent is None or e.parent.id != ith.parent.id or e.state.dead or e.state.down or ctx.embodied(e):
+            continue
+        ctx.patch(e, {"follows": me.id, "post": None})
+        came.append(e.id)
+    if not came:
+        return
+    ctx.patch(story(ctx), {"escort_by": me.id, "escorted": came})
+    scene(ctx, ith.parent.id, "Ithriel closes her book and stands. Around the room hooded figures rise from the corners and "
+          "fall in behind you, quiet as smoke: her household. \"To the pier, then,\" she says. \"And not past the "
+          "Apothecary, if you can help it.\"")
+    ctx.remember(ith, me.name + " is walking my household to the Moonmoth.")
+
+def boards(ctx, st, who):
+    # one of the household, at the docks behind the one walking them, goes up the gangplank on their own
+    ctx.move(who, st.moonmoth)
+    ctx.patch(who, {"follows": None, "post": st.moonmoth, "home": st.moonmoth})
+    ctx.emit("arrived", target=st.moonmoth, reach=1, who=who.id, place=st.moonmoth, boarded=True)
+    left = []
+    for x in (st.escorted or []):
+        e = ctx.get(x)
+        if e is not None and not e.state.dead and (e.parent is None or e.parent.id != st.moonmoth):
+            left.append(x)
+    if left or st.elves_aboard:
+        return
+    ctx.patch(story(ctx), {"elves_aboard": True, "elves_walked_by": st.escort_by})
+    scene(ctx, st.docks, "Ithriel is the last up the gangplank. At the top she turns. \"You walked with us,\" she says. "
+          "\"Keep the leaf. While the Moonmoth is in harbour, she will open to you.\" Then she is gone among the bundles, "
+          "and the empty places on the deck are empty no longer.")
+    ith = ctx.get(st.ithriel)
+    walker = ctx.get(st.escort_by)
+    if ith is not None:
+        ctx.remember(ith, "My household is aboard the Moonmoth" + ((", walked there by " + walker.name) if walker else "") + ".")
+
 def on(ctx, event):
     st = story(ctx).state
     k = event.kind
@@ -123,6 +178,10 @@ def on(ctx, event):
     if k == "arrived":
         place = p.get("place")
         who = ctx.get(p.get("who"))
+        if (who is not None and place == st.docks and st.escort_by and who.id in list(st.escorted or [])
+                and who.state.follows == st.escort_by):
+            boards(ctx, st, who)
+            return
         if who is None or not ctx.embodied(who):
             return
         if place == st.docks:
@@ -148,6 +207,11 @@ def on(ctx, event):
             add_clue(ctx, st, "teague")
         elif event.target == st.tully and ("brask" in about or "warehouse" in about or "crate" in about or "job" in about):
             add_clue(ctx, st, "tully")
+        elif event.target == st.ithriel and p.get("by"):
+            for w in ESCORT_TOPICS:
+                if w in about:
+                    escort_begins(ctx, st, p.get("by"))
+                    break
     elif k == "shown":
         item = ctx.get(p.get("item"))
         if item is None or item.state.clue not in CLUE_ITEMS:

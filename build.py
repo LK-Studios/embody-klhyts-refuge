@@ -154,7 +154,7 @@ def define(s):
     s.define_schema("ship", extends="thing", doc="A ship at her moorings: seen from the pier, not boarded.",
                     state={"portable": False})
     s.define_schema("elfship", extends="place", doc="The Moonmoth: elves board freely, others only with an elf's silverleaf token.",
-                    listeners=[{"script": "gangplank", "kinds": ["before_act"]}])
+                    listeners=[{"script": "gangplank", "kinds": ["before_act", "arrived"]}])
     s.define_schema("story", extends="entity", doc="The rails. Hidden; holds the facts the story has seen.",
                     state={"hidden": True})
 
@@ -194,7 +194,19 @@ HIRE_BRIEF = ("Hired help: some people here work for hire, each on their own ter
               "a favour done first); `hire` them bare to hear the price. Hiring someone is the only way to bring a second "
               "agent into the Refuge: the hire offers you their seat, and claim_seat gives you a paste for an agent of "
               "their own, until the days you paid for run out. You keep 1 + your Charisma modifier in your hire at once.")
-BRIEFING = BRIEFING + " " + HIRE_BRIEF
+# The pause while an agent asks the world, in a DM's voice (owner, 2026-11-22: on the phone it kept saying "One moment,
+# let me check on that")
+TABLE_BRIEF = ("At this table: you are the Dungeon Master for your human, and the world is behind your screen. When you "
+               "turn to it to see what happens, never say \"one moment\", \"let me check\" or \"looking that up\": a DM "
+               "never leaves the table. Fill the pause the way a DM would, in a line at most: lean into the moment "
+               "(\"Let's see if the lock gives...\"), call for the dice (\"Roll for it.\" or \"The dice rattle behind the "
+               "screen...\"), or give the room a beat (\"The fiddler misses a note; every drinker at the bar suddenly "
+               "finds their mug fascinating.\"). Then tell what happened. Your human may be listening, not reading (a "
+               "voice game on a phone): say who speaks before they speak, give each person their own rhythm and pet "
+               "words so they sound like nobody else in one voice (Fat Gog slow and rumbling, River quick and dry, "
+               "Kael loud and short), and keep to short spoken sentences, with no lists, symbols or headings.")
+BRIEFING = BRIEFING + " " + HIRE_BRIEF + " " + TABLE_BRIEF
+BRIEF_ADDENDA = [("Hired help:", HIRE_BRIEF), ("At this table:", TABLE_BRIEF)]  # each added once, to what the root says
 # an invite's steps for Claude: name the connector this, then say "Play <this>" in a chat (the owner's words, 2026-11-22)
 CONNECTOR_NAME = "Embody Klhyts Refuge"
 PLAY_NAME = "Klhyts Refuge"
@@ -865,17 +877,20 @@ DELORIS = {
     **body({"str": 12, "dex": 18, "con": 13, "int": 14, "wis": 12, "cha": 16},
            {"acrobatics": 3, "sleight": 3, "stealth": 3, "deception": 3, "insight": 3, "perception": 3,
             "lockpick": 3, "aim": 3, "blade": 3}, hp(58)),
-    "playable": True, "faction": None,
+    # Ed's character, and only Ed's (owner, 2026-11-22): no open seat offers her, and a hire never hands her seat on
+    "playable": False, "faction": None,
     "description": "Deloris: lean and pale, tousled dark hair, a hooded cloak over leather armour, a longbow across her back. "
                    "She always stands where she can see every way out.",
     "brief": "You are Deloris, a Catalan assassin on the run from your merchant family, with a complicated history and a "
              "promise to protect the defenceless. Calm, with a cutting wit when trust is earned; paranoid about organised "
-             "power. You came to Klhyts Refuge to not be found, and stepped off a boat onto its docks tonight. Phillip "
-             "Everuex is in town asking for you.",
+             "power. You came to Klhyts Refuge to not be found, and keep a room at the Stripperwitch, where red velvet "
+             "hides a great deal. Phillip Everuex is in town asking for you. You join nobody lightly: whoever wants "
+             "your bow ends Everuex's hunt first, and then pays like it.",
     "dialog": {
         "name|who": "\"Nobody you need to remember.\"",
         "family|everuex|phillip|running": "\"I do not seek mercy. I seek the path that will end this chase, for good or for me.\"",
-        "help|job|work": "\"Every vow has a price. I've learned to pay in shadows.\"",
+        "help|job|work|hire|join": "\"Every vow has a price. Mine starts with the man hunting me. End Everuex's hunt, then "
+                                   "come back with twenty-five gold a day, and I may listen.\"",
         "quiet|silence": "\"In silence there is a weapon as sharp as any blade.\"",
     },
     "default_line": "Deloris watches you without moving. \"Say it.\"",
@@ -884,13 +899,14 @@ DELORIS = {
 KAEL = {
     **body({"str": 16, "dex": 12, "con": 14, "int": 10, "wis": 11, "cha": 13},
            {"athletics": 2, "intimidation": 2, "survival": 2, "blade": 2}, hp(38)),
-    "playable": True, "faction": None,
+    # not a seat players pick (owner, 2026-11-22); hiring him is how a player gets his seat, for a sub-agent
+    "playable": False, "faction": None,
     "description": "Kael Ironjaw, a loud Jonulvicha sellsword from Vorkathia's frontier: his father's hat, a bright scarf, "
                    "dyed straps, and a glaive he found in a ditch.",
     "brief": "You are Kael Ironjaw, a Jonulvicha (half-orc) sellsword from the frontier camps of Vorkathia, loyal to a fault, reckless, not "
              "clever. You charge first and ask questions never. The hat was your father's; you have no idea what he looked "
-             "like. You fight because leaving others to fight alone would be rude. You have just come ashore at the docks, "
-             "looking for work.",
+             "like. You fight because leaving others to fight alone would be rude. You drink at the Rampant Ogre on what "
+             "is left of your coin, looking for work.",
     "dialog": {
         "fight|trouble|work|job": "\"I don't need a map to know where the fight is. I follow the noise.\"",
         "hat": "\"This hat don't scare easy. Neither do I.\"",
@@ -1452,12 +1468,12 @@ def people():
         ("person", "unicorn", "Ithriel", ITHRIEL, [("thing", "Coin", coin(350)), ("thing", "Knife", DAGGER),
                                                    ("thing", "Silverleaf token", {"portable": True, "bulk": 0, "elf_token": True,
                                                     "description": "A leaf of living silverwood, still green at the stem: an elf's word that you may be trusted."})]),
-        ("person", "docks", "Deloris", DELORIS, [
+        ("person", "stripperwitch", "Deloris", DELORIS, [
             ("thing", "Coin", coin(400)), ("thing", "Daggers", {**DAGGER, "count": 2, "description": "A matched pair of throwing daggers."}),
             ("thing", "Longbow", arm("longbow", "A plain longbow, well kept.")),
             ("thing", "Arrows", {"kind": "arrow", "ammo": "arrow", "count": 20, "bulk": 0.05, "portable": True, "description": "Black-fletched arrows."}),
             ("thing", "Thieves' tools", {"portable": True, "bulk": 0, "description": "Picks, a tension wrench and a little mirror in a leather roll."})]),
-        ("person", "docks", "Kael Ironjaw", KAEL, [
+        ("person", "ogre", "Kael Ironjaw", KAEL, [
             ("thing", "Coin", coin(30)), ("thing", "Glaive", arm("glaive", "A glaive he found in a ditch. It cuts fine.")),
             ("thing", "Father's hat", {"portable": True, "bulk": 0, "description": "A battered hat. It was his father's."})]),
         ("person", "docks", "Newcomer", NEWCOMER, [("thing", "Coin", coin(200)), ("thing", "Knife", DAGGER)]),
@@ -1650,7 +1666,10 @@ def build_wiring(s, root):
     have = by_name(s)
     st_id = have["Story"]["id"]
     want = {"packet": have[AT_SEA]["id"], "under": have[UNDER]["id"], "siren": have["Ondrine"]["id"],
-            "emerald": have["The Emerald Eye"]["id"], "market": P["market"], "moonmoth": P["moonmoth"]}
+            "emerald": have["The Emerald Eye"]["id"], "market": P["market"], "moonmoth": P["moonmoth"],
+            # Ithriel and her household, whom the story walks to the Moonmoth with whoever asks her about passage
+            "ithriel": have["Ithriel"]["id"],
+            "household": [have[n]["id"] for n in ["Ithriel"] + [h[0] for h in HOUSEHOLD] if n in have]}
     cur = s.inspect(st_id)["state"]
     missing = {k: v for k, v in want.items() if cur.get(k) != v}
     if missing:
@@ -1660,6 +1679,7 @@ def build_wiring(s, root):
     s.set_rule(root, "story", kinds=STORY_KINDS)
     s.set_rule(root, "finds", kinds=["checked"])
     s.set_rule(root, "bound_guard", kinds=["before_act"])
+    s.set_rule(root, "follow_rule", kinds=["following", "stayed"])
     for a, b, standing, note in KNOWS:
         edges = s.recall(about=have[b]["id"], entity=have[a]["id"])["edges"]
         if not any(e["relation"] == "knows" and e["direction"] == "out" for e in edges):
@@ -1689,8 +1709,11 @@ HIRELINGS = {
                      "ask": "Five silver a day and I hit whatever you point at. Cheap, for what you get."},
     "Hanklevode": {"wage": 200, "max_days": 7, "line": "Doors, then. Quietly.",
                    "ask": "Two gold a day. I open doors quietly. I don't do blood, and I don't do Dominico."},
-    "Deloris": {"wage": 2500, "max_days": 3, "line": "Three days. Then I'm gone, and you never saw me.",
-                "ask": "Twenty-five gold a day. I don't haggle, and I don't stay long anywhere."},
+    # hard to win (owner, 2026-11-22): a favour, then a fortune; and she joins as herself, her seat staying Ed's
+    "Deloris": {"favour": "end Phillip Everuex's hunt for her", "wage": 2500, "max_days": 3, "seat": False,
+                "line": "Three days. Then I'm gone, and you never saw me.",
+                "ask": "Twenty-five gold a day, and that is the easy part. A man named Everuex is hunting me. End the "
+                       "hunt, then come back with the gold."},
     "Thoradin": {"favour": "find him the druid he is looking for", "days": 3, "max_days": 3,
                  "line": "Three days, then. I keep my word better than most keep their purse.",
                  "ask": "Coin? No. Find me my druid, and I'll walk with you three days."},
@@ -1702,15 +1725,20 @@ HIRE_SLOTS = 6  # the engine's cap on seats one grant claims; the hire's own (1 
 
 def build_hire(s, root):
     have = by_name(s)
-    for name, offer in HIRELINGS.items():
+    for name, offer in HIRELINGS.items():  # the terms are the owner's: a changed line here reaches the live world
         p = have.get(name)
-        if p is not None and p["state"].get("for_hire") is None:
-            s.patch(p["id"], {"for_hire": offer, "seatable": True})
+        seat = offer.get("seat", True) is not False
+        if p is not None and (p["state"].get("for_hire") != offer or bool(p["state"].get("seatable")) != seat):
+            s.patch(p["id"], {"for_hire": offer, "seatable": seat})
     rs = s.inspect(root)["state"]
     if rs.get("seat_slots") is None:
         s.patch(root, {"seat_slots": HIRE_SLOTS})
-    if "Hired help:" not in str(rs.get("briefing") or ""):  # added to what the root says, so an edit there stays
-        s.patch(root, {"briefing": ((str(rs.get("briefing")) + " ") if rs.get("briefing") else "") + HIRE_BRIEF})
+    briefing = str(rs.get("briefing") or "")
+    for mark, text in BRIEF_ADDENDA:  # added to what the root says, so an edit there stays
+        if mark not in briefing:
+            briefing = (briefing + " " if briefing else "") + text
+    if briefing != str(rs.get("briefing") or ""):
+        s.patch(root, {"briefing": briefing})
     s.set_rule(root, "hire_rule", kinds=["hire_ends", "killed"])
 
 
@@ -1728,17 +1756,23 @@ def mend_stale(s):
     tg = have.get("Harbourmaster Teague")
     if tg and str(tg["state"].get("default_line", "")).startswith("Teague taps his tally board."):
         s.patch(tg["id"], {"default_line": TEAGUE["default_line"]})
-    # every seat comes ashore at the docks (owner, 2026-11-22). A world nobody has played yet (its clock still at the
-    # start) moves the two seats an older build sat in their taverns; one already under way keeps them where play has them
-    if s.summary()["t"] <= START:
-        P = place_ids(s)
-        for name, was, now in (("Deloris", "unicorn", DELORIS), ("Kael Ironjaw", "ogre", KAEL)):
-            p = have.get(name)
-            if p is None or parent_of(s, p["id"]) != P[was]:
-                continue
-            s.move(p["id"], P["docks"])
-            s.patch(p["id"], {"post": P["docks"], "home": P["docks"], "description": now["description"],
-                              "brief": now["brief"]})
+    # Kael back to the Ogre and Deloris to the Stripperwitch, neither a seat players pick (owner, 2026-11-22, after
+    # an earlier word had put every seat at the docks). One nobody holds, standing where an older build put them,
+    # goes; one play has moved elsewhere stays where play has them.
+    P = place_ids(s)
+    for name, olds, new, now in (("Kael Ironjaw", ("docks",), "ogre", KAEL),
+                                 ("Deloris", ("docks", "unicorn"), "stripperwitch", DELORIS)):
+        p = have.get(name)
+        if p is None:
+            continue
+        st = p["state"]
+        if st.get("playable") or st.get("brief") != now["brief"] or st.get("dialog") != now["dialog"]:
+            dialog = {k: None for k in (st.get("dialog") or {}) if k not in now["dialog"]}  # a retired topic goes
+            dialog.update(now["dialog"])
+            s.patch(p["id"], {"playable": False, "brief": now["brief"], "dialog": dialog})
+        if s.world.embodied(p["id"]) is None and parent_of(s, p["id"]) in [P[k] for k in olds]:
+            s.move(p["id"], P[new])
+            s.patch(p["id"], {"post": P[new], "home": P[new]})
 
 
 def parent_of(s, eid):

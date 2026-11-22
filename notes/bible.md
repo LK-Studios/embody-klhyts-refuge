@@ -104,10 +104,32 @@ Who is for hire, and their price, are **host defaults** for the owner to correct
 - **Tully**, Dominico's bruiser: 2 sp a day, 3 days at most, and Dominico must not hear of it.
 - **Kael Ironjaw**, sellsword: 5 sp a day, up to 7.
 - **Hanklevode**, mercenary thief: 2 gp a day, up to 7. Doors, not blood.
-- **Deloris**, assassin: 25 gp a day, 3 days at most. The fortune.
+- **Deloris**, assassin: hard to win. A favour first (end Phillip Everuex's hunt for her, marked done by the narrator),
+  then 25 gp a day, 3 days at most. She joins as herself: her seat is never offered to the hirer (below).
 - **Thoradin**, ranger: no coin. A favour first (find him his druid; Saelwyn is one), then three days. The narrator
   marks the favour done with `favoured: {<the hirer's id>: true}` on him.
 - **Ssark**, Meters fisherman: no coin. A tot of rum, poured for him first, buys a day.
+
+### Kael and Deloris (owner, 2026-11-22)
+
+> "Can we move Kael back to the Ogre, and Deloris put her in Somewhere fancy, and make her difficult to convince to
+> join. Can we only ever have Ed play her please ? And same with Kael don't offer to be played by players"
+
+- **Deloris** keeps a room at the Stripperwitch (the owner's pick of the fancy places). Only Ed plays her: she is not a
+  `playable` seat, so no open invite can take her, and Ed sits in her through a named invite
+  (`invite("player", entity="Deloris", label="Ed")`, made by the owner on the hosted world).
+- **Kael Ironjaw** drinks at the Rampant Ogre. He is not a seat a player picks on joining; hiring him is how a player
+  gets his seat, for a sub-agent.
+- This replaces the earlier word that put every seat at the docks for these two; newcomers still come ashore there.
+
+## Ithriel's passage (owner's playtest, 2026-11-22)
+
+Playing it on the hosted world, the household never followed and the player ended up aboard the Moonmoth. Now:
+asking Ithriel about passage (or the ship, the pier, walking, help) brings her and her four (Faelan, Ysolde, Corwen,
+Miravel) in behind the one who asked; at the docks each goes up the gangplank alone, and the story keeps
+`elves_aboard`. Following anyone keeps a follower's usual place for them until they `stay`, and nobody is carried
+aboard the Moonmoth by following: a player stops at the gangplank, and a follower with no elf blood and no leaf is
+turned back. Voss seeing them on the way is not built (a possible twist).
 
 ## Not in this build (post-war, anachronistic)
 

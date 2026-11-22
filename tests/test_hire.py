@@ -108,9 +108,15 @@ def test_not_everyone_works_for_coin_and_some_cost_a_fortune():
     with pytest.raises(Rejected) as e:
         you.act("hire", "River")
     assert "not for hire" in e.value.reason
+    # Deloris is hard to win: a favour first, then a fortune, and she joins as herself (her seat is Ed's alone)
+    assert you.act("hire", "Deloris", params={"days": 1})["result"] == {"hired": False}
+    gm.patch(eid(gm, "Deloris"), {"favoured": {eid(gm, "Newcomer"): True}})
     with pytest.raises(Rejected) as e:
         you.act("hire", "Deloris", params={"days": 1})
     assert "25gp, and you have 9gp" in e.value.reason
+    purse(gm, you, cp=3400)
+    assert you.act("hire", "Deloris", params={"days": 1})["result"]["hired"] and purse(gm, you) == 900
+    assert gm.inspect("Deloris")["state"]["follows"] == eid(gm, "Newcomer") and not you.seats().get("offers")
     r = you.act("hire", "Ssark")  # wants a rum, not coin: without one, he says so
     assert r["result"] == {"hired": False}
     gm.spawn("thing", eid(gm, "Newcomer"), "Tot of rum", state={"portable": True})
@@ -126,7 +132,26 @@ def test_the_town_is_wired_for_it():
     eng, gm, you = town()
     root = gm.inspect(gm.summary()["root"])["state"]
     assert root["seat_slots"] == 6 and "Hired help:" in root["briefing"]
-    for name in ("Tully", "Kael Ironjaw", "Hanklevode", "Deloris", "Thoradin", "Ssark"):
+    assert root["briefing"].count("At this table:") == 1 and "never say \"one moment\"" in root["briefing"]
+    for name in ("Tully", "Kael Ironjaw", "Hanklevode", "Thoradin", "Ssark"):
         st = gm.inspect(name)["state"]
         assert st["for_hire"] and st["seatable"], name
+    assert gm.inspect("Deloris")["state"]["for_hire"]["favour"] and not gm.inspect("Deloris")["state"].get("seatable")
     assert not gm.inspect("River")["state"].get("seatable")
+
+
+def test_only_ed_plays_deloris_and_nobody_picks_kael():
+    eng, gm, you = town()
+    ana = eng.session_for_token(gm.invite("player", label="ana")["token"])
+    for name in ("Deloris", "Kael Ironjaw"):  # an open invite picks neither
+        with pytest.raises(Rejected) as e:
+            ana.join("klhyts-refuge", name)
+        assert "not a seat you may take" in e.value.reason, name
+    ed = eng.session_for_token(gm.invite("player", entity="Deloris", label="Ed")["token"])
+    assert ed.join()["you"]["name"] == "Deloris"  # Ed's own invite names her
+    here(gm, "Deloris")
+    purse(gm, you, cp=5000)
+    gm.patch(eid(gm, "Deloris"), {"favoured": {eid(gm, "Newcomer"): True}})
+    with pytest.raises(Rejected) as e:  # with Ed in her, terms are Ed's to talk, not a hire to buy
+        you.act("hire", "Deloris", params={"days": 1})
+    assert "a mind of their own" in e.value.reason

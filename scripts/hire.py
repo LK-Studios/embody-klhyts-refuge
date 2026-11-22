@@ -1,6 +1,6 @@
 # hire: take someone here into your service, on their terms (see _hired). Asked bare, they name their price; with
-# {"days": n}, coin buys n days; someone who wants a thing takes it from what you carry, and someone owed a favour
-# signs on once the world has marked it done. Hiring again before the days run out adds days.
+# {"days": n}, coin buys n days; someone who wants a thing takes it from what you carry, and a favour (alone, or
+# before a price) counts once the world has marked it done. Hiring again before the days run out adds days.
 use("hired")
 
 def deal(ctx, me, who):
@@ -10,6 +10,10 @@ def deal(ctx, me, who):
     h = who.state.hired or {}
     ours = h.get("by") == me.id and float(h.get("until") or 0) > ctx.t
     start = float(h.get("until")) if ours else ctx.t
+    # a favour comes before any price: once to sign them on, and again for more days when the favour is all they take
+    alone = not offer.get("wage") and not offer.get("wants")
+    if offer.get("favour") and (not ours or alone) and not (who.state.favoured or {}).get(me.id):
+        return {"go": False, "why": "The favour comes first (" + str(offer.get("favour")) + "), and it is not done yet"}
     if offer.get("wage"):
         if p.get("days") is None:
             return {"go": False, "why": "Hire them with params {\"days\": n}"}
@@ -31,8 +35,6 @@ def deal(ctx, me, who):
     elif offer.get("favour"):
         n = int(offer.get("days") or 1)
         cost = 0
-        if not (who.state.favoured or {}).get(me.id):
-            return {"go": False, "why": "The favour is not done yet"}
     else:
         return who.name + " has named no price"
     if start + n * day(ctx) - ctx.t > max_days(offer) * day(ctx) + 1:
@@ -89,9 +91,9 @@ def apply(ctx):
         t = d["thing"]
         paid = t.name
         ctx.transfer(t, who, count=1 if ctx.count(t) > 1 else None)
-    if offer.get("favour") and not offer.get("wage") and not offer.get("wants"):
-        ctx.patch(who, {"favoured": {me.id: None}})
-        paid = "the favour"
+    if offer.get("favour") and (who.state.favoured or {}).get(me.id):
+        ctx.patch(who, {"favoured": {me.id: None}})  # spent
+        paid = (paid + " and the favour") if paid else "the favour"
     if d["ours"]:
         ctx.patch(who, {"hired": {"until": until}})
     else:
@@ -111,8 +113,12 @@ def apply(ctx):
     seat = ""
     if not ctx.embodied(who):
         ctx.patch(who, {"follows": me.id})
-        oid = ctx.offer_seat(who, me, why="in your hire for " + days_text(n) + ": they follow your lead, and stay themself")
-        seat = (". They follow you. Their seat is offered to you (" + oid + "): claim_seat(\"" + oid + "\") gives them "
-                "an agent of their own, for as long as the hire lasts")
+        if offer.get("seat") is False or not who.state.seatable:
+            # someone whose seat is kept for one player (Deloris, Ed's) joins as herself: no seat comes with the hire
+            seat = ". They follow you, as themself: no seat comes with this hire"
+        else:
+            oid = ctx.offer_seat(who, me, why="in your hire for " + days_text(n) + ": they follow your lead, and stay themself")
+            seat = (". They follow you. Their seat is offered to you (" + oid + "): claim_seat(\"" + oid + "\") gives "
+                    "them an agent of their own, for as long as the hire lasts")
     ctx.log(who.name + " is in your hire for " + days_text(n) + ", for " + paid + seat)
     return {"hired": True, "until": until}
