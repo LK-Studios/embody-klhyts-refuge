@@ -23,7 +23,7 @@ from packs.dnd5e.pack import armor as armor5, character, class_hp, install_rules
 
 WORLD = {
     "id": "klhyts-refuge",
-    "name": "Shalamar - Klhyts Refuge",
+    "name": "Embody - Klhyts Refuge",
     "seed": 1988,
     "description": "Shalamar, before the war. Klhyts Refuge, the nicest town on the continent: taverns, inns and "
                    "docks, refugees from Landfall, Lizardfolk tolerated. Fat Gog's guild is under threat and the "

@@ -1,4 +1,4 @@
-# Shalamar: Klhyts Refuge
+# Embody - Klhyts Refuge
 
 A custom game built on [embody](https://github.com/newsbubbles/embody), the open-source world engine by Nathaniel
 Gibson (MIT). This repository is the world, not the engine: the places, people, rules and story of one evening in
