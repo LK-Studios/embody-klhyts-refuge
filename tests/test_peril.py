@@ -214,15 +214,39 @@ def test_the_throne_attacks_the_wanted_on_sight():
     me = eid(gm, "Newcomer")
     gm.act_as("The Custodian", "warrant", params={"who": "Newcomer"})
     assert me in story(gm)["wanted"]
+    gm.patch(me, {"hp": 200, "max_hp": 200})  # to live long enough to be pardoned
     put(gm, "Lieutenant Voss", "Harbour Street", hold=True)
     since = last_seq(gm)
     put(gm, "Newcomer", "Harbour Street")
     run(gm, 60)
-    fights = [f for f in gm.world.find(type="fight", limit=10) if gm.world.get(f["parent_id"])["name"] == "Harbour Street"]
-    assert fights and gm.inspect("Lieutenant Voss")["state"].get("fight") == fights[0]["id"]
+    voss = eid(gm, "Lieutenant Voss")
+    started = [e for e in gm.history(since=since, kinds=["initiative"], limit=50) if (e.get("payload") or {}).get("by") == voss]
+    assert started  # the fight may be over already: he fights to kill, and a fresh character rarely lasts a round
     assert any("By commission of the Throne" in t for t in scenes(gm, since))
     gm.act_as("The Custodian", "pardon", params={"who": "Newcomer"})
     assert me not in story(gm)["wanted"] and not (gm.inspect("Vorkathia")["state"].get("hostile") or {}).get(me)
+
+
+def test_the_first_perils_outlaw_mark_comes_off_the_fist_on_the_upgrade():
+    eng, gm, you, _ = town()
+    me = eid(gm, "Newcomer")
+    gm.patch(gm.inspect("Story")["id"], {"peril_v": 1, "peril_step": {me: "marked"}})
+    gm.patch(gm.inspect("the Fist")["id"], {"hostile": {me: True}, "unseen": {me: -8}})
+    load_world(gm, WORLD, upgrade=True)
+    f = gm.inspect("the Fist")["state"]
+    assert not (f.get("hostile") or {}).get(me) and not (f.get("unseen") or {}).get(me)
+    assert story(gm)["peril_v"] == 2 and story(gm)["peril_step"][me] == "marked"
+
+
+def test_five_gold_to_the_fist_takes_the_word_back():
+    eng, gm, you, _ = town()
+    me = eid(gm, "Newcomer")
+    gm.act_as("Dominico", "set_on", params={"who": "Newcomer"})
+    put(gm, "Newcomer", "Rampant Ogre & Curved Cleaver")
+    put(gm, "Tully", "Rampant Ogre & Curved Cleaver", hold=True)
+    gm.spawn("thing", me, "Purse", state={"kind": "cp", "count": 600, "portable": True, "bulk": 0})
+    you.act("give", "Tully", params={"item": "Purse", "count": 500})
+    assert story(gm)["peril_step"][me] == "paid" and not hunts(gm, "kill", me)
 
 
 def test_a_world_that_played_its_night_marks_whoever_freed_klhyt_on_the_upgrade():
@@ -232,7 +256,8 @@ def test_a_world_that_played_its_night_marks_whoever_freed_klhyt_on_the_upgrade(
     gm.patch(sid, {"freed_by": me, "klhyt_freed": True, "peril_v": None})
     load_world(gm, WORLD, upgrade=True)
     st = story(gm)
-    assert st["peril_v"] == 1 and st["peril_step"][me] == "marked" and st["heat"][me] == 8
-    assert gm.inspect("the Fist")["state"]["hostile"][me]
+    assert st["peril_v"] == 2 and st["peril_step"][me] == "marked" and st["heat"][me] == 8
+    # the mark is the Story's: on the Fist's outlaw list, Brask and Tully would strike on sight with nobody playing
+    assert not (gm.inspect("the Fist")["state"].get("hostile") or {}).get(me)
     load_world(gm, WORLD, upgrade=True)  # again, without change
     assert story(gm)["heat"][me] == 8

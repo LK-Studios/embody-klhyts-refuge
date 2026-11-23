@@ -40,9 +40,6 @@ def apply(ctx):
         else:
             ctx.log("nobody is left to carry the word")
     elif v == "call_off":
-        fist = faction_called(ctx, FIST)
-        if fist is not None:
-            pardon_of(ctx, fist, who)
         for hid in list((s.state.hunts or {}).keys()):
             rec = (the_story(ctx).state.hunts or {}).get(hid)
             if rec and rec.get("target") == who.id:

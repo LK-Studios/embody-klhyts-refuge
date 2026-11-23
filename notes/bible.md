@@ -338,18 +338,20 @@ What is built (scripts/_peril.py, scripts/peril_rule.py, cast/f_peril.py; host d
   freeing Klhyt (4, anyone else there 2); a blow on one of the Fist (3).
 - **The steps.** At 3 a tail: one of the Fennicks follows for half a world hour, shown to the player alone by look
   ("is here too, and does not look your way"). At 5 a warning: Sabeth Crane finds them and reads their evening back
-  to them from her little book. At 8 the Fist marks them: quietly outlawed, deep (standing -8: a gift or two will not
-  buy it back, many will), and two of the Fist (three past 12) hunt them, a hop each 30 world seconds. When they find
+  to them from her little book. At 8 the Fist marks them (on the Story, never the faction's outlaw list, whose fighters
+  strike on sight whether anyone is playing or not), and two of the Fist (three past 12) hunt them, a hop each 30 world
+  seconds. Five gold in coin to any of the Fist buys the word back. When they find
   them they show themselves first (an ambush line by look) and strike on the next tick: one beat, about one deed, to
   run, shout or draw. A new wave comes six world hours after the last. A lone fresh character caught by two of them
   is very likely dead (a rehearsal: two thugs killed a level 1 Newcomer inside a round).
 - **Fair hunting.** Hunters move only while someone plays their mark and is at it (their seat did something in the last
-  half world hour); otherwise they go back to their day and the hunt waits. The Throne's men keep the same rule. They never enter the Stripperwitch (Fat Gog's house) or the Moonmoth: they wait outside. One of the Fist in
-  the marked player's hire is found out and leaves the Fist. No new marks once Dominico is dead or in irons.
+  half world hour); otherwise they go back to their day and the hunt waits. The Throne's men keep the same rule. They
+  never enter the Stripperwitch (Fat Gog's house) or the Moonmoth: they wait outside. One of the Fist in the marked
+  player's hire is found out and leaves the Fist. No new marks once Dominico is dead or in irons.
 - **Brask's door.** Cowed, he runs for help with the key on his belt, and the Fist is at the warehouse in five world
   minutes. Bribed, he hangs the key and goes, talks within half an hour, and the Fist comes in fifteen. Shown Gog's
   marker, he hangs the key and goes, and the Fist comes in ten. When they come: Klhyt still inside, three of them on
-  the door; Klhyt loose on the waterfront, they fight for him (the Fist outlaws Klhyt too) and his walk to the square
+  the door; Klhyt loose on the waterfront, they fight for him (each of them his foe in that fight) and his walk to the square
   waits until the fight is done; Klhyt gone, whoever freed him is marked.
 - **Dominico.** Shown the letter or the passage, he lets Gog be but holds out his hand for it: given within two world
   minutes, he burns it and forgets the giver; kept, the giver is marked. Cowed, he lets Gog be and marks the one who
@@ -366,7 +368,93 @@ What is built (scripts/_peril.py, scripts/peril_rule.py, cast/f_peril.py; host d
 - **Orders for minds.** Dominico and Sabeth Crane hold `set_on` and `call_off`; the Custodian holds `warrant` and
   `pardon` (verbs of their own, each `who=<name>`), and each brief has a paragraph on their teeth.
 - **The live world.** On the upgrade, whoever freed Klhyt there is marked by the Fist (hunted only while someone plays
-  them), and the Throne's warrant comes at the next two in the morning.
+  them), and the Throne's warrant comes at the next two in the morning. The first deploy of this (2026-11-23) put that
+  mark on the Fist's outlaw list, where Brask and Tully would strike on sight with nobody playing; the next upgrade
+  takes it off and keeps the mark on the Story.
+
+## Fat Gog's work (owner, 2026-11-23)
+
+> We still go shallow NPCs fat hog has nothing to say despite being the main person to go to for stuff and missions
+
+What the live world showed: asked twice for work and pay ("Work, then. If we're protecting Klhyt tomorrow ... are we
+getting paid for it?"), Gog gave his line about the Custodian both times. His table had no word for pay, the table
+scores a matched word by its length (so "custodian" beat "work"), and his work line still sent people to the warehouse
+hours after Klhyt was home. He had no work to give once the first night was over.
+
+What is built (cast/g_gog.py, scripts/_missions.py, scripts/missions_rule.py; the engine's jobs pack):
+
+- **His table reads the news and answers what is asked**: work and pay (a long list of words: work, job, mission, pay,
+  paid, reward, coin, help, anything...), guarding and protecting (the small hours, the witnesses), why bother, the
+  Fist's men, the ring, the witnesses and the warrant, the elves; the greeting and the mayor in stages (Klhyt home,
+  Klhyt dead); his own lines for anything else steer to work.
+- **His missions are jobs he carries** (the jobs pack: `jobs` lists what you could take, `take_job` takes it), offered
+  aloud to whoever asks him for work, when the story calls for them, and paid from his own purse with standing in the
+  Guild. Host defaults, the owner may change any:
+  - *Where my mayor went* (before he knows): show him proof he can hold. 5 sp.
+  - *Bring him breathing* (he knows, Klhyt still crated): cut Klhyt loose before the tide. 5 gp, to the one who cuts
+    him and whoever stands with them.
+  - *Keep my books* (before midnight): be in the Stripperwitch at the bell; with his friends there the Fist turns away
+    and Dominico lets Gog be. 3 gp.
+  - *The hooded household*: walk Ithriel's household to the Moonmoth. 1 gp.
+  - *Who pays for Dominico's nerve*: watch him at the Apothecary (arcana, religion or investigation, DC 13: the candle
+    leans toward the ring he turns) and tell Gog. 5 gp. Gog then knows something old is whispering to Dominico.
+  - *Sit up with a witness* (the Custodian found out, before the verdict): be with Teague or Tully when Voss calls in
+    the small hours. 3 sp a night, again each night.
+  - *Papers for the magistrate* (the magistrate ashore): show them a paper against the Custodian. 3 gp.
+  - *The Fist's dogs* (someone marked): put one of the Fist on the ground in a fight. 2 gp each time.
+- A mind may run Gog later: his brief says what moves the story now and that he offers these with `offer_job`.
+
+## Shops, keepers who keep their houses, and the town's work (owner, 2026-11-23)
+
+> The touchy unicorn seems to have lost its owner bar keep
+> And we need some shops. Adventurer stuffs food, weapons. Armour
+> Key NPCs need power and agency
+> Deepen gog, klyht, etc
+> Custodian, and create new shop owners for our new shops. Make sure a rapier is for sale
+> Klyht has nothing to say. River seems to run out. I am finding NPCs are shallow still. How do I make them chat ?
+
+(Asked how NPCs should truly chat, the owner picked "Tables only for now": deeper tables, missions and shops; minds
+for the key people are a later step.)
+
+- **The keepers keep their houses.** Wendeline Moss walked out of the Touchy Unicorn twice a day (the Town Hall at
+  nine, the pond at ten, the evening carts at five), Bosun Maggs left the Turtle Dragon for the docks at half past
+  midnight (to "a pot-boy" who did not exist), Big Ludo, Sister Agathe and Master Quillon had errands in opening hours.
+  Their errands moved to between six and eight in the morning, when the taverns are shut (cast/k_keepers.py); Maggs
+  sells passage over her own bar now.
+- **Chandlers' Row** (host default: canon names no shops), a steep cobbled lane between Harbour Street and the Night
+  Market, with three shops whose keepers live above them and keep them at every hour (cast/h_shops.py; wares in
+  build.py, 5e's prices in copper):
+  - *Merrow's Chandlery*, Hob Merrow: backpacks, bedrolls, trail rations, waterskins, rope, torches, lanterns, oil,
+    healer's kits, potions of healing (50 gp), crowbars, grappling hooks, thieves' tools, caltrops, a map.
+  - *The Crooked Anvil*, Tamsin Vey, an elven bladesmith in exile: the **rapier** (25 gp), a sword-cane, daggers,
+    swords, axes, spears, maces, hammers, a glaive, a whip, javelins, bows, a light crossbow, arrows and bolts.
+  - *Coral and Chain*, Brynja Coralhand, a Xoton armourer: padded, leather, studded, hide, coral, chain shirt, scale,
+    ring, chain mail, a breastplate and shields.
+  Each shop has something for a sharp eye (a scraped regimental drum, an unpaid line for a black sword-cane, THE FIST
+  OWES 30 JERKINS).
+- **More people carry work** (cast/l_missions.py), offered when asked for work, a deal, pay or help, and paid in each
+  giver's own voice:
+  - *Klhyt*: show him a paper against the Custodian (2 gp, Gog's purse); stand in the square at ten when the Custodian
+    reads his proclamation from the steps (1 gp, each morning).
+  - *River*: carry a sealed note (green wax) to Ned Tallow the lamplighter (2 sp, a day). It hints; it tells nothing.
+  - *The Custodian*: his bargain, ten gold for a paper against him, which he burns. A paper sold to him is a paper the
+    magistrate never sees.
+- **Deeper tables** for Klhyt, River, the Custodian, Dominico and Gog (cast/i_klhyt_river.py, cast/j_powers_deep.py):
+  many more topics, staged by the news, lines that ask and offer, and a paragraph for a mind on what each wants now.
+
+## A player's body is the player's (2026-11-23)
+
+A player (Nate, playing Kesh-Ta, who goes by Joe) found his character back on the pier without having moved him:
+"make sure it's not just jolting bodies around and puppeteering players". The live log showed the d20 pack's idle care
+(`quench`) walking held seats gone idle back to their `post`, a step a minute, and every character made from a
+template had its post at the docks: Kalypso at 00:33, Kesh-Ta at 01:06 and Pepe Papa at 02:26 were each walked to the
+pier while their humans were away.
+
+Now a body with `stays` is never walked by idle care (an engine change in the d20 pack): every template carries it, and
+the build gives it to the Newcomer and to every character already made (`build_players`). It drinks what is in hand
+or where it stands, and waits where its player left it. The town's own people keep their walks: that is how their
+days move them. Nothing else in the Refuge moves a body someone plays: the story's walks, the hunters and the Throne
+move only the town's people.
 
 ## Not in this build (post-war, anachronistic)
 

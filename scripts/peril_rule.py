@@ -37,17 +37,50 @@ def on(ctx, event):
         by = ctx.get(p.get("by")) if p.get("by") else None
         if t is not None and by is not None and t.state.faction == FIST and by.state.faction != FIST:
             add_heat(ctx, by, 3, "struck one of the Fist")
+    elif k == "given":
+        tribute(ctx, s, event, p)
     elif k == "fist_answers":
         fist_answers(ctx, s, p)
     elif k == "brask_talks":
         who = ctx.get(p.get("by")) if p.get("by") else None
         add_heat(ctx, who, 3, "paid Brask off his door", False)
 
+def tribute(ctx, s, event, p):
+    # five gold in coin, to any of the Fist, from someone they have marked: the word is taken back
+    t = ctx.get(event.target) if event.target else None
+    by = ctx.get(p.get("by")) if p.get("by") else None
+    item = ctx.get(p.get("item")) if p.get("item") else None
+    if t is None or by is None or item is None or t.state.faction != FIST or step_of(s.state, by) != "marked":
+        return
+    kind = ctx.root().state.coin_kind or "coin"
+    if item.state.kind != kind:
+        return
+    paid = int((s.state.tribute or {}).get(by.id) or 0) + ctx.count(item)
+    ctx.patch(s, {"tribute": {by.id: paid}})
+    if paid < TRIBUTE:
+        ctx.emit("scene", target=t.parent.id, reach=1, text=cap1(look_of(t, "the man in the black armband")) + " weighs "
+                 "it, and pockets it, and does not say thank you. \"It's a start.\"")
+        return
+    set_step(ctx, by, "paid")
+    ctx.patch(s, {"heat": {by.id: WARN_AT - 1}})
+    for hid in list((s.state.hunts or {}).keys()):
+        rec = (the_story(ctx).state.hunts or {}).get(hid)
+        if rec and rec.get("target") == by.id:
+            end_hunt(ctx, hid)
+    ctx.emit("scene", target=t.parent.id, reach=1, text=cap1(look_of(t, "the man in the black armband")) + " counts it, "
+             "twice. \"I'll tell Sabeth you've paid,\" comes the answer at last. \"Don't make her write your name "
+             "down again.\"")
+    dom = ctx.get(s.state.dominico) if s.state.dominico else None
+    if dom is not None:
+        ctx.remember(dom, by.name + " paid the Fist five gold. The word on them is taken back.")
+
 def tick(ctx, s):
     st = s.state
     h, day = hour_of(ctx)
     if st.custodian_exposed and not st.verdict and NIGHT_FROM <= h < NIGHT_TO and st.throne_day != day:
         throne_night(ctx, s, day)
+    if st.custodian_exposed and not st.verdict and 10.0 <= h < 10.5 and st.steps_day != day:
+        on_the_steps(ctx, s, day)
     want = st.dominico_wants
     if want and ctx.t > float(want.get("until") or 0):
         ctx.patch(s, {"dominico_wants": None})
@@ -68,6 +101,19 @@ def tick(ctx, s):
             run_hunt(ctx, hid, rec)
     throne_sight(ctx, the_story(ctx))
 
+def on_the_steps(ctx, s, day):
+    # ten in the morning: the Custodian reads the Throne's proclamation from the Town Hall steps, and whoever stands in
+    # the square with Klhyt is seen to (Klhyt's "The steps at ten")
+    st = s.state
+    ctx.patch(s, {"steps_day": day})
+    there = [x for x in ctx.children(st.square, "person") if ctx.embodied(x)]
+    if not there:
+        return
+    ctx.emit("scene", target=st.square, reach=1, text="At ten the Town Hall door opens, and the thin man in the grey "
+             "coat reads the Throne's proclamation from the top step in a voice that carries. This morning he reads it "
+             "to faces that do not look away, and he reads it faster than he meant to.")
+    tell_mission(ctx, "steps", [x.id for x in there])
+
 def run_hunt(ctx, hid, rec):
     st = the_story(ctx).state
     h = ctx.get(hid)
@@ -81,11 +127,9 @@ def run_hunt(ctx, hid, rec):
         end_hunt(ctx, hid)
         return
     mode = rec.get("mode")
-    if mode == "kill":
-        fist = faction_called(ctx, FIST)
-        if fist is None or not outlaw_of(ctx, fist, tgt):
-            end_hunt(ctx, hid)  # paid off, or called off
-            return
+    if mode == "kill" and step_of(st, tgt) != "marked":
+        end_hunt(ctx, hid)  # paid off, or called off
+        return
     if not playing(ctx, tgt) or tgt.parent is None:
         # nobody plays them now (or their human has gone quiet): the hunter goes back to his day, and the hunt waits for them
         if h.state.routine_hold_until is not None:
@@ -206,9 +250,6 @@ def fist_answers(ctx, s, p):
     if st.klhyt_freed and klhyt is not None and klhyt.parent is not None and not klhyt.state.dead and \
             klhyt.parent.id in [st.docks, st.warehouse, st.harbour]:
         place = klhyt.parent
-        fist = faction_called(ctx, FIST)
-        if fist is not None:
-            outlaw(ctx, fist, klhyt)
         freer = ctx.get(st.freed_by) if st.freed_by else None
         if freer is not None:
             ctx.patch(s, {"heat": {freer.id: max(heat_of(the_story(ctx).state, freer), MARK_AT)}})
@@ -224,6 +265,8 @@ def fist_answers(ctx, s, p):
                  "standing loose, and stop. Then they spread out, slowly, the way men do who have been told what happens "
                  "to them if the crate goes out empty.")
         strike_first(ctx, men[0], klhyt)
+        for m in men:
+            mark_foes(ctx, m, klhyt)  # each of them is there for him
         return
     freer = ctx.get(st.freed_by) if st.freed_by else None
     if freer is not None:
@@ -289,6 +332,7 @@ def throne_night(ctx, s, day):
         wl = look_of(w, "the witness")
         guarded = [x for x in ctx.children(place, "person") if ctx.embodied(x)]
         if guarded:
+            tell_mission(ctx, "witnesses", [x.id for x in guarded])
             ctx.emit("scene", target=place.id, reach=1, text=who + come + " to the door in the small hours, look at who is "
                      "sitting up with " + wl + ", and stand there a while. Then they go away again. Too many eyes.")
             ctx.patch(s, {"spared": {key: day}})

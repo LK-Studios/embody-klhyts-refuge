@@ -25,6 +25,7 @@ from pathlib import Path as _Path
 
 from packs.d20.pack import install_rules
 from packs.dnd5e.pack import armor as armor5, character, class_hp, install_rules as install_5e, weapon as weapon5
+from packs.jobs.pack import install_rules as install_jobs
 
 WORLD = {
     "id": "klhyts-refuge",
@@ -33,7 +34,7 @@ WORLD = {
     "description": "Shalamar, before the war. Klhyts Refuge, the nicest town on the continent: taverns, inns and "
                    "docks, refugees from Landfall, Lizardfolk tolerated. Fat Gog's guild is under threat and the "
                    "founder is missing.",
-    "requires": ["village", "d20", "sheet", "dnd5e", "locks"],
+    "requires": ["village", "d20", "sheet", "dnd5e", "locks", "jobs"],
 }
 
 # ---- 5e on the sheet pack ----------------------------------------------------------------------------------------
@@ -473,12 +474,45 @@ PLACES = {
                        "Beyond, the jungle road goes into the dark, and the dark goes on a long way.",
         "finds": {"survival|nature|perception": {"dc": 11, "line": "The road out is well used: cart ruts, hooves, the splayed prints of "
                                                  "Lizardfolk feet coming in to market. Nothing has come down it in a hurry tonight."}}}),
+    # the shops (owner, 2026-11-23: "we need some shops. Adventurer stuffs food, weapons. Armour"; canon names none:
+    # host defaults). Chandlers' Row runs between Harbour Street and the Night Market; each keeper lives above the shop
+    "row": ("Chandlers' Row", {
+        "description": "A short, steep lane between Harbour Street and the Night Market, cobbled with ballast stones. Three "
+                       "shopfronts stand with their shutters propped open late for the night trade: a chandler's window "
+                       "hung with rope and lanterns, a smith's door with a crooked anvil painted on the lintel, and a "
+                       "Xoton armourer's sign of coral and chain. Lamps burn in all three."}),
+    "chandlery": ("Merrow's Chandlery", {
+        "description": "A narrow shop that goes back much further than it looks, every inch of it hung or shelved: coils "
+                       "of rope, lanterns, bedrolls, oilskins, barrels of hardtack and salt fish, a glass case of small "
+                       "bottles with red wax on their necks, and maps pinned flat under a sheet of glass on the counter.",
+        "finds": {"perception|investigation": {"dc": 13,
+                  "line": "Behind the counter, half hidden by a rack of lanterns, a regimental drum hangs on a nail with "
+                          "its painted crest scraped off. Somebody scraped it carefully, a long time ago.",
+                  "fail": "Rope, lamps, biscuit and the smell of tar. A chandler's shop."}}}),
+    "anvil": ("The Crooked Anvil", {
+        "description": "A forge-shop open to the lane, hot as a kitchen: a crooked anvil, a quenching trough, and on the "
+                       "back wall a rack of blades laid out like a choir, rapiers at the front, their guards curling like "
+                       "fern fronds. Bows and crossbows hang above them; a barrel of spears stands by the door.",
+        "finds": {"perception|investigation|history": {"dc": 12,
+                  "line": "Elven script is worked small into the rapier guards, a word on each: names, you think, and none "
+                          "of them the smith's. A ledger by the anvil has one long-unpaid line, for a sword-cane, black, "
+                          "silver head.",
+                  "fail": "Good steel, well kept. Somebody here knows what they are doing."}}}),
+    "coral": ("Coral and Chain", {
+        "description": "A low Xoton shop that smells of oil and the sea: coral plates drying on racks like shells on a "
+                       "beach, a hauberk on a wooden man by the door, leather jerkins hung in a row, shields stacked like "
+                       "plates, and a workbench of rivets and awls under a glow-kelp lamp.",
+        "finds": {"perception|investigation": {"dc": 12,
+                  "line": "A slate on the wall reads, in chalk: THE FIST OWES 30 JERKINS. Under it, a newer line: AND "
+                          "INTEREST.",
+                  "fail": "Armour, oil and the sound of a mallet. A working shop."}}}),
 }
 
 WAYS = [("square", "market"), ("harbour", "market"), ("docks", "moonmoth"), ("docks", "warehouse"), ("docks", "harbour"), ("harbour", "turtle"), ("harbour", "apothecary"), ("harbour", "ogre"),
         ("harbour", "square"), ("square", "hall"), ("hall", "study"), ("square", "stripperwitch"), ("square", "omberhulk"),
         ("square", "treeline"), ("treeline", "unicorn"), ("square", "gate"), ("square", "lanes"), ("market", "lanes"),
-        ("docks", "cove")]
+        ("docks", "cove"), ("harbour", "row"), ("row", "market"), ("row", "chandlery"), ("row", "anvil"),
+        ("row", "coral")]
 
 # ---- people ------------------------------------------------------------------------------------------------------
 # Each: (type, where, state, carries). Lines in a table: words in double quotes are said, the rest is seen.
@@ -955,7 +989,7 @@ KAEL = {
 NEWCOMER = {
     **body({"str": 10, "dex": 14, "con": 12, "int": 13, "wis": 15, "cha": 10},
            {"perception": 2, "insight": 2, "investigation": 2, "stealth": 2}, 10),
-    "playable": True, "faction": None,
+    "playable": True, "faction": None, "stays": True,
     "description": "You, fresh off a fishing boat from somewhere you would rather not talk about, salt in your hair and "
                    "everything you own on your back.",
 }
@@ -1409,6 +1443,10 @@ PLACE_AT = {
     "moonmoth": ([-112, -238, 0], [44, 10, 14]),
     "lanes": ([120, 110, 0], [90, 60, 2]),
     "cove": ([-290, -255, 0], [50, 40, 2]),
+    "row": ([-60, -96, 0], [100, 10, 2]),
+    "chandlery": ([-95, -82, 0], [18, 14, 7]),
+    "anvil": ([-62, -82, 0], [16, 14, 6]),
+    "coral": ([-30, -82, 0], [18, 14, 6]),
 }
 PLACE_TYPES = {"moonmoth": "elfship"}
 PACKET_AT = ([0, -700, 0], [24, 7, 2])
@@ -1418,7 +1456,7 @@ UNDER = "Under the Harbour"
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
 STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
-          "peril"]
+          "peril", "missions", "shops"]
 
 
 def by_name(s):
@@ -1669,7 +1707,9 @@ def templates(P):
         five.update({"max_hp": five["hp"], "five_e": 1})
         gear = [{"type": "thing", "name": armour_state(k)[0], "state": armour_state(k)[1]} for k in armours]
         out[key] = {"type": "person", "place": P[where], "doc": doc,
+                    # `stays`: nothing walks a player's body while they are away (the d20 pack's idle care)
                     "state": {**body(scores, skills, hp5), **five, "description": doc, "post": P[where], "home": P[where],
+                              "stays": True,
                               "people": TEMPLATE_PEOPLE[key],
                               "skill_prof": {k: 1 for k, v in (skills or {}).items() if v},  # 5e skills (statblocks)
                               "statblock": people_block(TEMPLATE_PEOPLE[key])},
@@ -1966,16 +2006,22 @@ def load_cast():
                     merged[k] = v
             cast[name] = merged
         new.update(getattr(mod, "NEW", {}))
-        PERIL_DATA.update(getattr(mod, "PERIL", {}) or {})
-        if getattr(mod, "MAGISTRATE", None):
+        # the special names count only in their own shape: a cast file may name a topic key MAGISTRATE or PERIL
+        part = lambda name, kind: getattr(mod, name, None) if isinstance(getattr(mod, name, None), kind) else None
+        PERIL_DATA.update(part("PERIL", dict) or {})
+        MISSIONS_DATA.extend(part("MISSIONS", list) or [])
+        WORK_VOICES.update(part("WORK_VOICES", dict) or {})
+        if part("MAGISTRATE", dict):
             MAGISTRATE_DATA = mod.MAGISTRATE
-        FAITH_TEXTS.update(getattr(mod, "FAITH_TEXTS", {}) or {})
+        FAITH_TEXTS.update(part("FAITH_TEXTS", dict) or {})
     return cast, new
 
 
 MAGISTRATE_DATA = None
 FAITH_TEXTS = {}  # cast/e_faith.py: the missions' tract, and its line in the Unicorn's library
 PERIL_DATA = {}  # cast/f_peril.py: who fights to kill, and the orders the villains hold (build_peril)
+MISSIONS_DATA = []  # cast/g_gog.py, cast/l_missions.py: the town's work, as jobs its givers carry (build_missions)
+WORK_VOICES = {}  # cast/l_missions.py: how each giver offers and pays, in their own voice
 
 
 CAST, NEW_PEOPLE = load_cast()
@@ -2400,6 +2446,10 @@ PLACE_SHORT = {
     "lanes": "Narrow lanes of timber houses, washing overhead and a goat in every third yard.",
     "cove": "A hidden cove of black shingle, where a long black schooner rides at anchor.",
     "gate": "Two open timber gates, and the jungle road going on into the dark.",
+    "row": "A steep cobbled lane of three lit shopfronts: rope and lanterns, blades, and coral armour.",
+    "chandlery": "A long narrow chandler's shop hung floor to ceiling with rope, lanterns, bedrolls and biscuit barrels.",
+    "anvil": "A hot forge-shop open to the lane, blades racked on the wall like a choir, rapiers at the front.",
+    "coral": "A low Xoton armourer's smelling of oil and the sea: coral plates, chain, leather and shields.",
 }
 # what a place's own rules read and a player must not: what a check there turns up (the cove's path among them)
 PLACE_SECRET = ["finds"]
@@ -2456,9 +2506,8 @@ def build_glance(s, root):
 # ---- peril (owner, 2026-11-23: "We need more peril!"; asked, "Full 5e, to the death" and "World first, minds after") -
 # scripts/_peril.py has the why: heat, the tail, the warning, the Fist's mark and its hunters, the Throne's warrant and
 # the Custodian's nights; cast/f_peril.py has who fights to kill and the orders the villains hold.
-PERIL_KINDS = ["peril_tick", "talked", "say", "hit", "fist_answers", "brask_talks"]
+PERIL_KINDS = ["peril_tick", "talked", "say", "hit", "given", "fist_answers", "brask_talks"]
 PERIL_EVERY = 30  # world seconds between the hunts' moves
-PERIL_MARK_DEPTH = -8  # scripts/_peril.py MARK_DEPTH
 
 
 def build_peril(s, root):
@@ -2482,26 +2531,201 @@ def build_peril(s, root):
     if story is None:
         return
     st = s.inspect(story["id"])["state"]
+    fist = have.get("the Fist")
+    if st.get("peril_v") == 1 and fist:
+        # the first peril marked on the Fist's outlaw list, and its fighters (Brask, Tully) struck on sight whether
+        # anyone was playing or not: the mark is the Story's alone now, and what it put on the faction comes off
+        fs = fist["state"]
+        for pid, step in (st.get("peril_step") or {}).items():
+            if step == "marked" and ((fs.get("hostile") or {}).get(pid) or (fs.get("unseen") or {}).get(pid)):
+                s.patch(fist["id"], {"hostile": {pid: None}, "unseen": {pid: None}})
+        s.patch(story["id"], {"peril_v": 2})
+        return
     if st.get("peril_v"):
         return
-    changes = {"peril_v": 1}
+    changes = {"peril_v": 2}
     freer = st.get("freed_by")
-    fist = have.get("the Fist")
-    if freer and fist and s.world.get(freer) is not None and not (st.get("peril_step") or {}).get(freer):
-        seen = 0
-        for e in s.world.edges(freer, "standing", "out"):
-            if e["target"] == fist["id"]:
-                seen = int((e.get("data") or {}).get("value") or 0)
-        fs = fist["state"]
-        unseen = dict(fs.get("unseen") or {})
-        now = seen + int(unseen.get(freer) or 0)
-        if now > PERIL_MARK_DEPTH:
-            unseen[freer] = int(unseen.get(freer) or 0) + (PERIL_MARK_DEPTH - now)
-        s.patch(fist["id"], {"unseen": unseen, "hostile": {freer: True},
-                             "secret": sorted(set(fs.get("secret") or []) | {"unseen"})})
+    if freer and s.world.get(freer) is not None and not (st.get("peril_step") or {}).get(freer):
         changes.update({"heat": {freer: 8}, "peril_step": {freer: "marked"},
                         "marked_for": {freer: "freed Klhyt from the Fist's warehouse"}})
     s.patch(story["id"], changes)
+
+
+# ---- Fat Gog's work (owner, 2026-11-23: "fat gog has nothing to say despite being the main person to go to for stuff
+# and missions"). cast/g_gog.py has his missions and lines; scripts/_missions.py offers and pays them.
+MISSION_KINDS = ["talked", "say", "downed", "mission_done", "job_taken"]
+RING_FIND = {"dc": 13, "clue": "ring",
+             "line": "The man in the black coat turns the heavy silver ring on his finger, round and round, and the candle "
+                     "on his table leans toward it, against the draught from the door. When he stops turning it the flame "
+                     "stands up straight again. Whatever is in that ring is awake, and he is listening to it.",
+             "fail": "Fine linen, good wine, a man in a black coat turning a ring. Nothing you could swear to."}
+
+
+def build_missions(s, root):
+    """The jobs pack's rule, Gog's missions as jobs he carries (made once by name; their terms, pay and when kept as the
+    cast file says, never their holders or offers), the rule that offers and pays them, and the Apothecary's look at
+    Dominico's ring. Runs again without change."""
+    install_jobs(s, root, dusk=None, dawn=None)
+    s.set_rule(root, "missions_rule", kinds=MISSION_KINDS)
+    have = by_name(s)
+    for name, v in WORK_VOICES.items():
+        if name in have and have[name]["state"].get("work_voice") != v:
+            s.patch(have[name]["id"], {"work_voice": None})
+            s.patch(have[name]["id"], {"work_voice": v, "secret": sorted(set(have[name]["state"].get("secret") or [])
+                                                                          | {"work_voice"})})
+    jobs = {j["state"].get("mission"): j for j in s.world.find(type="job", limit=None) if j["state"].get("mission")}
+    for i, m in enumerate(MISSIONS_DATA):
+        giver = have.get(m.get("giver") or "Fat Gog")
+        if giver is None:
+            continue
+        item = {"kind": "cp", "count": int(m["pay"])}
+        if m.get("paid_by"):
+            item["from"] = m["paid_by"]  # the mayor's work, paid from Gog's purse
+        want = {"giver": giver["name"], "mission": m["key"], "order": i, "terms": m["terms"], "pitch": m["pitch"],
+                "when": m.get("when") or {}, "done": m.get("done") or {"kind": "mission"}, "hidden": True,
+                "pay": {"items": [item], "standing": int(m.get("standing") or 0)},
+                "repeat": m.get("repeat") or "once", "slots": int(m.get("slots") or 1), "hands": m.get("hands")}
+        j = jobs.get(m["key"])
+        if j is None:
+            s.spawn("job", giver["id"], m["name"], state=want)
+            continue
+        changes = {k: v for k, v in want.items() if j["state"].get(k) != v}
+        for k in ("when", "pay", "repeat", "done", "hands"):  # whole, so a dropped condition does not linger
+            if k in changes and isinstance(j["state"].get(k), dict):
+                s.patch(j["id"], {k: None})
+        if changes:
+            s.patch(j["id"], changes)
+    apo = have.get(PLACES["apothecary"][0])
+    key = "arcana|religion|investigation"
+    if apo is not None and (apo["state"].get("finds") or {}).get(key) != RING_FIND:
+        s.patch(apo["id"], {"finds": {key: RING_FIND}})
+
+
+# ---- the shops' wares (owner, 2026-11-23: "Adventurer stuffs food, weapons. Armour ... Make sure a rapier is for
+# sale"). 5e's prices, kept in copper; weapons and armour are the dnd5e pack's numbers with this town's looks. Their
+# keepers (cast/h_shops.py) live above the shop and keep it at every hour.
+def gear(name, desc, **extra):
+    return {"type": "thing", "name": name, "state": {"description": desc, "portable": True, "bulk": 0, **extra}}
+
+
+def blade(name, base, desc, **over):
+    return {"type": "thing", "name": name, "state": arm(base, desc, **over)}
+
+
+def suit(name, base, desc, **over):
+    return {"type": "thing", "name": name, "state": armor5(base, description=desc, **over)}
+
+
+SELLS_CHANDLERY = {
+    "backpack|pack|knapsack|bag": {"price": 200, **gear("Backpack", "A canvas backpack with tarred seams and two good straps.")},
+    "bedroll|blanket|bed roll": {"price": 100, **gear("Bedroll", "A rolled oilskin and a wool blanket, tied with cord.")},
+    "rations|ration|food|hardtack|biscuit|travel food|provisions": {"price": 50, **dish(
+        "Trail rations", "A day's travel food in a twist of oilcloth: hardtack, salt fish and a strip of dried mango.",
+        "Hardtack and salt fish. It keeps you going, which is all it promises.")},
+    "waterskin|water skin|skin|canteen": {"price": 20, **gear("Waterskin", "A goatskin water bag, full, with a wooden stopper.",
+                                                              capacity=4, left=4, kind="water")},
+    "rope|hemp|hempen": {"price": 100, **gear("Hempen rope", "Fifty feet of tarred hemp rope, coiled and whipped at both ends.")},
+    "torch|torches": {"price": 1, **gear("Torch", "A pine torch dipped in pitch.")},
+    "tinderbox|tinder|flint": {"price": 50, **gear("Tinderbox", "A tin box: flint, steel and dry tinder.")},
+    "lantern|hooded lantern|lamp": {"price": 500, **gear("Hooded lantern", "A brass lantern with a hood that shutters the light.")},
+    "oil|flask of oil|lamp oil": {"price": 10, **gear("Flask of oil", "A stoppered clay flask of lamp oil.")},
+    "healer|healers|healer's kit|kit|bandages|bandage|splints": {"price": 500, **gear(
+        "Healer's kit", "A leather wallet of bandages, salves and splints.", medicine=True, doses=10, heals="1",
+        description_empty="An empty leather wallet that smells of salve.")},
+    "potion|healing|draught|potions": {"price": 5000, **gear(
+        "Potion of healing", "A small glass vial of red liquid that glimmers when shaken, sealed with red wax.",
+        heals="2d4+2", doses=1, medicine=True, kind="potion", description_empty="An empty glass vial, red at the bottom.")},
+    "crowbar|prybar|pry bar": {"price": 200, **gear("Crowbar", "An iron crowbar, one end flattened.", bulk=1)},
+    "grappling|grappling hook|grapnel": {"price": 200, **gear("Grappling hook", "A four-pronged iron grapnel.", bulk=1)},
+    "thieves|thieves' tools|lockpicks|picks|tools": {"price": 2500, **gear(
+        "Thieves' tools", "A roll of oiled leather: picks, a tension bar, a small mirror on a stick, narrow-bladed snips.",
+        tool="thieves' tools")},
+    "caltrops": {"price": 100, **gear("Bag of caltrops", "A bag of iron caltrops, four points each.")},
+    "chalk": {"price": 1, **gear("Chalk", "A stick of white chalk.")},
+    "map|chart|maps|coast": {"price": 50, "type": "letter", "name": "Map of the Refuge and its coast", "state": {
+        "bulk": 0, "portable": True, "description": "A chart on thin paper, folded small.",
+        "text": "The Refuge: the docks and the bonded warehouse, Harbour Street, the square and the Town Hall, the six "
+                "taverns, the Night Market, Chandlers' Row, the gate and the jungle road. The coast south is drawn as far as "
+                "a reef marked DO NOT, and no further."}},
+}
+SELLS_ANVIL = {
+    "rapier|rapiers": {"price": 2500, **blade(
+        "Rapier", "rapier", "An elven rapier: a slim bright blade, the guard a spiral of blackened steel like a fern "
+        "uncurling. It rings when you breathe on it.")},
+    "cane|sword-cane|swordcane|swordstick|sword cane": {"price": 5000, **blade(
+        "Sword-cane", "rapier", "A walking cane of black wood with a silver head; a slim blade sleeps inside it.",
+        kind="sword-cane")},
+    "dagger|knife|daggers": {"price": 200, **blade("Dagger", "dagger", "A plain double-edged dagger, honest steel.")},
+    "shortsword|short sword": {"price": 1000, **blade("Shortsword", "shortsword", "A leaf-bladed shortsword, elven pattern.")},
+    "scimitar": {"price": 2500, **blade("Scimitar", "scimitar", "A curved scimitar with a sharkskin grip.")},
+    "longsword|long sword|sword": {"price": 1500, **blade("Longsword", "longsword", "A plain straight longsword with a "
+                                                                                    "wheel pommel.")},
+    "handaxe|hand axe|hatchet": {"price": 500, **blade("Handaxe", "handaxe", "A short-hafted axe, good for wood or worse.")},
+    "battleaxe|battle axe|axe": {"price": 1000, **blade("Battleaxe", "battleaxe", "A bearded battleaxe on an ash haft.")},
+    "spear|spears": {"price": 100, **blade("Spear", "spear", "An ash spear with a leaf-shaped head.")},
+    "mace": {"price": 500, **blade("Mace", "mace", "A flanged iron mace.")},
+    "warhammer|hammer|war hammer": {"price": 1500, **blade("Warhammer", "warhammer", "A warhammer with a beak behind the "
+                                                                                     "face.")},
+    "glaive|polearm": {"price": 2000, **blade("Glaive", "glaive", "A long glaive, the blade curved like a cleaver.")},
+    "whip": {"price": 200, **blade("Whip", "whip", "A braided leather whip with a lead-weighted tip.")},
+    "javelin|javelins": {"price": 50, **blade("Javelin", "javelin", "A light throwing javelin.")},
+    "shortbow|short bow": {"price": 2500, **blade("Shortbow", "shortbow", "A recurved elven shortbow of laminated horn.")},
+    "longbow|long bow|bow": {"price": 5000, **blade("Longbow", "longbow", "A yew longbow taller than most people.")},
+    "crossbow|light crossbow": {"price": 2500, **blade("Light crossbow", "light crossbow", "A light crossbow with a "
+                                                                                          "goat's-foot lever.")},
+    "arrows|arrow|quiver": {"price": 100, "type": "thing", "name": "Arrows", "state": {
+        "kind": "arrow", "ammo": "arrow", "count": 20, "bulk": 0.05, "portable": True,
+        "description": "Twenty grey-fletched arrows in a bundle."}},
+    "bolts|bolt|quarrels": {"price": 100, "type": "thing", "name": "Crossbow bolts", "state": {
+        "kind": "bolt", "ammo": "bolt", "count": 20, "bulk": 0.05, "portable": True,
+        "description": "Twenty iron-headed crossbow bolts in a case."}},
+}
+SELLS_CORAL = {
+    "padded|quilted|gambeson": {"price": 500, **suit("Padded armour", "padded", "A quilted gambeson, stiff with salt.")},
+    "leather|jerkin": {"price": 1000, **suit("Leather jerkin", "leather", "A jerkin of boiled leather, Xoton-stitched.")},
+    "studded|studded leather": {"price": 4500, **suit("Studded leather", "studded leather", "Dark leather studded with "
+                                                                                             "copper rivets.")},
+    "hide": {"price": 1000, **suit("Hide armour", "hide", "Sharkskin and boar hide, layered and laced.")},
+    "coral|coral armour|coral armor": {"price": 2000, **suit("Coral armour", "leather", "Xoton coral armour: plates of "
+                                                             "sea-coral on sharkskin, light and quiet.", kind="coral armor")},
+    "chain shirt|mail shirt|shirt": {"price": 5000, **suit("Chain shirt", "chain shirt", "A shirt of fine riveted Xoton "
+                                                           "chain, worn under a coat.")},
+    "scale|scale mail": {"price": 5000, **suit("Scale mail", "scale mail", "Overlapping steel scales on a leather coat, "
+                                               "like a fish's.")},
+    "ring|ring mail": {"price": 3000, **suit("Ring mail", "ring mail", "Leather sewn with heavy iron rings.")},
+    "chain mail|chainmail|hauberk|mail": {"price": 7500, **suit("Chain mail", "chain mail", "A full hauberk of Xoton "
+                                                                "chain, heavy and close-woven.")},
+    "breastplate|cuirass": {"price": 40000, **suit("Breastplate", "breastplate", "A plain steel breastplate, Xoton-forged, "
+                                                   "with no sigil on it and never will be.")},
+    "shield|buckler": {"price": 1000, **suit("Shield", "shield", "A round shield of oak faced with sharkskin.")},
+}
+SHOP_SELLS = {"Hob Merrow": SELLS_CHANDLERY, "Tamsin Vey": SELLS_ANVIL, "Brynja Coralhand": SELLS_CORAL}
+
+
+def build_players(s):
+    """Every player's own character keeps still while its player is away (a player, 2026-11-23: "make sure it's not
+    just jolting bodies around and puppeteering players"): `stays`, so the d20 pack's idle care never walks it back to
+    the docks or off for water. A character made from a template carries it from birth; this gives it to the ones
+    made before. The town's own people keep their walks: that is how their days move them. Runs again without change."""
+    for e in s.world.find(type="person", limit=None):
+        st = e["state"]
+        if (st.get("template") or st.get("playable")) and not st.get("stays") and not st.get("dead"):
+            s.patch(e["id"], {"stays": True})
+
+
+def build_shops(s):
+    """Each shopkeeper's wares, as the file says (whole, so a dropped line goes), keeping what play has done to
+    stock. Runs again without change."""
+    have = by_name(s)
+    for name, sells in SHOP_SELLS.items():
+        p = have.get(name)
+        if p is None:
+            continue
+        cur = p["state"].get("sells") or {}
+        want = {k: dict(v) for k, v in sells.items()}
+        if {k: {kk: vv for kk, vv in v.items() if kk != "stock"} for k, v in cur.items()} != want:
+            s.patch(p["id"], {"sells": None})
+            s.patch(p["id"], {"sells": want})
 
 
 def build(s):
@@ -2535,6 +2759,11 @@ def build(s):
         build_glance(s, root)
     if "peril" in STAGES:
         build_peril(s, root)
+    if "missions" in STAGES:
+        build_missions(s, root)
+    if "shops" in STAGES:
+        build_shops(s)
+        build_players(s)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

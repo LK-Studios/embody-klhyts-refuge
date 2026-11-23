@@ -63,6 +63,7 @@ def gog_learns(ctx, st, by, what):
     if st.gog_knows:
         return
     ctx.patch(story(ctx), {"gog_knows": True, "gog_told_by": by})
+    tell_mission(ctx, "mayor", [by])
     gog = ctx.get(st.gog)
     scene(ctx, gog.parent.id, seen(ctx, st.gog, "the huge old lizardman") + " goes very still. Then he laughs, low and long, and it is not a happy sound. "
           "\"I carried that man up the sand with his tongue black from thirst. And the Custodian puts him in a crate.\" "
@@ -96,6 +97,8 @@ def klhyt_free(ctx, st, by):
         return
     ctx.patch(story(ctx), {"klhyt_freed": True, "freed_by": by})
     klhyt = ctx.get(st.klhyt)
+    if klhyt is not None and klhyt.parent is not None:
+        tell_mission(ctx, "breathing", [by] + [x.id for x in ctx.children(klhyt.parent, "person") if ctx.embodied(x)])
     if klhyt.state.look_free:
         ctx.patch(klhyt, {"look": klhyt.state.look_free})
     scene(ctx, klhyt.parent.id, "The grey-bearded man rubs his wrists and stands, unsteady, a big man gone thin. \"Four nights,\" he says. "
@@ -230,6 +233,7 @@ def boards(ctx, st, who):
     if left or st.elves_aboard:
         return
     ctx.patch(story(ctx), {"elves_aboard": True, "elves_walked_by": st.escort_by})
+    tell_mission(ctx, "elves", [st.escort_by])
     scene(ctx, st.docks, seen(ctx, st.ithriel, "the hooded elf") + " is the last up the gangplank. At the top she turns. \"You walked with us,\" she says. "
           "\"Keep the leaf. While the Moonmoth is in harbour, she will open to you.\" Then she is gone among the bundles, "
           "and the empty places on the deck are empty no longer.")
@@ -386,6 +390,8 @@ def to_magistrate(ctx, st, event, p):
         if item.state.clue not in have:
             have.append(item.state.clue)
             ctx.patch(story(ctx), {"magistrate_shown": have})
+            if item.state.clue in ["letter", "passage", "tally"]:
+                tell_mission(ctx, "papers", [p.get("by")])
             a = st.magistrate_spec["arms"][st.magistrate_arm]
             scene(ctx, ctx.get(st.magistrate).parent.id, a["receives"])
     elif event.kind == "given":
@@ -459,6 +465,17 @@ def on(ctx, event):
     elif k == "died":
         if event.target == st.klhyt:
             klhyt_dies(ctx, st)
+    elif k == "given" and event.target == st.custodian and st.custodian_exposed and not st.verdict:
+        # the Custodian's bargain: a paper against him, sold to him, burns in his grate
+        item = ctx.get(p.get("item"))
+        if item is None or item.state.clue not in ["letter", "passage", "tally"]:
+            return
+        cust = ctx.get(st.custodian)
+        scene(ctx, cust.parent.id, seen(ctx, st.custodian, "the thin man in the grey coat") + " reads it once, very "
+              "carefully, and feeds it to the candle a corner at a time. \"The Throne thanks you,\" he says, \"and so do "
+              "I.\"")
+        ctx.destroy(item)
+        tell_mission(ctx, "custodian_paper", [p.get("by")])
     elif (k == "shown" or k == "given") and st.magistrate and event.target == st.magistrate:
         to_magistrate(ctx, st, event, p)
     elif k == "magistrate_sighted":
@@ -471,6 +488,8 @@ def on(ctx, event):
         item = ctx.get(p.get("item"))
         if item is None or item.state.clue not in CLUE_ITEMS:
             return
+        if event.target == st.klhyt and item.state.clue in ["letter", "passage", "tally"]:
+            tell_mission(ctx, "klhyt_papers", [p.get("by")])
         if event.target == st.gog and item.state.clue != "tally":
             gog_learns(ctx, st, p.get("by"), item.state.clue)
         elif event.target == st.dominico and item.state.clue in ["passage", "letter"]:
@@ -542,6 +561,15 @@ def on(ctx, event):
                   "He takes the red booth. The woman behind the bar brings him wine without being asked.")
     elif k == "midnight":
         ctx.patch(ctx.root(), {"ambient": {"time_of_day": "midnight", "light": "the taverns' lamps and not much else"}})
+        ctx.patch(story(ctx), {"midnight_rung": True})
+        waiting = [h for h in mission_holders(ctx, "books") if ctx.get(h) is not None and ctx.get(h).parent is not None
+                   and ctx.get(h).parent.id == st.stripperwitch and ctx.embodied(ctx.get(h))]
+        if waiting and not st.dominico_backed and not st.klhyt_freed:
+            dominico_backs_off(ctx, st, "Gog's friends were waiting")
+            scene(ctx, st.stripperwitch, "At the midnight bell four hard men in black come to the Stripperwitch's door, "
+                  "look at who is sitting up with the big lizardman, and find somewhere else to be.")
+            tell_mission(ctx, "books", waiting)
+            return
         if st.dominico_backed or st.klhyt_freed:
             scene(ctx, st.stripperwitch, "The midnight bell goes. Nobody comes for the books.")
             return

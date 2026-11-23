@@ -1,12 +1,23 @@
 use("common")
+use("five")
 # The Refuge's own drink, over the d20 pack's: water works as it always did (a skin, a well, a cask), and a strong
 # drink (a vessel whose state says `strong`: ale, rum, palm wine) is drunk for the taste, thirsty or not. Three strong
 # drinks inside a world hour leave a body unsteady: a -2 grant on every roll for an hour (a body with a sheet reads it).
+# A healing potion (`heals`: dice, and `doses`) is drunk from the hand and heals by the 5e pack's rules, up off the
+# floor too (the shops, 2026-11-23: Merrow's Chandlery sells them; in a fight it is a bonus action).
 
 TIPSY_AT = 3
 HOUR = 3600
 
 def check(ctx):
+    if ctx.target.state.heals:
+        if ctx.target.parent.id != ctx.actor.id:
+            return "a potion is drunk from your own hand: take it first"
+        if int(ctx.target.state.doses or 0) <= 0:
+            return "it is empty"
+        if ctx.actor.state.dead:
+            return "the dead do not drink"
+        return True
     if ctx.target.state.left is None and not ctx.target.state.water_source:
         return "that is not something you can drink"
     if ctx.target.parent.id != ctx.actor.id and ctx.target.parent.id != ctx.actor.parent.id:
@@ -50,9 +61,22 @@ def strong(ctx, me, cup):
     else:
         ctx.log("strong drink " + str(n) + " this hour; " + str(TIPSY_AT - n) + " more and you will feel it")
 
+def quaff(ctx, me, vial):
+    doses = int(vial.state.doses or 0) - 1
+    h = vial.state.heals
+    n = roll_dice(ctx, h, False) if isinstance(h, str) else int(h)
+    ctx.patch(vial, {"doses": doses, "description": (vial.state.description_empty or "Empty.") if doses <= 0
+                     else vial.state.description})
+    got = heal(ctx, me, n, me, vial.name)
+    ctx.emit("drank", target=vial, reach=1, by=me.id, healed=got)
+    ctx.log(vial.name + ": " + str(got) + " hp, now " + str(me.state.hp))
+
 def apply(ctx):
     me = ctx.actor
     cup = ctx.target
+    if cup.state.heals:
+        quaff(ctx, me, cup)
+        return
     if cup.state.strong:
         strong(ctx, me, cup)
         return

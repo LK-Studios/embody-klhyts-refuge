@@ -38,6 +38,10 @@ def on(ctx, event):
                     if entry.get("clue") not in have:
                         have.append(entry.get("clue"))
                         ctx.patch(st[0], {"clues": have})
+                    # who found it, so a mission can ask the finder to tell (Fat Gog's work, scripts/_missions.py)
+                    by = list((st[0].state.clue_by or {}).get(entry.get("clue")) or [])
+                    if who.id not in by:
+                        ctx.patch(st[0], {"clue_by": {entry.get("clue"): by + [who.id]}})
         else:
             ctx.emit("scene", target=who, reach=0, text=entry.get("fail") or "You look, and come up with nothing you can use.")
         return

@@ -5,9 +5,10 @@
 # (the villains act with nobody running them; minds may run Dominico and the Custodian later, with the orders verb).
 #
 # Heat is what Dominico's people have heard about someone a player holds, kept on the Story (`heat`). At 3 one of the
-# Fennicks tails them; at 5 Sabeth Crane finds them and warns them; at 8 the Fist marks them: outlawed, quietly and
-# deep (standing -8, so a gift or two will not buy it back), and hunted to the death by two of Dominico's men (three
-# past 12), a hop a tick, with a fight on sight. Hunters move only while someone plays their mark and is at it (a body
+# Fennicks tails them; at 5 Sabeth Crane finds them and warns them; at 8 the Fist marks them (on the Story, never the
+# faction's outlaw list, whose fighters strike on sight whether anyone is playing or not) and two of Dominico's men
+# (three past 12) hunt them to the death, a hop a tick, with a fight on sight. Five gold in coin to any of the Fist buys
+# the word back. Hunters move only while someone plays their mark and is at it (a body
 # left alone, or held by a human who has gone quiet, is never murdered in its sleep), and never set foot in the
 # Stripperwitch (Fat Gog's house) or aboard the Moonmoth: they wait outside. The Throne's warrant is the Custodian's: Vorkathia outlaws someone, and the officer and the constable
 # he pays attack them on sight (they do not chase).
@@ -23,6 +24,7 @@ TAIL_AT = 3
 WARN_AT = 5
 MARK_AT = 8
 MARK_DEPTH = -8
+TRIBUTE = 500  # copper, in coin, to any of the Fist: the word is taken back
 TALK_GAP = 300
 TAIL_FOR = 1800
 WARN_FOR = 3600
@@ -173,7 +175,6 @@ def mark(ctx, who, why):
     fist = faction_called(ctx, FIST)
     if fist is None or who is None or who.state.dead or fist_gone(ctx, st):
         return False
-    outlaw(ctx, fist, who)
     set_step(ctx, who, "marked")
     ctx.patch(s, {"marked_for": {who.id: why}})
     dom = ctx.get(st.dominico)
@@ -291,12 +292,27 @@ def strike_first(ctx, h, tgt):
     # what d20's fighters do on sight: the first hostile deed here starts the fight, and their turn is taken at once
     place = h.parent
     if my_fight(ctx, h) is not None:
+        mark_foes(ctx, h, tgt)  # in the fight already: this one is its foe too
         return None
     f = start_fight(ctx, place, h, tgt)
     if f is not None and f.state.turn_of == h.id:
         npc_turn(ctx, f, h)
         schedule_next(ctx, f, "done")
     return f
+
+def tell_mission(ctx, key, ids):
+    # one of Fat Gog's missions is done by these: scripts/missions_rule.py pays it (this file and the scripts that use
+    # it never include the jobs pack, whose `pay` would shadow the 5e pack's)
+    ids = [i for i in (ids or []) if i]
+    if ids:
+        ctx.emit("mission_done", target=ctx.root().id, reach=0, key=key, who=ids)
+
+def mission_holders(ctx, key):
+    for j in ctx.find(type="job", limit=200):
+        if j.state.mission == key:
+            hs = j.state.holders or {}
+            return [h for h in hs if hs.get(h) is not None]
+    return []
 
 def warrant(ctx, who, crime):
     # the Throne's warrant: Vorkathia outlaws them, a notice goes up on the square, describing them as a stranger would

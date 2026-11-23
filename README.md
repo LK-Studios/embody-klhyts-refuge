@@ -56,7 +56,8 @@ To run it yourself, put this repository in an embody checkout as `worlds/klhyts-
   villains' own verbs, for minds).
 - `cast/` holds the people: each one's look (no name), lines, day, purse, scheme and secrets, in files the build
   merges in name order (`a_powers.py`, `b_town.py`, `c_market_docks.py`, `d_vorkath.py`, `e_faith.py`,
-  `f_peril.py`). **Like the bible, it holds secrets: players should not read it.**
+  `f_peril.py`, `g_gog.py`, `h_shops.py`, `i_klhyt_river.py`, `j_powers_deep.py`, `k_keepers.py`, `l_missions.py`), and the
+  town's work as jobs (`_missions`, `missions_rule`). **Like the bible, it holds secrets: players should not read it.**
 - `notes/bible.md` is the canon digest, the owner's words verbatim, and every host default that was invented.
   **It holds the story's secrets: players should not read it.** `notes/` also keeps the playtest notes and the text
   to carry back into LoreKeeper.

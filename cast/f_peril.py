@@ -18,8 +18,8 @@ CAST = {
             "the word out, and two of your men find them and kill them. When there is time, a warning from Sabeth comes "
             "first. Your own verbs: set_on (who: their name) marks someone and sends your men; call_off (who) ends it. "
             "Use them the way you would: rarely, coldly, never on a whim, and never inside the Stripperwitch, which "
-            "would be war with Gog before you are ready for it. Gifts to your people buy back a little standing; a lot of "
-            "them, or your word, buys it all."),
+            "would be war with Gog before you are ready for it. Five gold in coin to any of your people buys the word "
+            "back, and so does your own call_off."),
     },
     "Sabeth Crane": {
         "brief_more": (
