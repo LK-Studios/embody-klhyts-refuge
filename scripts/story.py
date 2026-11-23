@@ -105,7 +105,9 @@ def klhyt_returns(ctx, st):
     if klhyt is None or klhyt.state.dead or st.custodian_exposed:
         return
     walk(ctx, st.klhyt, st.square)
-    ctx.patch(story(ctx), {"custodian_exposed": True, "outcome": "Klhyt is home, and the Custodian's skimming is out in the square"})
+    ctx.patch(story(ctx), {"custodian_exposed": True, "outcome": "Klhyt is home, the Custodian's skimming is out in the "
+                                                                "square, and he holds the Town Hall in the Throne's name "
+                                                                "to wait for the magistrate"})
     scene(ctx, st.square, "The big grey-bearded man from the warehouse climbs the Town Hall steps with the lamps behind "
           "him. People come out of all six taverns shouting his name, Klhyt, Klhyt, to see if it's really him. It is. He tells them where the harbour dues went, and whose name is on every tally.")
     tell_town(ctx, "klhyt_home")
@@ -115,16 +117,27 @@ def klhyt_returns(ctx, st):
     ctx.patch(ctx.root(), {"story": "complete"})
 
 def disgrace(ctx, st):
-    # the Custodian, found out: the coat, the empty space round him, and a smaller day (his `routine_disgraced`)
+    # the Custodian, found out, doubles down (owner, 2026-11-23: "I think he should be more militant. He is a
+    # Vorkathian empire representative ... he just has to wait it out a bit"): the Throne's sigil worn openly, the Town
+    # Hall and the strongbox held in the Throne's name, the skim called the Throne's tithe, and a day of waiting for the
+    # magistrate due within the week (his `routine_disgraced`). The flag stays `disgraced`: found out, not beaten.
     cust = ctx.get(st.custodian)
     if cust is None or cust.state.disgraced:
         return
-    look = cust.state.look_disgraced or "A thin, neat man in a good grey coat gone suddenly too warm, with nobody standing near him."
+    look = cust.state.look_disgraced or "A thin, neat man in a good grey coat buttoned to the throat, a silver eight-armed sigil at his collar."
     changes = {"disgraced": True, "look": look, "description": look}
     if cust.state.routine_disgraced:
         changes["routine"] = cust.state.routine_disgraced
         changes["routine_key"] = None
     ctx.patch(cust, changes)
+    if cust.parent is not None and cust.parent.id != st.hall and not ctx.embodied(cust):
+        walk(ctx, st.custodian, st.hall)
+    scene(ctx, st.square, "When it is done, the Town Hall door opens. " + seen(ctx, st.custodian, "a thin man in a grey coat")
+          + " stands in it with a silver eight-armed sigil pinned at his collar, and does not come down the steps. "
+          "\"By commission of the Throne of Vorkath,\" he says, in a voice that carries without being raised, \"this "
+          "harbour is in the Throne's custody, which is mine. The dues you have heard about were the Throne's tithe, "
+          "withheld under the charter. A magistrate of the Throne has been at sea since midsummer and is due within the "
+          "week. Bring your complaints to them.\" The door shuts. Somebody bars it from inside.")
 
 # Ithriel's household, the five the Moonmoth waits for. Asked about passage, Ithriel and her four fall in behind the
 # one who asked, their usual places kept for them (or the idle walk would take them straight home); at the docks each
@@ -189,6 +202,162 @@ def boards(ctx, st, who):
     if ith is not None:
         ctx.remember(ith, "My household is aboard the Moonmoth" + ((", walked there by " + walker.name) if walker else "") + ".")
 
+# ---- the magistrate (owner, 2026-11-23): "A magistrate is due to arrive. They would have been at sea months. So who
+# knows who they will decide on. Vorkathians aren't known for their tolerance." The build keeps the spec on the Story
+# (`magistrate_spec`: the ship, the guards, the day's round, and one magistrate for each Arm of Vorkath). A sail two
+# hours out; the landing at nine, when the Arm is drawn; a day for anyone to bring the magistrate papers or coin; the
+# hearing the next morning in the Town Hall; then the verdict, and the Arm's decree, which nobody in the Refuge will
+# like.
+
+def tell_town_value(ctx, flag, value):
+    for p in ctx.find(type="person", limit=500):
+        if p.state.get(flag) != value:
+            ctx.patch(p, {flag: value})
+
+def magistrate_sighted(ctx, st):
+    spec = st.magistrate_spec
+    if not spec or st.magistrate:
+        return
+    ship = spec["ship"]
+    for place in [st.docks, st.square, st.harbour]:
+        scene(ctx, place, "Out past the harbour mouth, a sail: a tall ship standing in on the morning breeze, an octogram "
+              "on her mainsail the size of a house. Word goes up Harbour Street faster than the ship can come in: " + ship["name"]
+              + ", out of Landfall, and on her a magistrate of the Throne.")
+    tell_town(ctx, "magistrate_sighted")
+    cust = ctx.get(st.custodian)
+    if cust is not None and st.custodian_exposed and not cust.state.dead and not ctx.embodied(cust):
+        if walk(ctx, st.custodian, st.docks):
+            ctx.patch(cust, {"routine_hold_until": ctx.t + 7200 + 3600})
+            scene(ctx, st.docks, seen(ctx, st.custodian, "the thin man in the grey coat") + " comes down the pier at "
+                  "a walk that is almost a run, a thick packet under his arm, and stands at the very end of it.")
+
+def magistrate_lands(ctx, st):
+    spec = st.magistrate_spec
+    if not spec or st.magistrate:
+        return
+    arm = ctx.rand.choice(spec["arm_order"])
+    a = spec["arms"][arm]
+    ship = ctx.spawn("thing", st.docks, name=spec["ship"]["name"], state={"description": spec["ship"]["description"]})
+    state = dict(spec["base"])
+    for k in a["state"]:
+        state[k] = a["state"][k]
+    state["post"] = st.docks
+    state["home"] = st.apothecary
+    state["arm"] = arm
+    mag = ctx.spawn("person", st.docks, name=a["name"], state=state)
+    guards = []
+    for g in spec["guards"]:
+        gs = dict(g["state"])
+        gs["post"] = st.docks
+        gs["home"] = st.apothecary
+        guards.append(ctx.spawn("person", st.docks, name=g["name"], state=gs).id)
+    for g in a.get("carries") or []:
+        ctx.spawn("thing", mag, name=g["name"], state=dict(g["state"]))
+    ctx.patch(story(ctx), {"magistrate": mag.id, "magistrate_arm": arm, "magistrate_ship": ship.id,
+                           "magistrate_guards": guards, "magistrate_shown": [], "magistrate_gold": 0})
+    tell_town_value(ctx, "magistrate_arm", arm)
+    tell_town(ctx, "magistrate_landed")
+    scene(ctx, st.docks, spec["landing"] + " " + a["landing"])
+    cust = ctx.get(st.custodian)
+    first = (cust is not None and cust.parent is not None and cust.parent.id == st.docks and st.custodian_exposed
+             and not cust.state.dead)
+    if first:
+        ctx.patch(story(ctx), {"custodian_first": True})
+        scene(ctx, st.docks, seen(ctx, st.custodian, "The thin man in the grey coat") + " is the first on the gangplank's "
+              "foot. He bows as far as rank requires, a little further, and puts the thick packet into the magistrate's "
+              "hands before anyone else in the Refuge has opened their mouth.")
+    if st.custodian_exposed:
+        scene(ctx, st.docks, a["hearing_called"])
+    ctx.schedule(25 * 3600, "hearing", target=ctx.root().id)  # ten the next morning, in the Town Hall
+
+def evidence(ctx, st):
+    # what the magistrate weighs for Klhyt: papers shown them, the witnesses the town has found, coin
+    docs = [c for c in (st.magistrate_shown or []) if c in ["letter", "passage", "tally"]]
+    witnesses = [c for c in (st.clues or []) if c in ["river", "teague", "tully"]]
+    if st.custodian_exposed:
+        witnesses = witnesses + ["the watch book"]  # the sergeant gives the magistrate his book, and nobody else
+    return docs, witnesses
+
+def hearing(ctx, st):
+    spec = st.magistrate_spec
+    mag = ctx.get(st.magistrate) if st.magistrate else None
+    if not spec or mag is None or st.verdict:
+        return
+    arm = st.magistrate_arm
+    a = spec["arms"][arm]
+    w = a["weigh"]
+    docs, witnesses = evidence(ctx, st)
+    if st.custodian_exposed:
+        for_custodian = 2 + int(w.get("lean", 0)) + (1 if st.custodian_first else 0)
+        for_klhyt = int(w.get("proof", 1)) * len(docs) + int(w.get("witness", 1)) * len(witnesses) + int(w.get("harm", 0))
+        if w.get("gold"):
+            for_klhyt = for_klhyt + int(st.magistrate_gold or 0) // int(w["gold"])
+            for_custodian = for_custodian + int(spec["custodian_gold"]) // int(w["gold"])
+        if w.get("town") and st.klhyt_freed:
+            for_klhyt = for_klhyt + int(w["town"])
+        if w.get("dice"):  # the Fearless judges by a throw: the case only shifts the odds
+            odds = 0.5 + 0.1 * (for_klhyt - for_custodian)
+            odds = min(0.9, max(0.1, odds))
+            removed = ctx.rand.random() < odds
+        else:
+            removed = for_klhyt > for_custodian
+        verdict = "removed" if removed else "upheld"
+    else:
+        verdict = "upheld"
+        for_klhyt = 0
+        for_custodian = 0
+    ctx.patch(story(ctx), {"verdict": verdict, "verdict_weighed": {"custodian": for_custodian, "klhyt": for_klhyt,
+                                                                    "papers": docs, "witnesses": witnesses}})
+    tell_town_value(ctx, "verdict", verdict)
+    for place in [st.hall, st.square]:
+        scene(ctx, place, a["verdict_" + verdict] if st.custodian_exposed else a["survey"])
+    cust = ctx.get(st.custodian)
+    if verdict == "removed" and cust is not None and not ctx.embodied(cust):
+        ctx.patch(cust, {"routine_off": True, "in_irons": True,
+                         "look": "A thin, neat man in a grey coat with no sigil at his collar, irons on his wrists and a "
+                                 "Throne guard at each elbow."})
+        scene(ctx, cust.parent.id if cust.parent else st.hall, "The Throne guards put irons on the thin man in the grey "
+              "coat. He does not struggle. He looks, for a moment, at the strongbox, and then at nothing at all.")
+        walk(ctx, st.custodian, st.docks)
+        ctx.patch(cust, {"post": st.docks, "routine_off": True})
+    elif verdict == "upheld" and cust is not None:
+        changes = {"upheld": True}
+        if cust.state.routine_upheld:
+            changes["routine"] = cust.state.routine_upheld
+            changes["routine_key"] = None
+        if cust.state.look_upheld:
+            changes["look"] = cust.state.look_upheld
+        ctx.patch(cust, changes)
+    # the decree: every Arm's, whoever won; nobody in the Refuge will like it
+    ctx.spawn("letter", st.square, name="The Magistrate's Proclamation", state={
+        "portable": False, "bulk": 0, "text": a["decree"],
+        "description": "A proclamation nailed over the notice board, the octogram at its head and a red seal at its foot."})
+    tell_town_value(ctx, "decree", arm)
+    ctx.patch(story(ctx), {"decree": arm})
+    ctx.patch(story(ctx), {"outcome": ("The magistrate removed the Custodian" if verdict == "removed" else
+                                       "The magistrate upheld the Custodian") + ", and the Throne's decree is on the square"})
+
+def to_magistrate(ctx, st, event, p):
+    # papers shown and coin given to the magistrate before the hearing
+    if st.verdict:
+        return
+    if event.kind == "shown":
+        item = ctx.get(p.get("item"))
+        if item is None or not item.state.clue:
+            return
+        have = list(st.magistrate_shown or [])
+        if item.state.clue not in have:
+            have.append(item.state.clue)
+            ctx.patch(story(ctx), {"magistrate_shown": have})
+            a = st.magistrate_spec["arms"][st.magistrate_arm]
+            scene(ctx, ctx.get(st.magistrate).parent.id, a["receives"])
+    elif event.kind == "given":
+        item = ctx.get(p.get("item"))
+        kind = ctx.root().state.coin_kind or "coin"
+        if item is None or (item.state.kind != kind and (item.name or "").lower() != kind):
+            return
+        ctx.patch(story(ctx), {"magistrate_gold": int(st.magistrate_gold or 0) + ctx.count(item)})
+
 def on(ctx, event):
     st = story(ctx).state
     k = event.kind
@@ -237,6 +406,14 @@ def on(ctx, event):
                 if w in said:
                     escort_begins(ctx, st, p.get("by"))
                     break
+    elif (k == "shown" or k == "given") and st.magistrate and event.target == st.magistrate:
+        to_magistrate(ctx, st, event, p)
+    elif k == "magistrate_sighted":
+        magistrate_sighted(ctx, st)
+    elif k == "magistrate_lands":
+        magistrate_lands(ctx, st)
+    elif k == "hearing":
+        hearing(ctx, st)
     elif k == "shown":
         item = ctx.get(p.get("item"))
         if item is None or item.state.clue not in CLUE_ITEMS:

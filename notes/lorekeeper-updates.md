@@ -90,3 +90,17 @@ If you want it in LoreKeeper, River's character entry would gain, somewhere play
 first: River is secretly a witch (built here as a sea witch who scries in the mirror behind the Stripperwitch's bar)
 and the captain of a pirate schooner, the Quicksilver, kept in a cove down the coast behind the reef the charts mark
 DO NOT. Her quartermaster is Ned Tallow, the town's lamplighter. Nobody in the Refuge knows, not even Fat Gog.
+
+## 10. The Custodian is the Throne's officer (the owner's word, 2026-11-23)
+
+> He is a Vorkathian empire representative.
+
+LoreKeeper's A-Z has "The Custodian" as a heading with no text. If you want it there: the Custodian of Klhyts Refuge is
+the Throne of Vorkath's officer in the western colonies, under Emperor Arkmady Melenkov's commission. Found out, he
+does not bend: he holds the Town Hall in the Throne's name and waits for a magistrate of the Throne, months at sea and
+due within the week, whose Arm of Vorkath will decide the case. The magistrate and how each Arm judges are invented
+for the build (bible.md, "The Throne of Vorkath in the Refuge").
+
+Also, from the research: LoreKeeper's "History of Vorkath" has the emperor as "Melenkovis" once, a run-together typo
+for "Melenkov is"; and the eight Patron Saints are named in full only in the "Dungeon Master Quick Start." world's
+"KARGATH - format", where the goddess is called Kargath. The Shalamar world names only Gideon and Teflon.

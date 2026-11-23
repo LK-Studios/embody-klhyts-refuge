@@ -242,6 +242,78 @@ schemes, secrets, purses, homes and the night's crawl. The owner may strike any 
   household's book of names.
 - Eirik's trader at anchor is the Guardians of the Horizon (a name from the Xoton ship-names doc).
 
+## The Throne of Vorkath in the Refuge (owner, 2026-11-23)
+
+> The custodian disgraced? Does he double down. I think he should be more militant. He is a Vorkathian empire
+> representative. Maybe he asks for support from the mainland. he just has to wait it out a bit
+
+> A magistrate is due to arrive. They would have been at sea months. So who knows who they will decide on. Vorkathians
+> aren't known for their tolerance. Might decides what arm of Vorkath they follows? Do we have anything about the
+> Vorkath religon in the game? We need a whole thing about that too. You can get itt from LoreKeeper mcp / shalamar
+
+(Asked how long he waits: "The next week (5-9 days)".)
+
+### The faith (LoreKeeper)
+
+From "History of Vorkath" (3be19d14), "Vorkathia" (aaba6499), "THE GODS summary v002" (e081bb5b) and "KARGATH -
+format" (aeda85df, the older draft of the setting, where the goddess is Kargath; read Vorkath). The full digest with
+sources is kept beside this build's notes as `notes/vorkath.md`.
+
+- **Vorkath** is a goddess, the newest of the New Gods: an eight-armed woman holding a saint's sign in each hand.
+  Greater Vorkathia (Aurelia, Öchland, Fronteria joined in 300EV) is her theocratic empire under Emperor Arkmady
+  Melenkov, whose missions go "to the known and unknown corners of the globe". The sign is the **octogram**.
+- **The Eight Arms** are her aspects, each with its patron saint and sign: War (Gideon the Everliving, ball and
+  chain), Peace (Percival the Builder, spade), Pleasure (Pil's Loffgren, One For The Road, wine and stout), Pain
+  (Teflon, First of Many, founder of the Inquisition, hourglass and spider), Chaos (Captain-Lady Hester-Stanhope, The
+  Fearless, who discovered Shalamar, storm and ship), Destiny (Annabella Rand, the Blind Savant, sextant and glass
+  eye), Death (Gwendoline, Handholder to Heaven, a child's hand and sweets), Life (Vistadine the Baptist, the pouring
+  jug). The Shalamar world names only Gideon and Teflon; the other six are the Kargath draft's.
+- **The Inquisition**, founded at Kirchheim by Teflon, purges "the impure": the elven races are enemies of the
+  state; unsanctioned magic and other gods are suppressed; penance runs from death to the Aurelian mines.
+- **Host defaults** (the lore leaves them open): the library burning at Kirchheim (the lore has Kirchheim as the
+  Inquisition's seat, and the Hall of Osmith burned in 240); how each Arm judges; colours (none given).
+
+### The Custodian is the Throne's officer (owner's word)
+
+He is the Throne of Vorkath's Custodian in the western colonies, under Emperor Melenkov's commission (host default:
+Klhyt took him because Landfall's ships would not trade with a harbour that had no Custodian, and never read the
+commission). Found out, he **doubles down**: from the Town Hall door he claims the harbour in the Throne's name, calls
+the skim the Throne's tithe withheld under the charter, bars himself in with the strongbox, wears the octogram openly,
+pays Constable Rosa Quint a silver a night to keep his door, dines with Lieutenant Voss and lends him his seal, reads
+a proclamation on the steps at ten, and watches the harbour mouth at dawn for the magistrate's sail. Constable Abel
+Fitch stands by Klhyt's Charter (Article One: nobody here shall be asked where they came from); Sergeant Pell Harrow
+keeps the gate and will give his watch book to the magistrate and nobody else.
+
+### The magistrate (owner's word; the mechanics are host defaults)
+
+- **When.** A magistrate of the Throne has been at sea since midsummer on the Patient Hand, one of Melenkov's
+  missions. They are due 5 to 9 world days after the build (drawn once from the world's seed and kept on the Story as
+  `magistrate_eta`), at nine in the morning; a sail shows at the harbour mouth two hours before, and the Custodian goes
+  down to be first on the pier. The clock runs only while someone plays, so that is 5 to 9 days of play.
+- **Which Arm** is drawn when they land, and it decides who comes ashore: Magistrate-Commander Bertrand Hale (War),
+  Magistrate Hollis Thorne (Peace), Magistrate Lucan Merriwether (Pleasure), Inquisitor-Magistrate Severin Crake
+  (Pain), Magistrate-Captain Rosalind Strand (Chaos), Magistrate Aurelio Quill (Destiny), Magistrate Mercy Ashgrove
+  (Death) or Sister-Justice Ilse Brennan (Life), with two Throne guards (Henrik Vael, Oriane Sall).
+- **The hearing** is at ten the next morning in the Town Hall. Before it, anyone may `show` the magistrate papers
+  (Klhyt's letter, the passage page, the dues tally) and `give` them coin. The case is weighed by the Arm
+  (`MAGISTRATE["arms"][...]["weigh"]` in cast/d_vorkath.py): the Custodian starts on 2 (the Throne's officer), plus
+  his Arm's lean, plus 1 if he met the ship first; Klhyt gets points per paper shown, per witness the town has found
+  (River, Teague, Tully, and the sergeant's watch book), for harm (Death: a man crated to die) or for a town that freed
+  him itself (War); Pleasure counts coin (a point a gold piece; the Custodian puts in five); Chaos throws dice and the
+  case only shifts the odds. The Inquisition (Pain) leans 3 to the Throne's officer. More for Klhyt removes him: irons,
+  and down to the ship. Otherwise he is upheld, with the Throne's seal round his neck.
+- **The decree.** Whoever wins, the Arm's decree goes up on the square ("The Magistrate's Proclamation"), and none of
+  them is tolerant: War levies twenty and disarms the Lizardfolk; Peace builds a church and writes every name and
+  origin in its book; Pleasure licenses every tavern and keeps Lizardfolk and elves where the licence allows; Pain
+  demands every elf and forbids unsanctioned magic (River should worry); Chaos takes the Moonmoth as the Throne's
+  prize; Destiny orders a census; Death forbids sea-burials and the elves' rites; Life washes everyone, and the
+  unwashed lose office, stalls and testimony.
+- **What the town says** moves in stages (an engine change: a line's `else` may be another conditional line): before
+  the ship, once it lands, and after the verdict, either way (Klhyt, Fat Gog, River, Teague, the Custodian, Voss, the
+  watch).
+- **Not built yet:** what the decree does beyond the proclamation and the talk (no levy is raised, no census taken,
+  no elf seized). Each is a story the owner may want to play out.
+
 ## Not in this build (post-war, anachronistic)
 
 Dominico as guild master, and Fat Gog's death at his hands; the Lizardfolk army and Santa Guistina's fall; the attack on the Refuge and the slave train; the Smith's alliance,
@@ -307,7 +379,7 @@ factions, duels and the sheet's skills stay as they were. Hit points are whole 5
 - What kind of guild is Fat Gog's (thieves', merchants', something else)? Built as the underworld of the taverns.
 - Which EV year is this evening, if any? None is set.
 - What really happened to Klhyt? (The crate is a host default.)
-- Who is the Custodian: a name, a race, a past?
+- Who is the Custodian: a name, a past? (His office is settled: the Throne of Vorkath's officer, owner 2026-11-23.)
 - What are "crownies" (the Rampant Ogre's regulars)?
 - Kael Ironjaw fights with the **glaive** (owner, 2026-11-22: "Use the glaive for Kael, please"), not the
   greatsword on his LoreKeeper character entry. Still open: his numbers. The character entry (built here) has AC 15,

@@ -20,6 +20,7 @@ Canon comes from LoreKeeper; what had to be invented is listed in notes/invented
 """
 
 import importlib.util as _ilu
+import random as _random
 from pathlib import Path as _Path
 
 from packs.d20.pack import install_rules
@@ -1412,7 +1413,7 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring", "cast", "five_e", "statblocks", "hire"]
+STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire"]
 
 
 def by_name(s):
@@ -1649,7 +1650,8 @@ TIMERS = [(600, "ultimatum"), (1500, "custodian_out"), (3600, "siren_rises"), (3
           (7200, "small_hours"), (7800, "siren_leaves"), (9000, "tide")]
 STORY_KINDS = ["act", "arrived", "read", "taken", "talked", "shown", "cowed", "agreed", "freed", "pick_failed", "break_failed",
                "lock_broken", "klhyt_returns", "ultimatum", "dominico_back", "custodian_out", "midnight", "small_hours", "tide",
-               "siren_rises", "siren_sings", "siren_leaves"]
+               "siren_rises", "siren_sings", "siren_leaves", "magistrate_sighted", "magistrate_lands", "hearing",
+               "given"]
 
 
 def templates(P):
@@ -1927,15 +1929,37 @@ CAST_DIR = _Path(__file__).with_name("cast")
 
 
 def load_cast():
-    """CAST and NEW from every cast/*.py, in name order."""
+    """CAST and NEW from every cast/*.py, in name order. A later file may give part of someone an earlier one wrote
+    (cast/d_vorkath.py: the Custodian found out): its keys replace theirs, and its dialog topics join theirs (None
+    retires one)."""
     cast, new = {}, {}
+    global MAGISTRATE_DATA
     for f in sorted(CAST_DIR.glob("*.py")):
         spec = _ilu.spec_from_file_location("klhyts_refuge_cast_" + f.stem, f)
         mod = _ilu.module_from_spec(spec)
         spec.loader.exec_module(mod)
-        cast.update(getattr(mod, "CAST", {}))
+        for name, entry in getattr(mod, "CAST", {}).items():
+            if name not in cast:
+                cast[name] = dict(entry)
+                continue
+            merged = dict(cast[name])
+            for k, v in entry.items():
+                if k == "dialog":
+                    d = dict(merged.get("dialog") or {})
+                    d.update(v)
+                    merged["dialog"] = {dk: dv for dk, dv in d.items() if dv is not None}
+                else:
+                    merged[k] = v
+            cast[name] = merged
         new.update(getattr(mod, "NEW", {}))
+        if getattr(mod, "MAGISTRATE", None):
+            MAGISTRATE_DATA = mod.MAGISTRATE
+        FAITH_TEXTS.update(getattr(mod, "FAITH_TEXTS", {}) or {})
     return cast, new
+
+
+MAGISTRATE_DATA = None
+FAITH_TEXTS = {}  # cast/e_faith.py: the missions' tract, and its line in the Unicorn's library
 
 
 CAST, NEW_PEOPLE = load_cast()
@@ -1944,8 +1968,8 @@ for _n, _v in NEW_PEOPLE.items():
     PEOPLE_OF.setdefault(_n, _v.get("people", "human"))
 
 # what players never read on a person (their `secret`): the lines not said yet, the day ahead, the plans
-CAST_SECRET = ["dialog", "default_line", "routine", "routine_when", "routine_disgraced", "scheme", "beats", "look_free",
-               "look_disgraced"]
+CAST_SECRET = ["dialog", "default_line", "routine", "routine_when", "routine_disgraced", "routine_upheld", "routine_if",
+               "scheme", "beats", "look_free", "look_disgraced", "look_upheld"]
 # what the plot adds to the cast files: whose day waits for which fact, the story's or their own (scripts/routine.py),
 # and what they are doing while it waits (the cast files carry the looks and day the plot turns to: look_free,
 # look_disgraced, routine_disgraced)
@@ -2045,17 +2069,27 @@ def build_cast(s, root):
         want = {"look": c["look"], "seen_as": c.get("seen_as"), "brief": c.get("brief"), "scheme": c.get("scheme"),
                 "default_line": list(c.get("default_line") or []), "beats": list(c.get("beats") or []),
                 "routine": routine_ids(c.get("routine"), P, have)}
-        for k in ("look_free", "look_disgraced"):
+        for k in ("look_free", "look_disgraced", "look_upheld"):
             if c.get(k):
                 want[k] = c[k]
         if c.get("routine_disgraced"):
             want["routine_disgraced"] = routine_ids(c["routine_disgraced"], P, have)
+        if c.get("routine_upheld"):
+            want["routine_upheld"] = routine_ids(c["routine_upheld"], P, have)
+        if c.get("routine_if"):  # {flag: slots}: the day the news brings (scripts/routine.py)
+            want["routine_if"] = [[flag, routine_ids(slots, P, have)] for flag, slots in c["routine_if"].items()]
         extra = dict(CAST_EXTRA.get(name, {}))
         waiting_text = extra.pop("waiting", None) or c.get("waiting") or ""
         want.update(extra)
         if st.get("disgraced") and want.get("look_disgraced"):  # what the story has made of them stays
             want["look"] = want["look_disgraced"]
             want["routine"] = want.get("routine_disgraced") or want["routine"]
+        if st.get("upheld") and want.get("look_upheld"):
+            want["look"] = want["look_upheld"]
+            want["routine"] = want.get("routine_upheld") or want["routine"]
+        if st.get("in_irons"):  # removed by the magistrate: his look and his day are the story's now
+            want.pop("look", None)
+            want.pop("routine", None)
         if st.get("bound") is False and want.get("look_free"):
             want["look"] = want["look_free"]
         changes = {k: v for k, v in want.items() if st.get(k) != v}
@@ -2103,6 +2137,29 @@ def build_cast(s, root):
                                "they were there. A hooded lantern burns at the stern."})
 
 
+TRACT = "The Eight Arms and Their Saints"
+
+
+def build_faith(s):
+    """The faith in the town's hands (owner, 2026-11-23: "We need a whole thing about that too"): the missions' tract on
+    the Town Hall table and in the officer's coat, and its title on the Unicorn's shelves. Once each, by name."""
+    text = FAITH_TEXTS.get("catechism")
+    if not text:
+        return
+    have = by_name(s)
+    w = s.world
+    tract = {"portable": True, "bulk": 0, "text": text,
+             "description": "A thin printed tract on cheap paper, an octogram stamped on the cover: one of the missions'."}
+    holders = [have.get(PLACES["hall"][0]), have.get("Lieutenant Voss")]
+    for h in holders:
+        if h and not any(c["name"] == TRACT for c in w.children(h["id"])):
+            s.spawn("letter", h["id"], TRACT, state=dict(tract))
+    lib = have.get("The library")
+    line = FAITH_TEXTS.get("library")
+    if lib and line and line not in (lib["state"].get("text") or ""):
+        s.patch(lib["id"], {"text": (lib["state"].get("text") or "").rstrip() + " " + line})
+
+
 def build_news(s):
     """The night's news on the people of a world built before the flags (a live world mid-story): each fact the story
     has set reaches those it would have reached (scripts/story.py tell_town), once."""
@@ -2141,6 +2198,85 @@ def build_news(s):
     for e in folk:
         if e["name"] in elves and parent_of(s, e["id"]) == moon and not e["state"].get("aboard"):
             s.patch(e["id"], {"aboard": True, "routine_off": True})
+
+
+# ---- the magistrate (owner, 2026-11-23: "A magistrate is due to arrive. They would have been at sea months. So who
+# knows who they will decide on. Vorkathians aren't known for their tolerance"; how long: "The next week (5-9 days)").
+# The day is drawn once, from the world's seed, and kept on the Story (`magistrate_eta`): a sail at the harbour mouth
+# two hours before, the landing at nine in the morning. Which Arm of Vorkath the magistrate serves is drawn when they
+# land (scripts/story.py), from MAGISTRATE_ARMS.
+
+MAGISTRATE_DAYS = (5, 9)
+MAGISTRATE_HOUR = 9.0
+MAGISTRATE_KINDS = ["magistrate_sighted", "magistrate_lands", "hearing"]
+
+
+MAGISTRATE_SCORES = {"str": 10, "dex": 11, "con": 12, "int": 15, "wis": 15, "cha": 14}
+GUARD_SCORES = {"str": 13, "dex": 12, "con": 12, "int": 10, "wis": 11, "cha": 10}
+
+
+def magistrate_spec(s):
+    """The magistrate as scripts/story.py spawns them: each Arm's whole person (look, lines, day, 5e numbers), the
+    guards and the ship, with places as ids. Kept on the Story, so a change here reaches a live world."""
+    M = MAGISTRATE_DATA
+    if not M:
+        return None
+    P = place_ids(s)
+    have = by_name(s)
+    secret = sorted(CAST_SECRET + ["arm"])
+
+    def person(name, kind, look, scores, skills, extra):
+        st = {**body(scores, skills, hp(SRD[kind]["hp"])), **srd_state(name, kind, {}, {"people": "human"}),
+              "people": "human", "faction": "Vorkathia", "look": look, "description": look, "secret": secret}
+        st.update(extra)
+        return st
+
+    arms = {}
+    for key, a in M["arms"].items():
+        day = routine_ids(sorted([sl for sl in M_DAY(M) if sl["at"] != a["visit"]["at"]] + [a["visit"]],
+                                 key=lambda d: d["at"]), P, have)
+        state = person(a["name"], a["srd"], a["state"]["look"], MAGISTRATE_SCORES,
+                       {"insight": 2, "persuasion": 2, "religion": 2}, dict(a["state"]))
+        state["routine"] = day
+        arms[key] = {k: v for k, v in a.items() if k not in ("state", "visit", "srd")}
+        arms[key]["state"] = state
+    guards = []
+    for g in M["guards"]:
+        st = person(g["name"], g["srd"], g["look"], GUARD_SCORES, {"perception": 1},
+                    {"seen_as": g["seen_as"], "dialog": g["dialog"], "default_line": g["default_line"],
+                     "routine": routine_ids(M_GUARD_DAY(M), P, have)})
+        guards.append({"name": g["name"], "state": st})
+    return {"ship": M["ship"], "landing": M["landing"], "custodian_gold": M["custodian_gold"], "guards": guards,
+            "arms": arms, "arm_order": list(M["arm_order"]),
+            "base": {"faction": "Vorkathia", "people": "human"}}
+
+
+def M_DAY(M):
+    return [dict(sl) for sl in M.get("day") or []]
+
+
+def M_GUARD_DAY(M):
+    return [dict(sl) for sl in M.get("guard_day") or []]
+
+
+def build_magistrate(s, root):
+    have = by_name(s)
+    if "Story" not in have:
+        return
+    sid = have["Story"]["id"]
+    st = s.inspect(sid)["state"]
+    spec = magistrate_spec(s)
+    if st.get("magistrate_spec") != spec:
+        s.patch(sid, {"magistrate_spec": None})
+        s.patch(sid, {"magistrate_spec": spec})
+    if st.get("magistrate_eta") is not None:
+        return
+    now = s.summary()["t"]
+    days = _random.Random(str(WORLD["seed"]) + "-magistrate").randint(*MAGISTRATE_DAYS)
+    eta = (int(now // 86400) + days) * 86400 + MAGISTRATE_HOUR * 3600
+    s.schedule(eta - 7200 - now, "magistrate_sighted", entity=root)
+    s.schedule(eta - now, "magistrate_lands", entity=root)
+    s.patch(sid, {"magistrate_eta": eta, "magistrate_day": int(eta // 86400)})
 
 
 # ---- hired help: the one way a player brings a second agent in (owner, 2026-11-22) ---------------------------------
@@ -2243,6 +2379,9 @@ def build(s):
     if "cast" in STAGES:
         build_cast(s, root)
         build_news(s)
+        build_faith(s)
+    if "magistrate" in STAGES:
+        build_magistrate(s, root)
     if "five_e" in STAGES:
         build_five_e(s)
     if "statblocks" in STAGES:

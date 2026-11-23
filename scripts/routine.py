@@ -9,7 +9,8 @@
 # A routine waits for: a body someone holds, a hireling, a follower, someone tied, down or dead, one the story walked
 # (`routine_hold_until`), one the story has done with (`routine_off`), and one whose `routine_when` names facts (the
 # story's, or a flag of their own) none of which is true yet (Klhyt starts his day once he is free, Brask once he is
-# off the warehouse door).
+# off the warehouse door). `routine_if` ([[flag, slots], ...]) is a day the news brings: the first whose flag is true
+# (the person's own, or the story's) is kept instead of `routine` (the watch split once Klhyt is home).
 
 def story(ctx):
     found = ctx.find(type="story", limit=1)
@@ -108,6 +109,12 @@ def on(ctx, event):
     for p in people:
         st = p.state
         r = st.routine
+        which = ""
+        for alt in (st.routine_if or []):
+            if st.get(alt[0]) or facts.get(alt[0]):
+                r = alt[1]
+                which = alt[0] + "/"
+                break
         if not r:
             continue
         here = p.parent
@@ -115,7 +122,7 @@ def on(ctx, event):
             continue
         idx, wrapped = slot_of(r, h)
         slot = r[idx]
-        key = str(day - 1 if wrapped else day) + ":" + str(idx)
+        key = which + str(day - 1 if wrapped else day) + ":" + str(idx)
         fresh = st.routine_key != key
         changes = {}
         if fresh:
