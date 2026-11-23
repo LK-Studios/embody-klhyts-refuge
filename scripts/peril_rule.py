@@ -6,6 +6,7 @@
 # on the witnesses the town has found, one a night.
 
 use("peril")
+use("custody")
 
 WITNESS_KEYS = ["teague", "tully"]  # River is under Fat Gog's roof, where the Throne does not go
 NIGHT_FROM = 2.0
@@ -38,12 +39,43 @@ def on(ctx, event):
         if t is not None and by is not None and t.state.faction == FIST and by.state.faction != FIST:
             add_heat(ctx, by, 3, "struck one of the Fist")
     elif k == "given":
-        tribute(ctx, s, event, p)
+        if not bail(ctx, s, event, p) and not look_away(ctx, s, event, p):
+            tribute(ctx, s, event, p)
+    elif k in BREAK_KINDS:
+        at_the_door(ctx, s, event, p)
+    elif k == "yielded":
+        # a surrender to someone who takes prisoners, while they press you: the cells (scripts/_custody.py)
+        who = ctx.get(event.target) if event.target else None
+        captor = ctx.get(p.get("to")) if p.get("to") else None
+        surrender(ctx, s, who, captor)
     elif k == "fist_answers":
         fist_answers(ctx, s, p)
     elif k == "brask_talks":
         who = ctx.get(p.get("by")) if p.get("by") else None
         add_heat(ctx, who, 3, "paid Brask off his door", False)
+    elif k == "doctor_tells":
+        doctor_tells(ctx, s, p)
+
+def doctor_tells(ctx, s, p):
+    # Doctor Prewitt mends anyone, and writes it all down: a patient the Throne wants is in the watch's hands ten world
+    # minutes after he has paid (scripts/healing_rule.py). The officers come to the surgery door; whoever is still
+    # there is seen, and the warrant does the rest
+    who = ctx.get(p.get("who")) if p.get("who") else None
+    place = ctx.get(p.get("at")) if p.get("at") else None
+    if who is None or place is None or who.state.dead or who.id not in (s.state.wanted or []):
+        return
+    men = [m for m in [body_named(ctx, n) for n in THRONE_MEN] if free_hand(ctx, m)]
+    if not men:
+        return
+    for m in men:
+        if m.parent is None or m.parent.id != place.id:
+            go_one(ctx, m, place)
+        ctx.patch(m, {"routine_hold_until": ctx.t + 1800})
+    looks = [look_of(m, "an officer of the Throne") for m in men]
+    ctx.emit("scene", target=place.id, reach=1, text=cap1(looks[0] if len(looks) == 1 else " and ".join(looks))
+             + (" comes" if len(men) == 1 else " come") + " to the surgery door with a paper. The doctor does not look "
+             "up from his basin. He only lifts a wet hand and points.")
+    throne_sight(ctx, the_story(ctx))
 
 def tribute(ctx, s, event, p):
     # five gold in coin, to any of the Fist, from someone they have marked: the word is taken back
@@ -76,6 +108,9 @@ def tribute(ctx, s, event, p):
 
 def tick(ctx, s):
     st = s.state
+    if st.jailed:
+        check_jail(ctx, s)
+    mind_the_cells(ctx, the_story(ctx))
     h, day = hour_of(ctx)
     if st.custodian_exposed and not st.verdict and NIGHT_FROM <= h < NIGHT_TO and st.throne_day != day:
         throne_night(ctx, s, day)

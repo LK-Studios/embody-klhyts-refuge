@@ -26,6 +26,7 @@ from pathlib import Path as _Path
 from packs.d20.pack import install_rules
 from packs.dnd5e.pack import armor as armor5, character, class_hp, install_rules as install_5e, weapon as weapon5
 from packs.jobs.pack import install_rules as install_jobs
+from packs.burial.pack import install_rules as install_burial
 
 WORLD = {
     "id": "klhyts-refuge",
@@ -34,7 +35,7 @@ WORLD = {
     "description": "Shalamar, before the war. Klhyts Refuge, the nicest town on the continent: taverns, inns and "
                    "docks, refugees from Landfall, Lizardfolk tolerated. Fat Gog's guild is under threat and the "
                    "founder is missing.",
-    "requires": ["village", "d20", "sheet", "dnd5e", "locks", "jobs"],
+    "requires": ["village", "d20", "sheet", "dnd5e", "locks", "jobs", "burial"],
 }
 
 # ---- 5e on the sheet pack ----------------------------------------------------------------------------------------
@@ -286,6 +287,13 @@ SELLS_OMBERHULK = {
         "Beatrice, Susan and Phillip's spuds: a heap of fried potatoes the size of a cat, salted like the sea.",
         "The spuds are, against all odds, wonderful.")},
     "room|bed": {"price": 1, **token("Room key (Omberhulk & Nun)", "A brass key on a leather tag. The room is hot and the bugs get in.")},
+    # the healers, 2026-11-23: she left the order, and the order's prayers did not leave her (scripts/healing_rule.py)
+    "blessing|bless|prayer|pray|heal|healing|cure|wounds|hurt": {"price": 50, **token(
+        "Sister Agathe's blessing", "Five silver in the poor box and her hand on your head.", portable=True,
+        treatment="blessing", heals="1d8+3")},
+    "stitches|stitch|stitching|thread|needle|sew": {"price": 1, **token(
+        "Sister Agathe's stitches", "A copper for the thread, and her needle through your hide.", portable=True,
+        treatment="stitches", heals="1d4")},
 }
 SELLS_UNICORN = {
     "scraps": {"price": 0, **dish("Scraps", "Yesterday's bread and the end of a cheese.", "Scraps, but honest ones.")},
@@ -506,13 +514,119 @@ PLACES = {
                   "line": "A slate on the wall reads, in chalk: THE FIST OWES 30 JERKINS. Under it, a newer line: AND "
                           "INTEREST.",
                   "fail": "Armour, oil and the sound of a mallet. A working shop."}}}),
+    # the owner, 2026-11-23: "Surrender should mean surrender. And you are taken to prison." Under the Town Hall,
+    # behind a barred door only the watch opens (scripts/_custody.py)
+    "cells": ("The Cells", {
+        "water_source": True,
+        "description": "Two cells cut into the rock under the Town Hall, straw on the floor, a bucket of water, and a "
+                       "slit of a window at the height of passing boots. Names and tallies are scratched into the "
+                       "walls in four alphabets. The door is oak and iron, barred on the Hall side."}),
+    # the owner, 2026-11-23: "we will need an undertaker to go and sort out bodies etc." (scripts/undertaker_rule.py)
+    "graves": ("The Quiet Ground", {
+        "burial_ground": True, "water_source": True,
+        "description": "A burial ground off the Treeline Road, red earth and frangipani, rows of pine boards with names "
+                       "lettered on them, a low end by the mangroves where the Lizardfolk lie with their feet to the "
+                       "water, and a lodge with a mule cart under the eaves. The jungle leans over the place where a "
+                       "wall ought to be."}),
+    # the owner, 2026-11-23: "the river that runs through the town... the Verde river. Legends have it is the body of
+    # Kteol submerged. It goes out to the jungle ... out side the city walls, farms, lizard tribes and about 30 miles down
+    # a wiggly river is Malice." The town's stretch of it, and the water gate where it meets the jungle; what is beyond
+    # is known in talk (cast/n_beyond.py), not walked yet
+    "verde": ("The Verde", {
+        "water_source": True,
+        "description": "The Verde runs through the middle of the Refuge, green and slow and warm as bathwater, between "
+                       "banks of mangrove root and old stone quays. Three bridges cross it: a rope footbridge hung with "
+                       "washing in the Back Lanes, the humpbacked Stone Bridge by the Night Market, and a tarred swing "
+                       "bridge where it meets the harbour. Under the Stone Bridge flat river boats from the farms unload "
+                       "plantains, cane and cages of shrieking birds, and Lizardfolk fishermen stand thigh-deep with "
+                       "spears, never under the arch. The water is very still. In the right light its bends look less "
+                       "like a river than like something lying down. Downstream it slides out into the harbour.",
+        "finds": {"religion|history|nature|arcana": {"dc": 13,
+                  "line": "Under the bridge, where the old stones go down into the water, a serpent has been cut into "
+                          "every one of them, older than the town, worn almost smooth. The Lizardfolk leave a fish on "
+                          "the lowest stone at dusk and do not look at the water while they do it. Their name for the "
+                          "river is not Verde. It is the name of a god, and they say he is not dead, only lying down.",
+                  "fail": "Green water, mangrove roots and a bridge. Something about the stillness bothers you, and "
+                          "you cannot say what."}}}),
+    "rivergate": ("The River Gate", {
+        "water_source": True,
+        "description": "Where the Verde comes in under the town wall: a water gate of tarred timber and iron, its "
+                       "portcullis hung a man's height above the river so the boats can pass beneath, and a farm path "
+                       "running along the bank. Beyond the wall lie cleared fields of cane and plantain, farmhouses on "
+                       "stilts, the smoke of Lizardfolk fishing camps, and then the jungle, closing over the river like a "
+                       "lid: past the last farm there is no path at all, only water. A painted board by the gate reads "
+                       "MALICE, THIRTY MILES, BY WATER ONLY, and someone has added underneath, in another hand, AS THE "
+                       "RIVER WINDS. The farm boats come in under the portcullis at dawn and go back out at noon, and "
+                       "they take nobody with them."}),
+    # the owner, 2026-11-23: "I guess with a river we need some bridges." Canon names none: three crossings, one for each
+    # part of town, all host defaults
+    "stonebridge": ("The Stone Bridge", {
+        "description": "A humpbacked bridge of green-grey stone over the Verde between the Night Market and the Back "
+                       "Lanes, so steep in the middle that the carts take a run at it. The parapets are worn into hollows "
+                       "where a thousand elbows have leaned, lanterns hang on iron hooks, and there is a fruit barrow at "
+                       "each end. Stone steps go down on the market side to the bridge quay, where the farm boats tie up "
+                       "and the harbourmaster's copper is collected. Nobody throws anything off it, not a mango skin, not "
+                       "a fishbone, and below it the Lizardfolk fishermen keep well out from under the arch.",
+        "finds": {"history|religion|investigation|arcana": {"dc": 12,
+                  "line": "The paving and the parapets are the town's, mortared and patched. The arch underneath is "
+                          "not: older stones, fitted without mortar, greener than anything the town's masons ever cut, "
+                          "and the hump stands exactly over the deepest bend of the river. The town did not build this "
+                          "bridge. It paved one that was already there.",
+                  "fail": "A good old bridge, steep as a roof. Your calves feel it."}}}),
+    "washline": ("The Washline Bridge", {
+        "description": "A footbridge of planks on rope slung across the Verde from the Back Lanes, sagging in the middle "
+                       "so that the green water is never far below your boots. Washing lines run from its rails to every "
+                       "balcony on both banks, and shirts, sheets and petticoats hang over the river like the flags of a "
+                       "hundred small countries. It sways when anyone heavier than a goat crosses. On the far side a "
+                       "duckboard path runs along the bank to the Reed House on its stilts.",
+        "finds": {"perception|investigation": {"dc": 13,
+                  "line": "Pegged out among the sheets is a fine white shirt, Landfall linen, far too good for the Back "
+                          "Lanes. Someone has scrubbed hard at the collar and not quite got the red out.",
+                  "fail": "Sheets, shirts, a goat on a balcony eating a sock. The Back Lanes, drying."}}}),
+    "swingbridge": ("The Swing Bridge", {
+        "description": "Where the Verde slides out into the harbour, Harbour Street crosses it on a timber bridge black "
+                       "with tar that turns on a great iron pin, worked by a capstan in a keeper's hut no bigger than a "
+                       "privy. At high water it swings open for the masts and the carts wait and curse. Below, the green "
+                       "river water and the grey sea water meet in a line you could draw with a stick, and the gulls sit "
+                       "on the rail on the sea side only."}),
+    # the owner, 2026-11-23: "do we need a healer shop ? A doctor ? And a healer different shops different vibes." A
+    # Landfall surgeon off the harbour who mends anyone, fast and dear, and writes it all down; and a Lizardfolk
+    # grandmother's reed house over the Verde, slow and cheap, where nobody is taken (scripts/healing_rule.py)
+    "surgery": ("Prewitt's Surgery", {
+        "description": "A narrow whitewashed room off Harbour Street that smells of lye and spirits: a scrubbed table "
+                       "with leather straps, a glass case of saws and probes laid out by size, a basin, a rack of brown "
+                       "bottles labelled in a tidy Landfall hand, and a framed diploma from a college of surgeons in "
+                       "Landfall, the glass cracked across. A brass plate on the door gives his hours. A slate under it "
+                       "gives his prices, and they are not low.",
+        "finds": {"investigation|perception": {"dc": 14,
+                  "line": "On the shelf above the basin, among the case books, is a thinner ledger with a ribbon in it. "
+                          "The last page is names, dates and wounds, and beside some of the names a small, neat tick and "
+                          "the letter V.",
+                  "fail": "Clean, cold and orderly: the cleanest room in the Refuge, and the least friendly."}}}),
+    "reedhouse": ("The Reed House", {
+        "water_source": True,
+        "description": "A long low house of woven reed on stilts over the Verde, reached by a plank from the bank. "
+                       "Inside it is dim and green and smells of river mud and crushed leaves: sleeping mats in rows, "
+                       "bundles of herbs drying on the roof poles, clay pots of poultice, a fire pit with a kettle that "
+                       "is never empty, and between the floor reeds the slow green river going by underneath. Nobody "
+                       "here asks who you are, or who hurt you.",
+        "finds": {"nature|medicine|religion": {"dc": 12,
+                  "line": "The herbs are good ones and the poultices honestly made. On the post by the door hangs a "
+                          "string of serpent bones, very old, that nobody who came here meaning harm has been able to "
+                          "look at for long. Nobody is taken from the Reed House: not by the Fist, not by the watch. "
+                          "Nobody has had to say so twice.",
+                  "fail": "Reed, mud, smoke and herbs. Peaceful, and a little unsettling, like being watched by "
+                          "something patient."}}}),
 }
 
 WAYS = [("square", "market"), ("harbour", "market"), ("docks", "moonmoth"), ("docks", "warehouse"), ("docks", "harbour"), ("harbour", "turtle"), ("harbour", "apothecary"), ("harbour", "ogre"),
         ("harbour", "square"), ("square", "hall"), ("hall", "study"), ("square", "stripperwitch"), ("square", "omberhulk"),
         ("square", "treeline"), ("treeline", "unicorn"), ("square", "gate"), ("square", "lanes"), ("market", "lanes"),
         ("docks", "cove"), ("harbour", "row"), ("row", "market"), ("row", "chandlery"), ("row", "anvil"),
-        ("row", "coral")]
+        ("row", "coral"), ("treeline", "graves"), ("market", "verde"), ("lanes", "verde"), ("harbour", "verde"),
+        ("verde", "rivergate"), ("harbour", "surgery"), ("verde", "reedhouse"), ("market", "stonebridge"),
+        ("stonebridge", "lanes"), ("stonebridge", "verde"), ("lanes", "washline"), ("washline", "reedhouse"),
+        ("harbour", "swingbridge"), ("swingbridge", "verde")]
 
 # ---- people ------------------------------------------------------------------------------------------------------
 # Each: (type, where, state, carries). Lines in a table: words in double quotes are said, the rest is seen.
@@ -1447,6 +1561,15 @@ PLACE_AT = {
     "chandlery": ([-95, -82, 0], [18, 14, 7]),
     "anvil": ([-62, -82, 0], [16, 14, 6]),
     "coral": ([-30, -82, 0], [18, 14, 6]),
+    "cells": ([-10, 70, -4], [12, 10, 3]),
+    "graves": ([-190, 135, 0], [44, 30, 2]),
+    "verde": ([115, -20, 0], [16, 100, 1]),
+    "rivergate": ([140, 60, 0], [20, 12, 6]),
+    "surgery": ([75, -124, 0], [14, 12, 6]),
+    "reedhouse": ([135, 5, 1], [14, 12, 5]),
+    "stonebridge": ([115, -50, 2], [26, 8, 4]),
+    "washline": ([118, 45, 3], [22, 3, 2]),
+    "swingbridge": ([115, -136, 1], [22, 6, 2]),
 }
 PLACE_TYPES = {"moonmoth": "elfship"}
 PACKET_AT = ([0, -700, 0], [24, 7, 2])
@@ -1456,7 +1579,7 @@ UNDER = "Under the Harbour"
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
 STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
-          "peril", "missions", "shops"]
+          "peril", "missions", "shops", "law", "undertaker", "healers"]
 
 
 def by_name(s):
@@ -2450,6 +2573,15 @@ PLACE_SHORT = {
     "chandlery": "A long narrow chandler's shop hung floor to ceiling with rope, lanterns, bedrolls and biscuit barrels.",
     "anvil": "A hot forge-shop open to the lane, blades racked on the wall like a choir, rapiers at the front.",
     "coral": "A low Xoton armourer's smelling of oil and the sea: coral plates, chain, leather and shields.",
+    "cells": "Two rock cells under the Town Hall: straw, a water bucket, a slit window, a barred oak door.",
+    "graves": "A burial ground of red earth and frangipani, pine name-boards in rows and a lodge with a mule cart.",
+    "verde": "The green, still Verde through the middle of town: a stone bridge, quays, river boats and spear-fishers.",
+    "rivergate": "The water gate where the Verde comes in under the wall; beyond, farms, fishing camps and jungle.",
+    "surgery": "A whitewashed Landfall surgery off the harbour: a strapped table, a case of saws, a slate of high prices.",
+    "reedhouse": "A reed house on stilts over the Verde: sleeping mats, drying herbs, a kettle, the river underneath.",
+    "stonebridge": "A steep humpbacked stone bridge by the Night Market, worn parapets, lanterns, steps down to the quay.",
+    "washline": "A swaying rope footbridge in the Back Lanes, hung on both sides with the neighbourhood's washing.",
+    "swingbridge": "A tarred timber swing bridge where the Verde meets the harbour, with a capstan and a keeper's hut.",
 }
 # what a place's own rules read and a player must not: what a check there turns up (the cove's path among them)
 PLACE_SECRET = ["finds"]
@@ -2506,7 +2638,8 @@ def build_glance(s, root):
 # ---- peril (owner, 2026-11-23: "We need more peril!"; asked, "Full 5e, to the death" and "World first, minds after") -
 # scripts/_peril.py has the why: heat, the tail, the warning, the Fist's mark and its hunters, the Throne's warrant and
 # the Custodian's nights; cast/f_peril.py has who fights to kill and the orders the villains hold.
-PERIL_KINDS = ["peril_tick", "talked", "say", "hit", "given", "fist_answers", "brask_talks"]
+PERIL_KINDS = ["peril_tick", "talked", "say", "hit", "given", "yielded", "fist_answers", "brask_talks", "doctor_tells",
+               "unlocked", "lock_picked", "pick_failed", "lock_broken", "break_failed"]
 PERIL_EVERY = 30  # world seconds between the hunts' moves
 
 
@@ -2645,8 +2778,13 @@ SELLS_CHANDLERY = {
     "map|chart|maps|coast": {"price": 50, "type": "letter", "name": "Map of the Refuge and its coast", "state": {
         "bulk": 0, "portable": True, "description": "A chart on thin paper, folded small.",
         "text": "The Refuge: the docks and the bonded warehouse, Harbour Street, the square and the Town Hall, the six "
-                "taverns, the Night Market, Chandlers' Row, the gate and the jungle road. The coast south is drawn as far as "
-                "a reef marked DO NOT, and no further."}},
+                "taverns, the Night Market, Chandlers' Row, the gate and the jungle road, and the Verde through the middle "
+                "of it all, from the River Gate down to the harbour, crossed by the Washline footbridge, the Stone Bridge "
+                "and the Swing Bridge. Beyond the River Gate the river is drawn as a dotted "
+                "line wriggling into the jungle between farm squares and little fish-shaped marks for the Lizardfolk "
+                "camps, to a black tower drawn in a valley: MALICE, 30 MILES, AS THE RIVER WINDS. No road is drawn, "
+                "because there is none. The coast south is "
+                "drawn as far as a reef marked DO NOT, and no further."}},
 }
 SELLS_ANVIL = {
     "rapier|rapiers": {"price": 2500, **blade(
@@ -2699,7 +2837,45 @@ SELLS_CORAL = {
                                                    "with no sigil on it and never will be.")},
     "shield|buckler": {"price": 1000, **suit("Shield", "shield", "A round shield of oak faced with sharkskin.")},
 }
-SHOP_SELLS = {"Hob Merrow": SELLS_CHANDLERY, "Tamsin Vey": SELLS_ANVIL, "Brynja Coralhand": SELLS_CORAL}
+SELLS_GRAVES = {
+    "marker|markers|headstone|stone|board|cross": {"price": 20, **gear(
+        "Grave marker", "A pine board, planed smooth, with room for a name and a line.", bulk=1)},
+    "coffin|coffins|box": {"price": 300, **gear("Coffin", "A plain pine coffin, the lid pegged on.", bulk=4)},
+}
+# the healers (owner, 2026-11-23: "A doctor ? And a healer different shops different vibes"): the doctor fast, sure
+# and dear, and a wanted patient is in his casebook by morning; the grandmother slow and cheap, and she asks nothing.
+# A `treatment` is done the moment it is paid for (scripts/healing_rule.py); a medicine is carried and used with tend
+SELLS_SURGERY = {
+    "treatment|treat|surgery|stitch|stitches|stitching|mend|heal|healing|wound|wounds|patch|patch up|cure": {
+        "price": 500, **gear("Doctor's treatment", "Clean, stitch, splint and bind: every hurt seen to, at once.",
+                             treatment="full")},
+    "dressing|dressings|bandage|bandages|field dressing|lint": {"price": 100, **gear(
+        "Field dressing", "A Landfall field dressing in waxed paper: lint, a pad and a roll of bandage, with his "
+        "instructions printed on the wrapper.", medicine=True, doses=1, heals="2d4+2",
+        description_empty="A torn wrapper of waxed paper.")},
+    "tooth|teeth|pull|extraction|toothache": {"price": 10, **gear(
+        "Tooth extraction", "One tooth, out.", treatment="tooth")},
+    "laudanum|drops|tincture|sleep|pain": {"price": 20, **gear(
+        "Laudanum", "A brown glass bottle with a dropper and a Landfall label: TEN DROPS AT NIGHT, AND NO MORE.")},
+}
+SELLS_REEDHOUSE = {
+    "sleep|long sleep|rest|mats|mat|bed|heal|healing|cure|wounds|mend": {"price": 100, **gear(
+        "A long sleep on the mats", "An hour on the reed mats with river mud on your hurts.", treatment="rest")},
+    "poultice|poultices|mud|salve|herbs": {"price": 30, **gear(
+        "River-mud poultice", "A clay pot of green-black mud and crushed leaves, stoppered with wax. It smells of the "
+        "river and stings like a slap, and it works.", medicine=True, doses=3, heals="1d4+2",
+        description_empty="An empty clay pot, green at the bottom.")},
+    "tea|bitterleaf|bitterleaf tea|sober|sobering|hangover": {"price": 2, **gear(
+        "Bitterleaf tea", "A clay cup of bitterleaf tea, black and so bitter it makes your ears ring. It clears a head "
+        "full of drink like a bucket of river water.", capacity=1, left=1, sobers=True, kind="tea",
+        description_empty="An empty clay cup with black leaves at the bottom.")},
+    "charm|fever charm|fever|luck|knot": {"price": 1, **gear(
+        "Fever charm", "A knot of red thread around a fish bone. Grandmother Ishkaa ties one on anybody who looks "
+        "feverish, and nobody has dared take one off to see what happens.")},
+}
+SHOP_SELLS = {"Hob Merrow": SELLS_CHANDLERY, "Tamsin Vey": SELLS_ANVIL, "Brynja Coralhand": SELLS_CORAL,
+              "Ottoline Crabbe": SELLS_GRAVES, "Doctor Amsel Prewitt": SELLS_SURGERY,
+              "Grandmother Ishkaa": SELLS_REEDHOUSE, "Sister Agathe": SELLS_OMBERHULK}
 
 
 def build_players(s):
@@ -2711,6 +2887,75 @@ def build_players(s):
         st = e["state"]
         if (st.get("template") or st.get("playable")) and not st.get("stays") and not st.get("dead"):
             s.patch(e["id"], {"stays": True})
+
+
+UNDERTAKER_EVERY = 600  # world seconds between the undertaker's looks for the dead
+
+
+def build_law(s):
+    """The cells under the Town Hall, behind a barred door whose padlock has one key, Constable Rosa Quint's (it can be
+    bribed off her, searched off her, picked or broken: scripts/_custody.py says what each costs), and the evidence
+    chest where a prisoner's weapons and papers go. Runs again without change."""
+    P = place_ids(s)
+    have = by_name(s)
+    town = have["Klhyts Refuge"]["id"]
+    ts = s.inspect(town)["state"]
+    if "cells" in P and not ts.get("cells_built"):
+        door = s.spawn("thing", P["hall"], "Cell door", state={
+            "open": True, "portable": False,
+            "description": "An oak and iron door at the foot of a stair behind the Town Hall, barred on this side."})["id"]
+        s.spawn("lock", door, "Cell bar", state={
+            "locked": True, "pick_dc": 18, "break_dc": 20,
+            "description": "An iron bar across the cell door in two brackets, with a padlock through it."})
+        s.connect(P["hall"], P["cells"], via=door)
+        s.patch(town, {"cells_built": True})
+    have = by_name(s)
+    bar = have.get("Cell bar")
+    rosa = have.get("Constable Rosa Quint")
+    if bar is not None and rosa is not None and not bar["state"].get("key"):
+        # one key, on the watchwoman who takes small bribes (the owner: "rules to break someone out of prison")
+        key = s.spawn("thing", rosa["id"], "Cell key", state={
+            "portable": True, "bulk": 0,
+            "description": "A heavy iron key on a loop of string: the padlock on the cell bar under the Town Hall."})["id"]
+        s.patch(bar["id"], {"key": key, "shut_why": None})
+    if "Evidence chest" not in have:
+        chest = s.spawn("thing", P["hall"], "Evidence chest", state={
+            "holds": True, "portable": False,
+            "description": "An iron-bound chest under the clerk's desk, stencilled with the octogram."})["id"]
+        s.spawn("lock", chest, "Evidence chest lock", state={
+            "locked": True, "pick_dc": 16, "break_dc": 18,
+            "shut_why": "The watch keeps the evidence chest's key, and the Throne keeps the watch.",
+            "description": "A heavy Landfall lock on the evidence chest."})
+
+
+def build_undertaker(s, root):
+    """The burial pack's rule (the dead decay, graves take mark, inscribe and adorn), and the undertaker's round: a
+    look for the dead every ten world minutes (scripts/undertaker_rule.py). Runs again without change."""
+    install_burial(s, root)
+    s.set_rule(root, "undertaker_rule", kinds=["undertaker_tick"])
+    if not any(t["kind"] == "undertaker_tick" for t in s.timers()):
+        s.schedule(UNDERTAKER_EVERY, "undertaker_tick", entity=root, every=UNDERTAKER_EVERY)
+
+
+HEALING_EVERY = 300  # world seconds between looks at who lies on the Reed House mats
+HEALING_KINDS = ["bought", "healing_tick", "treatment_done"]
+
+
+def build_healers(s, root):
+    """A treatment is done the moment it is bought, and the long sleep heals a patient who stays the hour
+    (scripts/healing_rule.py); the Reed House is a sanctuary, where the Fist hunt nobody and the watch take nobody
+    (scripts/_peril.py). Runs again without change."""
+    s.set_rule(root, "healing_rule", kinds=HEALING_KINDS)
+    if not any(t["kind"] == "healing_tick" for t in s.timers()):
+        s.schedule(HEALING_EVERY, "healing_tick", entity=root, every=HEALING_EVERY)
+    P = place_ids(s)
+    story = by_name(s).get("Story")
+    if story is None:
+        return
+    cur = s.inspect(story["id"])["state"]
+    missing = {k: P[k] for k in ["surgery", "reedhouse"] if k in P and cur.get(k) != P[k]}
+    if missing:
+        s.patch(story["id"], missing)
 
 
 def build_shops(s):
@@ -2764,6 +3009,12 @@ def build(s):
     if "shops" in STAGES:
         build_shops(s)
         build_players(s)
+    if "law" in STAGES:
+        build_law(s)
+    if "undertaker" in STAGES:
+        build_undertaker(s, root)
+    if "healers" in STAGES:
+        build_healers(s, root)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

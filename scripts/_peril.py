@@ -76,7 +76,8 @@ def playing(ctx, who):
     return q is not None and q < ACTIVE
 
 def sanctuary(st, place_id):
-    return place_id is not None and place_id in [st.stripperwitch, st.moonmoth]
+    # the Stripperwitch (Gog's own house), the elves' ship, and the Reed House over the Verde (the healers, 2026-11-23)
+    return place_id is not None and place_id in [st.stripperwitch, st.moonmoth, st.reedhouse]
 
 def ears_at(ctx, st, place):
     # Dominico's informants drink at the Omberhulk, his muscle at the Ogre, and he sits at the Apothecary; anywhere

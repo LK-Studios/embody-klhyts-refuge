@@ -26,7 +26,7 @@ def check(ctx):
         return "it is empty"
     if ctx.actor.state.dead:
         return "the dead do not thirst"
-    if ctx.target.state.strong:
+    if ctx.target.state.strong or ctx.target.state.sobers:
         return True
     have = int(ctx.actor.state.water if ctx.actor.state.water is not None else 10)
     if have >= int(ctx.actor.state.max_water or 10):
@@ -61,6 +61,24 @@ def strong(ctx, me, cup):
     else:
         ctx.log("strong drink " + str(n) + " this hour; " + str(TIPSY_AT - n) + " more and you will feel it")
 
+def sober(ctx, me, cup):
+    # bitterleaf tea from the Reed House (the healers, 2026-11-23): it counts as water, and it takes the drink away
+    left = int(cup.state.left or 0) - 1
+    water = min(int(me.state.max_water or 10), int(me.state.water if me.state.water is not None else 10) + 2)
+    grants = [g for g in (me.state.grants or []) if g.get("source") != "drink"]
+    was = bool(me.state.unsteady)
+    changes = {"water": water, "drinks": 0, "drinking_since": None, "unsteady": False, "grants": grants}
+    if water > 3 and me.state.thirsty:
+        changes["thirsty"] = False
+    ctx.patch(me, changes)
+    ctx.patch(cup, {"left": left, "description": (cup.state.description_empty or "Empty.") if left <= 0 else cup.state.description})
+    ctx.emit("drank", target=cup, reach=1, by=me.id, left=left, water=water, sobered=was)
+    revive(ctx, me, water)
+    if was:
+        ctx.emit("scene", target=me.parent, reach=1, text=me.name + " drinks something black, shudders all over, and "
+                 "stands up straight.")
+    ctx.log("bitter as a curse; your head is clear" if was else "bitter as a curse, and you were sober already")
+
 def quaff(ctx, me, vial):
     doses = int(vial.state.doses or 0) - 1
     h = vial.state.heals
@@ -76,6 +94,9 @@ def apply(ctx):
     cup = ctx.target
     if cup.state.heals:
         quaff(ctx, me, cup)
+        return
+    if cup.state.sobers:
+        sober(ctx, me, cup)
         return
     if cup.state.strong:
         strong(ctx, me, cup)

@@ -456,6 +456,107 @@ or where it stands, and waits where its player left it. The town's own people ke
 days move them. Nothing else in the Refuge moves a body someone plays: the story's walks, the hunters and the Throne
 move only the town's people.
 
+## Surrender, the cells, and the dead (owner, 2026-11-23)
+
+> Surrender should mean surrender. And you are taken to prison.
+> Also we will need an undertaker to go and sort out bodies etc.
+
+(Asked whether to bring back Nate's Joe (Kesh-Ta), killed after yielding to the Fist, into the cells, the owner
+picked: leave Joe dead.)
+
+- **Surrender** (scripts/_custody.py). A yield to someone who takes prisoners (the Fist, the Throne's people, the
+  watch: Sergeant Harrow, Constables Fitch and Quint, the magistrate's guards) while they press you (you are marked or
+  wanted, or you are in their fight) ends the fight for you: your weapons and any paper against the Custodian go into
+  the evidence chest in the Town Hall, the Fist's word on you is satisfied and the Throne's warrant served, and you are
+  marched to **the Cells** under the Hall, behind a barred door. Six world hours later the watch lets you out with
+  your weapons (papers stay with the Throne); five gold bail given to Sergeant Harrow lets the longest-held out
+  sooner. A yield nobody is pressing is manners, nothing more.
+- **Breaking someone out** (the owner, 2026-11-23: "We gonna need rules to break someone out of prison"; the
+  mechanics are host defaults, in scripts/_custody.py; the watch talk about it in cast/p_cells.py). The bar's
+  padlock has one key, and Constable Rosa Quint carries it (her brief already has her taking small bribes). The ways
+  through:
+  - **Bribe Rosa.** Two gold given to her while someone is held, and she leaves the key in your hand and spends a
+    quarter of an hour at the market, seeing nothing. Less than two gold is "a mango", and kept.
+  - **Take the key off her** with `search` when she is down or asleep.
+  - **Pick** the padlock (DC 18, ten quiet minutes) or **break** the bar (DC 20, two loud minutes), from the Hall or
+    from inside the cell.
+  Anyone seen working the door by the watch or the Throne's officers in the Hall is wanted for "breaking into the
+  Throne's cells" and fought on the spot; a break is heard next door, and the watch on the square come running. A
+  prisoner caught at it from inside gets another hour. A prisoner out of the cells by any of these is wanted for the
+  escape (the rescuer only if seen). With nobody held, the watch fit a new bar if it was broken, and change the
+  padlock if the key has left their hands, so a kept key fits nothing.
+- **The undertaker** (cast/m_undertaker.py, scripts/undertaker_rule.py; host defaults): Ottoline Crabbe keeps **the
+  Quiet Ground** off the Treeline Road (a burial ground for the burial pack). Every ten world minutes she fetches one
+  of the dead who has lain half a world hour, whose seat nobody holds, from anywhere a townsperson would know, on her
+  mule cart, and buries them with what they carried, in the pack's own grave (who lies there, who buried them, the
+  words: "Here lies <name>. Nobody here asked where they came from."). Graves take mark, inscribe and adorn; she sells
+  markers (2 sp) and coffins (3 gp). The dead decay by the pack's clock meanwhile.
+
+## The Verde and what lies beyond (owner, 2026-11-23)
+
+> Also I forgot about the river that runs through the town... the Verde river. Legends have it is the body of Kteol
+> submerged. It goes out to the jungle. Not in the game yet, but out side the city walls, farms, lizard tribesx and
+> about 30 miles down a wiggly river is Malice. All of this is in the Lorekeeper lore. So you can start to give
+> characters and the city knowledge of what is beyond
+
+- **The Verde** runs through the middle of town (a stone bridge by the market, quays, river boats from the farms,
+  Lizardfolk spear-fishers who never fish under the bridge), between the Night Market, the Back Lanes and Harbour
+  Street, and out into the harbour. A sharp eye (religion, history, nature or arcana, DC 13) finds the serpents cut in
+  the old stones under the bridge: the Lizardfolk say whose body this is, and that he is only lying down. Kteol sleeps
+  in this build; he is never awake.
+- **The River Gate**, the water gate where the Verde comes in under the wall: farms, fishing camps and jungle beyond,
+  and a board: MALICE, THIRTY MILES, AS THE RIVER WINDS. Nothing beyond the walls is walkable yet; the town knows it in
+  talk (cast/n_beyond.py, with the canon digest in notes/beyond.md).
+- **Malice is reached only by the river** (the owner, 2026-11-23: "No road to malice. It's only accessibly by the
+  river"): three days poling up, two down. A farm path runs along the bank as far as the last farm and stops; past it
+  the banks are mangrove and jungle. The gate's board reads BY WATER ONLY.
+- **Malice is known, not reached** (the owner, 2026-11-23: "Malice shouldn't be accessible yet, it's just known about
+  as a location"). There is no place beyond the walls, and the town's lines never offer the trip: the farm boats take
+  no passengers, no boatman in the Refuge goes past the last farm (not for silver, not for rum), Ssark's dugout takes
+  nobody, and the watch stops at the wall. Hob prices a kit anyway, for the day somebody does.
+
+## Bridges over the Verde (owner, 2026-11-23)
+
+> I guess with a river we need some bridges
+
+Canon names none (the LoreKeeper library was searched), so all three are host defaults, one for each part of town:
+
+- **The Washline Bridge**: a rope-and-plank footbridge from the Back Lanes to the duckboard path to the Reed House,
+  hung with the Lanes' washing. A sharp eye (DC 13) finds a fine Landfall shirt with red not quite scrubbed out of the
+  collar (Rosa's mother's secret about the Custodian, out on the line).
+- **The Stone Bridge**: the humpbacked bridge by the Night Market that the town already talked about, from the market to
+  the Back Lanes, with steps down to the bridge quay on the Verde. Its arch is older than the town (DC 12): the town
+  paved a bridge that was already there, its hump over the deepest bend. Nobody throws anything off it; the Lizardfolk
+  never stand under it.
+- **The Swing Bridge**: a tarred timber bridge where Harbour Street crosses the Verde's mouth, turned on an iron pin by
+  a capstan; it swings open at high water for the masts.
+
+The Verde place is the quays and the water along all three.
+
+## The healers (owner, 2026-11-23)
+
+> Also do we need a healer shop ? A doctor ? And a healer different shops different vibes
+
+Three, each its own kind of help (the people and prices are host defaults: cast/o_healers.py, scripts/healing_rule.py):
+
+- **Doctor Amsel Prewitt**, **Prewitt's Surgery** off Harbour Street: a Landfall-trained surgeon, cold, quick, sure and
+  dear. His treatment (5 gp) mends every hurt at once. He sells field dressings (1 gp, a medicine: 2d4+2, used with
+  tend) and laudanum (2 sp), and pulls teeth (1 sp). He writes every patient down, and a patient the Throne wants is in Lieutenant
+  Voss's hands ten world minutes later: the officers come to his door, and whoever is still there is seen.
+- **Grandmother Ishkaa**, **the Reed House** on stilts over the Verde: a Lizardfolk healer, slow, cheap, asking nothing.
+  A long sleep on her mats (1 gp) heals you whole if you stay the world hour, and is only mud if you get up before. Her
+  river-mud poultice (3 sp, three uses of 1d4+2) is a medicine; bitterleaf tea (2 cp) takes the drink out of a head; a
+  fever charm costs a copper. The Reed House is a sanctuary, like the Stripperwitch and the elves' ship: the Fist hunt
+  nobody there, and the Throne's officers take nobody from it.
+- **Sister Agathe** at the Omberhulk & Nun: she left the order, its prayers did not leave her. Stitches are a copper
+  for the thread (1d4); five silver in the poor box and she prays over you (1d8+3).
+- The writer's inventions for the three (cast/o_healers.py lists them as `# invented:` lines): Prewitt was a naval
+  surgeon, cashiered for a midshipman who bled out while he was drunk; the Fist retain him at two gold a week; he sells
+  Lieutenant Voss the wanted (a silver a name, through Constable Quint); his casebook has the human bite he dressed on a
+  big sandy man of the Fist four nights back; he has offered Ottoline two gold for an unclaimed body. Ishkaa came down
+  from a Meters camp twenty years ago, heals with Kteol's water, and takes nobody upriver; Gog pays her, late, for the
+  Lizardfolk she mends. Agathe's prayer money goes to the poor box, and she sits with the dying for nothing.
+
 ## Not in this build (post-war, anachronistic)
 
 Dominico as guild master, and Fat Gog's death at his hands; the Lizardfolk army and Santa Guistina's fall; the attack on the Refuge and the slave train; the Smith's alliance,
