@@ -51,10 +51,12 @@ To run it yourself, put this repository in an embody checkout as `worlds/klhyts-
 - `build.py` builds the world: the canon, the taverns' prices, the places and map, the people, the things, the wiring.
 - `scripts/` holds the world's own verbs and rules: `buy`, `drink`, `eat`, `bathe`, `throw`, `free`, the guard's
   `guard_on`, `bound_guard`, the `gangplank`, the crowd's `crowd_hail` and `crowd_mingle`, the `finds` that answer a
-  passed check, the town's day (`routine`), hiring (`hire`, `dismiss`, `hire_rule`), following, and the `story`.
-- `cast/` holds the people: each one's look (no name), lines, day, purse, scheme and secrets, in three files the build
-  merges (`a_powers.py`, `b_town.py`, `c_market_docks.py`). **Like the bible, it holds secrets: players should not
-  read it.**
+  passed check, the town's day (`routine`), hiring (`hire`, `dismiss`, `hire_rule`), following, the `story`, and the
+  peril (`_peril`, `peril_rule`: heat, tails, warnings, the Fist's hunters, the Throne's warrant; `order`: the
+  villains' own verbs, for minds).
+- `cast/` holds the people: each one's look (no name), lines, day, purse, scheme and secrets, in files the build
+  merges in name order (`a_powers.py`, `b_town.py`, `c_market_docks.py`, `d_vorkath.py`, `e_faith.py`,
+  `f_peril.py`). **Like the bible, it holds secrets: players should not read it.**
 - `notes/bible.md` is the canon digest, the owner's words verbatim, and every host default that was invented.
   **It holds the story's secrets: players should not read it.** `notes/` also keeps the playtest notes and the text
   to carry back into LoreKeeper.

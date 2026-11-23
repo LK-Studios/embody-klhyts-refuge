@@ -314,6 +314,60 @@ keeps the gate and will give his watch book to the magistrate and nobody else.
 - **Not built yet:** what the decree does beyond the proclamation and the talk (no levy is raised, no census taken,
   no elf seized). Each is a story the owner may want to play out.
 
+## Peril (owner, 2026-11-23)
+
+> I don't feel like the antagonists are really antangoist enough. I have not ecounttered them being anything but
+> passive. And it has made every mission too easy. We need more peril!
+
+(Asked, the owner picked: "Full 5e, to the death": the Fist and the Throne fight to kill from the first blow, and
+characters can die in an ambush. And "World first, minds after": the villains act with nobody running them, each with
+a mind brief ready; launching minds for Dominico and the Custodian is a later step, by embody's mind guide.)
+
+What the live world showed: a player cowed Brask with one Intimidation roll (22 to 13); he hung the key on a nail and
+went for a drink; Klhyt was free three minutes later; Dominico called off midnight by himself and the Custodian shut
+himself in the Hall. Nobody threw a blow all night. Every villain had an off-switch and nothing after it.
+
+What is built (scripts/_peril.py, scripts/peril_rule.py, cast/f_peril.py; host defaults where the owner gave no word):
+
+- **Fighting to kill.** Dominico, Brask, Tully, Sabeth Crane, the Fennicks, Lieutenant Voss and the magistrate's
+  guards carry `finishes` (the dnd5e pack's): with no foe standing, they strike one who is down until they are dead.
+- **Heat.** The Fist hears about a player: a hot word (Klhyt, the crate, the warehouse, the Custodian, Dominico, the
+  dues, Brask, the ledger) said where the Fist has ears (the Omberhulk, the Ogre, the Apothecary, or any room one of
+  the Fist stands in), at most one a five world minutes; moving Brask off his door (cowed 3, bribed 3 when he talks,
+  half an hour later); going at the warehouse lock under his nose (3, and he attacks, a pick that works included);
+  freeing Klhyt (4, anyone else there 2); a blow on one of the Fist (3).
+- **The steps.** At 3 a tail: one of the Fennicks follows for half a world hour, shown to the player alone by look
+  ("is here too, and does not look your way"). At 5 a warning: Sabeth Crane finds them and reads their evening back
+  to them from her little book. At 8 the Fist marks them: quietly outlawed, deep (standing -8: a gift or two will not
+  buy it back, many will), and two of the Fist (three past 12) hunt them, a hop each 30 world seconds. When they find
+  them they show themselves first (an ambush line by look) and strike on the next tick: one beat, about one deed, to
+  run, shout or draw. A new wave comes six world hours after the last. A lone fresh character caught by two of them
+  is very likely dead (a rehearsal: two thugs killed a level 1 Newcomer inside a round).
+- **Fair hunting.** Hunters move only while someone plays their mark and is at it (their seat did something in the last
+  half world hour); otherwise they go back to their day and the hunt waits. The Throne's men keep the same rule. They never enter the Stripperwitch (Fat Gog's house) or the Moonmoth: they wait outside. One of the Fist in
+  the marked player's hire is found out and leaves the Fist. No new marks once Dominico is dead or in irons.
+- **Brask's door.** Cowed, he runs for help with the key on his belt, and the Fist is at the warehouse in five world
+  minutes. Bribed, he hangs the key and goes, talks within half an hour, and the Fist comes in fifteen. Shown Gog's
+  marker, he hangs the key and goes, and the Fist comes in ten. When they come: Klhyt still inside, three of them on
+  the door; Klhyt loose on the waterfront, they fight for him (the Fist outlaws Klhyt too) and his walk to the square
+  waits until the fight is done; Klhyt gone, whoever freed him is marked.
+- **Dominico.** Shown the letter or the passage, he lets Gog be but holds out his hand for it: given within two world
+  minutes, he burns it and forgets the giver; kept, the giver is marked. Cowed, he lets Gog be and marks the one who
+  threatened him. Terms (parley) are a clean way out. When Klhyt reaches the square he lets Gog be and marks whoever
+  freed Klhyt.
+- **Klhyt can die.** If he is killed before he reaches the square, the story is lost: "Klhyt died free, on the
+  waterfront".
+- **The Custodian's nights.** Once he is found out and until the verdict, at two in the morning once a world day: the
+  first night, the Throne's warrant on whoever freed Klhyt (a WANTED notice on the square, describing them as a stranger
+  would; Vorkathia outlaws them; Voss, Constable Rosa Quint and the magistrate's guards attack them on sight, and do
+  not chase). Each later night Voss and Quint call on the next witness the town has found (Harbourmaster Teague, then
+  Tully; River is under Gog's roof): with a player sitting up beside the witness they go away again; alone, the witness
+  is `silenced` (their lines on the crate and the night go quiet) and no longer counts at the hearing.
+- **Orders for minds.** Dominico and Sabeth Crane hold `set_on` and `call_off`; the Custodian holds `warrant` and
+  `pardon` (verbs of their own, each `who=<name>`), and each brief has a paragraph on their teeth.
+- **The live world.** On the upgrade, whoever freed Klhyt there is marked by the Fist (hunted only while someone plays
+  them), and the Throne's warrant comes at the next two in the morning.
+
 ## Not in this build (post-war, anachronistic)
 
 Dominico as guild master, and Fat Gog's death at his hands; the Lizardfolk army and Santa Guistina's fall; the attack on the Refuge and the slave train; the Smith's alliance,

@@ -121,6 +121,9 @@ PERSON_ACTIONS = {
              "listed": "ok", "duration": 30},
     "crawl": {"script": "crawl", "doc": "Drag yourself to a connected place, even when down", "targets": "place",
               "scope": "exits", "listed": "ok", "duration": 120},
+    # a villain's own orders, one verb each, held only by those the cast gives them (cast/f_peril.py, scripts/order.py)
+    "order": {"named_by": {"key": "orders", "doc": "doc"}, "script": "order", "doc": "An order of your own",
+              "params": {"who": "the name of the one it is about"}},
 }
 
 
@@ -635,7 +638,8 @@ BRASK = {
     "faction": "the Fist", "bribe": 200, "purse_before": 12, "leaves_behind": "Warehouse key",
     "bribe_line": "The big man weighs the coin, looks at the warehouse door, and decides the Rampant Ogre is where he was all along.",
     "marker_line": "The big man looks at the bone marker for a long time. \"I never saw you,\" he says, and walks off up the pier.",
-    "cowed_line": "The big man decides this is not worth his teeth and goes looking for a drink.",
+    "cowed_line": "The big man backs off a step, then another. Then he is going up the pier at a run, the key still on "
+                  "his belt, bawling for Tully.",
     "description": "A slab of a man on a bollard by the warehouse door, cudgel across his knees, one of Dominico's.",
     "dialog": {
         "warehouse|crate|inside|door": "\"Fish. Rope. Nothing. Move along.\"",
@@ -1413,7 +1417,8 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance"]
+STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
+          "peril"]
 
 
 def by_name(s):
@@ -1651,7 +1656,7 @@ TIMERS = [(600, "ultimatum"), (1500, "custodian_out"), (3600, "siren_rises"), (3
 STORY_KINDS = ["act", "arrived", "read", "taken", "talked", "shown", "cowed", "agreed", "freed", "pick_failed", "break_failed",
                "lock_broken", "klhyt_returns", "ultimatum", "dominico_back", "custodian_out", "midnight", "small_hours", "tide",
                "siren_rises", "siren_sings", "siren_leaves", "magistrate_sighted", "magistrate_lands", "hearing",
-               "given"]
+               "given", "died", "lock_picked"]
 
 
 def templates(P):
@@ -1948,10 +1953,20 @@ def load_cast():
                     d = dict(merged.get("dialog") or {})
                     d.update(v)
                     merged["dialog"] = {dk: dv for dk, dv in d.items() if dv is not None}
+                elif k == "brief_more":  # a paragraph added to the brief an earlier file wrote
+                    merged["brief"] = (str(merged.get("brief") or "") + " " + v).strip()
+                elif k == "dialog_when":  # [{if_state, words, line}]: each topic naming one of the words says `line`
+                    d = dict(merged.get("dialog") or {})  # while the flag holds, and what it said before otherwise
+                    for rule in v:
+                        for dk in list(d):
+                            if set(dk.split("|")) & set(rule["words"]):
+                                d[dk] = {"line": rule["line"], "if_state": rule["if_state"], "else": d[dk]}
+                    merged["dialog"] = d
                 else:
                     merged[k] = v
             cast[name] = merged
         new.update(getattr(mod, "NEW", {}))
+        PERIL_DATA.update(getattr(mod, "PERIL", {}) or {})
         if getattr(mod, "MAGISTRATE", None):
             MAGISTRATE_DATA = mod.MAGISTRATE
         FAITH_TEXTS.update(getattr(mod, "FAITH_TEXTS", {}) or {})
@@ -1960,6 +1975,7 @@ def load_cast():
 
 MAGISTRATE_DATA = None
 FAITH_TEXTS = {}  # cast/e_faith.py: the missions' tract, and its line in the Unicorn's library
+PERIL_DATA = {}  # cast/f_peril.py: who fights to kill, and the orders the villains hold (build_peril)
 
 
 CAST, NEW_PEOPLE = load_cast()
@@ -1969,7 +1985,7 @@ for _n, _v in NEW_PEOPLE.items():
 
 # what players never read on a person (their `secret`): the lines not said yet, the day ahead, the plans
 CAST_SECRET = ["dialog", "default_line", "routine", "routine_when", "routine_disgraced", "routine_upheld", "routine_if",
-               "scheme", "beats", "look_free", "look_disgraced", "look_upheld"]
+               "scheme", "beats", "look_free", "look_disgraced", "look_upheld", "orders", "finishes", "silenced"]
 # what the plot adds to the cast files: whose day waits for which fact, the story's or their own (scripts/routine.py),
 # and what they are doing while it waits (the cast files carry the looks and day the plot turns to: look_free,
 # look_disgraced, routine_disgraced)
@@ -2437,6 +2453,57 @@ def build_glance(s, root):
             s.patch(have[name]["id"], {"seen_as": line})
 
 
+# ---- peril (owner, 2026-11-23: "We need more peril!"; asked, "Full 5e, to the death" and "World first, minds after") -
+# scripts/_peril.py has the why: heat, the tail, the warning, the Fist's mark and its hunters, the Throne's warrant and
+# the Custodian's nights; cast/f_peril.py has who fights to kill and the orders the villains hold.
+PERIL_KINDS = ["peril_tick", "talked", "say", "hit", "fist_answers", "brask_talks"]
+PERIL_EVERY = 30  # world seconds between the hunts' moves
+PERIL_MARK_DEPTH = -8  # scripts/_peril.py MARK_DEPTH
+
+
+def build_peril(s, root):
+    """The peril rule and its tick, who fights to kill, the villains' orders; and once, on a world that has already
+    played its night, the Fist's word on whoever freed Klhyt (hunted only while someone plays them; the Throne's
+    warrant comes by itself at the next two in the morning). Runs again without change."""
+    s.set_rule(root, "peril_rule", kinds=PERIL_KINDS)
+    if not any(t["kind"] == "peril_tick" for t in s.timers()):
+        s.schedule(PERIL_EVERY, "peril_tick", entity=root, every=PERIL_EVERY)
+    have = by_name(s)
+    for name in PERIL_DATA.get("finishes") or []:
+        p = have.get(name)
+        if p is not None and not p["state"].get("finishes"):
+            s.patch(p["id"], {"finishes": True})
+    for name, orders in (PERIL_DATA.get("orders") or {}).items():
+        p = have.get(name)
+        if p is not None and p["state"].get("orders") != orders:
+            s.patch(p["id"], {"orders": None})  # whole: a merge would keep a retired order
+            s.patch(p["id"], {"orders": orders})
+    story = have.get("Story")
+    if story is None:
+        return
+    st = s.inspect(story["id"])["state"]
+    if st.get("peril_v"):
+        return
+    changes = {"peril_v": 1}
+    freer = st.get("freed_by")
+    fist = have.get("the Fist")
+    if freer and fist and s.world.get(freer) is not None and not (st.get("peril_step") or {}).get(freer):
+        seen = 0
+        for e in s.world.edges(freer, "standing", "out"):
+            if e["target"] == fist["id"]:
+                seen = int((e.get("data") or {}).get("value") or 0)
+        fs = fist["state"]
+        unseen = dict(fs.get("unseen") or {})
+        now = seen + int(unseen.get(freer) or 0)
+        if now > PERIL_MARK_DEPTH:
+            unseen[freer] = int(unseen.get(freer) or 0) + (PERIL_MARK_DEPTH - now)
+        s.patch(fist["id"], {"unseen": unseen, "hostile": {freer: True},
+                             "secret": sorted(set(fs.get("secret") or []) | {"unseen"})})
+        changes.update({"heat": {freer: 8}, "peril_step": {freer: "marked"},
+                        "marked_for": {freer: "freed Klhyt from the Fist's warehouse"}})
+    s.patch(story["id"], changes)
+
+
 def build(s):
     root = s.summary()["root"]
     if s.summary()["t"] < START and "Newcomer" not in by_name(s):
@@ -2466,6 +2533,8 @@ def build(s):
         build_hire(s, root)
     if "glance" in STAGES:
         build_glance(s, root)
+    if "peril" in STAGES:
+        build_peril(s, root)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

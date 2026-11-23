@@ -4,6 +4,8 @@
 # walked him out, and he has been tied up in the bonded warehouse at the docks ever since, crated for Catan aboard the
 # Emerald Eye (Danny DeVito's ship; he likes gold) on the one o'clock tide. Meanwhile Dominico squeezes Fat Gog: the Stripperwitch's books by midnight, or else.
 
+use("peril")
+
 CLUE_ITEMS = ["letter", "passage", "ring", "tally"]
 DOCKS_ARRIVAL = ("Klhyts Refuge comes at you all at once: tar and fish and frying onions, six kinds of music from six "
                  "taverns, and lamplight on wet planks. Out past the harbour mouth a Xoton trader rides at anchor, too many "
@@ -104,6 +106,11 @@ def klhyt_returns(ctx, st):
     klhyt = ctx.get(st.klhyt)
     if klhyt is None or klhyt.state.dead or st.custodian_exposed:
         return
+    # not while a fight is on where he stands, or the Fist is there for him, or he is down: a minute, and look again
+    here = klhyt.parent
+    if klhyt.state.down or (here is not None and (fight_in(ctx, here) is not None or fist_hunting_at(ctx, st, here))):
+        ctx.schedule(60, "klhyt_returns", target=ctx.root().id)
+        return
     walk(ctx, st.klhyt, st.square)
     ctx.patch(story(ctx), {"custodian_exposed": True, "outcome": "Klhyt is home, the Custodian's skimming is out in the "
                                                                 "square, and he holds the Town Hall in the Throne's name "
@@ -114,7 +121,36 @@ def klhyt_returns(ctx, st):
     disgrace(ctx, st)
     if not st.dominico_backed:
         dominico_backs_off(ctx, story(ctx).state, "his patron fell")
+    # Dominico lets Gog be, but not the one who made him look a fool on his own pier (owner, 2026-11-23: more peril)
+    freer = ctx.get(st.freed_by) if st.freed_by else None
+    if freer is not None and not freer.state.dead:
+        ctx.patch(story(ctx), {"heat": {freer.id: max(heat_of(story(ctx).state, freer), MARK_AT)}})
+        mark(ctx, freer, "freed Klhyt from the Fist's warehouse")
     ctx.patch(ctx.root(), {"story": "complete"})
+
+def fist_hunting_at(ctx, st, place):
+    for hid in (st.hunts or {}):
+        rec = (st.hunts or {}).get(hid)
+        h = ctx.get(hid)
+        if rec and rec.get("mode") == "kill" and h is not None and h.parent is not None and h.parent.id == place.id \
+                and not h.state.down and not h.state.dead:
+            return True
+    return False
+
+def klhyt_dies(ctx, st):
+    if st.klhyt_dead:
+        return
+    klhyt = ctx.get(st.klhyt)
+    place = klhyt.parent.id if klhyt is not None and klhyt.parent is not None else st.docks
+    if st.custodian_exposed:
+        ctx.patch(story(ctx), {"klhyt_dead": True, "outcome": str(st.outcome or "") + "; and then Klhyt was killed"})
+    else:
+        ctx.patch(story(ctx), {"klhyt_dead": True, "outcome": "Klhyt died free, on the waterfront, before he could reach "
+                                                              "the square"})
+        ctx.patch(ctx.root(), {"story": "lost"})
+    tell_town(ctx, "klhyt_dead")
+    scene(ctx, place, "The big grey-bearded man goes down and does not get up. Somebody says his name, once, the way you "
+          "would say it to wake a man. He does not wake.")
 
 def disgrace(ctx, st):
     # the Custodian, found out, doubles down (owner, 2026-11-23: "I think he should be more militant. He is a
@@ -248,6 +284,7 @@ def magistrate_lands(ctx, st):
     guards = []
     for g in spec["guards"]:
         gs = dict(g["state"])
+        gs["finishes"] = True  # the Throne fights to kill (owner, 2026-11-23: "Full 5e, to the death")
         gs["post"] = st.docks
         gs["home"] = st.apothecary
         guards.append(ctx.spawn("person", st.docks, name=g["name"], state=gs).id)
@@ -273,7 +310,7 @@ def magistrate_lands(ctx, st):
 def evidence(ctx, st):
     # what the magistrate weighs for Klhyt: papers shown them, the witnesses the town has found, coin
     docs = [c for c in (st.magistrate_shown or []) if c in ["letter", "passage", "tally"]]
-    witnesses = [c for c in (st.clues or []) if c in ["river", "teague", "tully"]]
+    witnesses = [c for c in (st.clues or []) if c in ["river", "teague", "tully"] and c not in (st.silenced or [])]
     if st.custodian_exposed:
         witnesses = witnesses + ["the watch book"]  # the sergeant gives the magistrate his book, and nobody else
     return docs, witnesses
@@ -406,6 +443,22 @@ def on(ctx, event):
                 if w in said:
                     escort_begins(ctx, st, p.get("by"))
                     break
+    elif k == "given" and st.dominico_wants and event.target == st.dominico:
+        want = st.dominico_wants
+        item = ctx.get(p.get("item"))
+        if item is None or item.id != want.get("item"):
+            return
+        ctx.patch(story(ctx), {"dominico_wants": None})
+        dom = ctx.get(st.dominico)
+        scene(ctx, dom.parent.id, seen(ctx, st.dominico, "the man in the black coat") + " reads it again, holds one corner "
+              "to the candle, and lets it burn down to his fingers. \"Sensible,\" he says.")
+        ctx.destroy(item)
+        giver = ctx.get(p.get("by")) if p.get("by") else None
+        if giver is not None:
+            ctx.patch(story(ctx), {"heat": {giver.id: 0}, "peril_step": {giver.id: None}})
+    elif k == "died":
+        if event.target == st.klhyt:
+            klhyt_dies(ctx, st)
     elif (k == "shown" or k == "given") and st.magistrate and event.target == st.magistrate:
         to_magistrate(ctx, st, event, p)
     elif k == "magistrate_sighted":
@@ -422,6 +475,11 @@ def on(ctx, event):
             gog_learns(ctx, st, p.get("by"), item.state.clue)
         elif event.target == st.dominico and item.state.clue in ["passage", "letter"]:
             dominico_backs_off(ctx, st, "shown the " + item.state.clue)
+            if not story(ctx).state.dominico_wants and p.get("by"):
+                ctx.patch(story(ctx), {"dominico_wants": {"by": p.get("by"), "item": item.id, "until": ctx.t + 120}})
+                dom = ctx.get(st.dominico)
+                scene(ctx, dom.parent.id, seen(ctx, st.dominico, "the man in the black coat") + " holds out his hand, "
+                      "palm up, and waits. \"I'll keep that,\" he says. It is not a question.")
         elif event.target == st.custodian and not st.custodian_bribe and item.state.clue in ["letter", "passage", "tally"]:
             ctx.patch(story(ctx), {"custodian_bribe": True})
             shower = ctx.get(p.get("by"))
@@ -436,10 +494,21 @@ def on(ctx, event):
     elif k == "cowed" or k == "agreed":
         if event.target == st.dominico:
             dominico_backs_off(ctx, st, k)
+            who = ctx.get(p.get("by")) if p.get("by") else None
+            if k == "cowed" and who is not None:
+                ctx.patch(story(ctx), {"heat": {who.id: max(heat_of(story(ctx).state, who), MARK_AT)}})
+                mark(ctx, who, "threatened Dominico in his own chair")
     elif k == "freed":
         if event.target == st.klhyt:
             klhyt_free(ctx, st, p.get("by"))
-    elif k in ["pick_failed", "break_failed", "lock_broken"]:
+            freer = ctx.get(p.get("by")) if p.get("by") else None
+            add_heat(ctx, freer, 4, "freed Klhyt")
+            klhyt = ctx.get(st.klhyt)
+            if klhyt is not None and klhyt.parent is not None:
+                for x in ctx.children(klhyt.parent, "person"):
+                    if freer is not None and x.id != freer.id and ctx.embodied(x):
+                        add_heat(ctx, x, 2, "was there when Klhyt was freed")
+    elif k in ["pick_failed", "break_failed", "lock_broken", "lock_picked"]:
         if p.get("holder") != st.warehouse:
             return
         brask = ctx.get(st.brask)
@@ -447,6 +516,8 @@ def on(ctx, event):
             return
         if brask.parent.id != st.docks:
             return
+        who = ctx.get(p.get("by")) if p.get("by") else None
+        add_heat(ctx, who, 3, "went at the warehouse lock under Brask's nose")
         ctx.patch(brask, {"attacked_by": p.get("by"), "attacked_at": ctx.t})
         scene(ctx, st.docks, seen(ctx, st.brask, "the big man on the bollard") + " hears it. He comes off the bollard with his cudgel already swinging. \"OI.\"")
     elif k == "klhyt_returns":
