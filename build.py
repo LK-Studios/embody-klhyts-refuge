@@ -1413,7 +1413,7 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire"]
+STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance"]
 
 
 def by_name(s):
@@ -2361,6 +2361,82 @@ def parent_of(s, eid):
     return p.get("id") if isinstance(p, dict) else p
 
 
+# ---- a glance, said aloud (owner, 2026-11-23: a player on a voice client could not take in the docks, 68,000 characters
+# of scene; "it needs to be enough that could be spoken to and listened to. LLMs over slop things, we want to reduce it
+# for human interactivity"). perceive is short here by default (the engine's `perceive_brief`): each place by its
+# `short` line, each person by their `seen_as`. The long descriptions stay for inspect, when someone looks closer.
+PLACE_SHORT = {
+    "docks": "Lamplit piers, ships rafted three deep, a pale ship glowing at the far end and a warehouse at the pier's end.",
+    "warehouse": "A long dark shed of bales and crates, smelling of tar and old fish.",
+    "harbour": "The waterfront street: shuttered chandlers, swaying tavern lanterns, and the hill up to the square.",
+    "turtle": "A sailors' pub drowned in nets and floats, where the beers come twice the size.",
+    "apothecary": "The town's one grand house: dark wood, white linen, and a steward who looks through you.",
+    "square": "Sheeted stalls, a town pump, the Town Hall's white porch and a notice board.",
+    "hall": "Colonial timber going grey, an office to one side and a locked door at the back.",
+    "study": "A small room of charts and pipe smoke, searched and put back very carefully.",
+    "stripperwitch": "Red velvet, good music, a curtained stage and a long mirror behind the bar.",
+    "omberhulk": "Loud, hot and buggy, with big portions and music that runs late.",
+    "ogre": "Sawdust, spit, a bar made of a ship's door and a dice game in the corner.",
+    "treeline": "A dark road at the edge of town, with eyes watching from the trees.",
+    "unicorn": "A quiet library of a tavern, for people who don't want to be found.",
+    "market": "Lantern-strung stalls, brazier smoke and a crowd you move through sideways.",
+    "moonmoth": "A grown ship of pale silverwood that hums underfoot, elves waiting among their bundles.",
+    "lanes": "Narrow lanes of timber houses, washing overhead and a goat in every third yard.",
+    "cove": "A hidden cove of black shingle, where a long black schooner rides at anchor.",
+    "gate": "Two open timber gates, and the jungle road going on into the dark.",
+}
+# what a place's own rules read and a player must not: what a check there turns up (the cove's path among them)
+PLACE_SECRET = ["finds"]
+# the numbers and the levers on the town's people, the DM's alone (owner, 2026-11-22: "every statblock is the DM's"):
+# a player sees how someone looks and how they are (condition), never their armour class, a guard's price or the line
+# he says when he takes it
+PERSON_SECRET = ["statblock", "skill_prof", "saves", "save_adv", "five_e", "cr", "ac", "hp", "max_hp", "temp_hp",
+                 "hit_dice", "hit_dice_max", "hit_die", "spellcasting", "extra_attacks", "weapon_prof", "init_bonus",
+                 "resist", "immune", "vulnerable", "level", "cls", "scores", "body", "wits", "will", "skills", "sheet",
+                 "bribe", "bribe_line", "cowed_line", "marker_line", "purse_before", "leaves_behind", "walks_to",
+                 "seen_docks", "cast_v"]
+VOICE_BRIEF = ("Keep it short enough to say aloud: your human may be listening, not reading. A scene is a breath or two: "
+               "the place in a line, who is here by their looks, what just happened. perceive here gives you the short "
+               "of it (the place's and each person's `looks`); inspect someone only when your human looks closer, and "
+               "then give one detail, not the paragraph. Ask what they do; never read out the list of verbs.")
+BRIEF_ADDENDA = BRIEF_ADDENDA + [("Keep it short enough to say aloud:", VOICE_BRIEF)]
+# a seat whose description talks to whoever sits in it ("You, fresh off a fishing boat...") still needs a glance for
+# everyone else
+SEEN_AS_EXTRA = {"Newcomer": "someone fresh off a fishing boat, salt in their hair"}
+
+
+def build_glance(s, root):
+    """The short perceive on, each place's one line, and the finds and the numbers kept from players. Runs again
+    without change."""
+    if not s.inspect(root)["state"].get("perceive_brief"):
+        s.patch(root, {"perceive_brief": True})
+    P = place_ids(s)
+    for key, line in PLACE_SHORT.items():
+        if key not in P:
+            continue
+        st = s.inspect(P[key])["state"]
+        changes = {}
+        if st.get("short") != line:
+            changes["short"] = line
+        secret = sorted(set(st.get("secret") or []) | set(PLACE_SECRET))
+        if st.get("secret") != secret:
+            changes["secret"] = secret
+        if changes:
+            s.patch(P[key], changes)
+    w = s.world
+    for e in w.find(type="person", limit=None):
+        st = e["state"]
+        if w.embodied(e["id"]) is not None or st.get("template"):
+            continue  # a player's own body: their sheet is theirs to show
+        secret = sorted(set(st.get("secret") or []) | set(PERSON_SECRET))
+        if st.get("secret") != secret:
+            s.patch(e["id"], {"secret": secret})
+    have = by_name(s)
+    for name, line in SEEN_AS_EXTRA.items():
+        if name in have and not have[name]["state"].get("seen_as"):
+            s.patch(have[name]["id"], {"seen_as": line})
+
+
 def build(s):
     root = s.summary()["root"]
     if s.summary()["t"] < START and "Newcomer" not in by_name(s):
@@ -2388,6 +2464,8 @@ def build(s):
         build_statblocks(s)
     if "hire" in STAGES:
         build_hire(s, root)
+    if "glance" in STAGES:
+        build_glance(s, root)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

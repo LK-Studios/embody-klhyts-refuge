@@ -57,7 +57,7 @@ def test_vendors_sell_at_the_night_market():
         you.act("go", p)
     you.act("buy", "Grusha", {"item": "goat skewer"})
     you.act("buy", "Saelwyn", {"item": "a map of the coast"})
-    held = {c["name"] for c in you.perceive()["holding"]}
+    held = {c["name"] for c in you.perceive(brief=False)["holding"]}
     assert {"Goat skewer", "Map of the southern coast"} <= held
 
 
@@ -68,7 +68,7 @@ def test_the_moonmoth_takes_elves_and_those_an_elf_vouches_for():
     for p in ["Harbour Street", "Market Square", "The Treeline Road", "The Touchy Unicorn"]:
         you.act("go", p)
     you.act("talk", "Ithriel", {"about": "passage on the moonmoth"})
-    assert "Silverleaf token" in {c["name"] for c in you.perceive()["holding"]}
+    assert "Silverleaf token" in {c["name"] for c in you.perceive(brief=False)["holding"]}
     for p in ["The Treeline Road", "Market Square", "Harbour Street", "The Docks", "The Moonmoth"]:
         you.act("go", p)
     assert where(gm, "Newcomer") == eid(gm, "The Moonmoth")

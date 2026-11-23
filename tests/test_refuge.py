@@ -33,7 +33,7 @@ def story(gm):
 
 
 def holding(you):
-    return {c["name"]: c for c in you.perceive()["holding"]}
+    return {c["name"]: c for c in you.perceive(brief=False)["holding"]}
 
 
 def coin(you):
@@ -43,7 +43,7 @@ def coin(you):
 
 def test_the_town_stands_and_the_newcomer_lands_at_the_docks(tmp_path):
     eng, gm, you = town(tmp_path)
-    p = you.perceive()
+    p = you.perceive(brief=False)
     assert p["here"]["name"] == "The Docks"
     here = {e["name"] for e in p["present"]}
     assert {"Brask", "Harbourmaster Teague", "Klhyt's signet ring"} <= here
@@ -78,7 +78,7 @@ def test_everyone_comes_ashore_at_the_docks_and_each_arrives_alone(tmp_path):
     hers = ana.act("talk", "Harbourmaster Teague", {"about": "hello"})
     assert any(arrival in t for t in scenes(hers))
     # told to her alone: the newcomer beside her on the pier never reads it
-    assert not any(arrival in (e["payload"].get("text") or "") for e in you.perceive()["events"] if e["kind"] == "scene")
+    assert not any(arrival in (e["payload"].get("text") or "") for e in you.perceive(brief=False)["events"] if e["kind"] == "scene")
     assert len(story(gm)["ashore"]) == 2
 
 

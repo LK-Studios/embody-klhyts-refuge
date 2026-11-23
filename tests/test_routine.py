@@ -116,7 +116,7 @@ def test_the_cove_is_hidden_until_someone_finds_the_shore_path(tmp_path):
     me = eid(gm, "Newcomer")
     assert w.knows_way(eid(gm, "River"), cove)
     assert not w.knows_way(me, cove)
-    names = [x.get("name") for x in (you.perceive().get("exits") or [])]
+    names = [x.get("name") for x in (you.perceive(brief=False).get("exits") or [])]
     assert "The Cove Behind the Reef" not in names
     gm.patch(me, {"sheet": {"attributes": {"acuity": 20}, "skills": {"survival": 2}}})
     for _ in range(6):  # a d20 is a d20: try until it passes the DC 15, each try a fresh hour
