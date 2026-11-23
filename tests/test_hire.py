@@ -34,7 +34,8 @@ def here(gm, *names):
     at = at["id"] if isinstance(at, dict) else at
     for n in names:
         gm.move(eid(gm, n), at)
-        gm.patch(eid(gm, n), {"post": at})  # or their idle routine walks them back to their own
+        # or their idle walk takes them back to their own post, and their day to the next place in it
+        gm.patch(eid(gm, n), {"post": at, "routine_hold_until": 10 ** 9})
 
 
 def purse(gm, you, cp=None, cha=None):

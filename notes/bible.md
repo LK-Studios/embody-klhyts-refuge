@@ -156,6 +156,92 @@ Miravel) in behind the one who asked; at the docks each goes up the gangplank al
 aboard the Moonmoth by following: a player stops at the gangplank, and a follower with no elf blood and no leaf is
 turned back. Voss seeing them on the way is not built (a possible twist).
 
+## The town's people and their days (owner, 2026-11-23)
+
+> ok. I encountered quite a few NPCs that were way way too one dimensional and had no backstory, or didn't engage in
+> conversation or didn't move or seem to do anything. Have a look at Kalypso's log? We really need to up our game on
+> the personality of our characters and what they are up to ? Give them routines, jobs, their own money, their plans
+> or schemes (if they have any) do we need a lot more of them as well? Also River needs to be a secret witch with her
+> own pirate vessle down the way (but this is all top secret). Also the narrator tells the users too much. Often
+> should describe what people look like rather then outright just say who they aare and what they are going to do
+
+(Asked, the owner picked: nobody in town knows River's secret, not even Fat Gog; and a law and turf network of new
+people, each with a job and a routine.)
+
+What Kalypso's log showed (the hosted world, night one): a person with no mind answers `talk` from their table, and
+anything off it got one stock line. An elf said "Yes?" to a hello and to a drink; Big Ludo said "Drink." twice; the
+chandler answered a question about lodging with his wares; Fat Gog, told Klhyt was free outside, recited the beach
+story; Klhyt, told Gog was inside, gave a stock line; nobody moved all night.
+
+What is built:
+
+- **Everyone has a cast entry** (`cast/*.py`, merged by `build_cast`): a `look` (what a stranger sees: no name, no
+  title, no intent), `seen_as` (how a stranger would point them out), a `brief` for an agent who may play them (backstory,
+  job, money, wants, scheme, secret, fears, voice), a `scheme`, a purse sized to their life, a table of 12 to 20 topics
+  with the words players really type, 3 to 5 lines of their own for when nothing fits (said in turn: the engine's
+  `default_line` list), a day (`routine`) and small visible deeds (`beats`). The lines, the day, the scheme and the
+  beats are on each person's `secret` list: players and their narrators see the look and hear what is said.
+- **A name comes in talk, not in the look.** Descriptions are look plus what they are doing now. The story's own scene
+  lines describe people the same way (scripts/story.py `seen`), and a name comes when someone says it. The briefing
+  tells the narrator the same (`SHOW_BRIEF`: people are seen before they are named; never say what someone is about
+  to do, wants or hides; one or two telling details at a time).
+- **The town's day** (`scripts/routine.py`, a `routine_tick` on the root every 5 world minutes): each slot moves a
+  person's post (d20's idle walk takes them there), sets what they are doing into their description, hands over its
+  pay, and tells the room they leave if a player is in it. While a player is in a room, one person at work there shows
+  it each tick. A day waits for a held body, a hireling, a follower, someone tied, down or dead, someone the story just
+  walked (`routine_hold_until`, half an hour), someone the story is done with (`routine_off`: the elves aboard, Klhyt
+  shipped), and Klhyt and Brask until the story frees them (`routine_when`).
+- **Money moves.** Purses are sized to each life. Sabeth Crane collects Dominico's peace money from the Ogre, the
+  Turtle and the Omberhulk on her round; Dominico pays his men at 2; Marlo pays Gog his cut; regulars pay for rounds.
+- **The night's news reaches people as flags** their lines answer to (`if_state`): on everyone `klhyt_home`,
+  `klhyt_shipped`, `guild_hit`; on Fat Gog `gog_knows`; on Dominico `backed_off`; on the Custodian `disgraced`; on
+  Klhyt `bound`; on Brask `left_post`; on the elf household `aboard`. The story no longer rewrites anyone's lines.
+- **The Back Lanes**, behind the square, where most of the town sleeps.
+
+### The law and the turf (owner's ask, 2026-11-22 and 2026-11-23)
+
+- **The Custodian's town watch** (the Refuge): Sergeant Pell Harrow, Constables Abel Fitch and Rosa Quint. They keep
+  the gate and walk the square, Harbour Street and the market; paid late and short; they chase drunk Xotons, take small
+  bribes and keep out of Gog's and Dominico's way.
+- **Dominico's Fist**: Brask, Tully, Sabeth Crane (his second and collector), Ott and Jory Fennick (who also take
+  Phillip Everuex's coin to find Deloris). They keep the peace with a fist and collect from the cheaper taverns.
+- **Fat Gog's guild**: River at the bar, Hessa on the Stripperwitch's door, Wick (a street child, his eyes and runner
+  in the market and square), Marlo (a fence on Harbour Street). The Stripperwitch pays nobody.
+- **The drunk Xotons**: Torvald Brineknot, Ragna Seaward, Bjarke Foamtooth and Little Olaf, off the Whispers of the
+  Deep, crawling the taverns all night with the watch a tavern behind them and Hulda wanting them aboard by the
+  morning tide. A force in a roundabout, random way.
+- Not built yet: who comes running when there is trouble on whose turf (a fight in a Fist tavern, a theft in the
+  market). The turf is in their briefs and lines.
+
+### River's secret (TOP SECRET; owner, 2026-11-23)
+
+River is secretly a witch, and captain of her own pirate schooner, the Quicksilver, which lies in **the Cove Behind
+the Reef** (`cove`, a hidden place off the docks, down the coast behind the reef Saelwyn's chart marks DO NOT). Nobody
+in town knows, not even Fat Gog. Ned Tallow the lamplighter is her quartermaster. Her look, lines and beats never say
+it; her lines may hint. Only River and Ned know the way (`known_to`); a player who passes a survival, nature or
+navigation check (DC 15) at the docks finds the shore path and knows it from then on (scripts/finds.py `reveals`).
+River walks there in the small hours; that is the one way a watcher could start to wonder. If Dominico's men wreck
+the Stripperwitch at midnight, her mirror goes with it.
+
+### Invented for the cast (host defaults)
+
+Each cast file lists what its writer invented at its top (`# invented: <who>: <what>`, one line each): backstories,
+schemes, secrets, purses, homes and the night's crawl. The owner may strike any of it. The larger inventions:
+
+- River: a salt-witch from a wreckers' village on the Landfall coast; her mirror is a scrying glass washed in seawater
+  at dawn; six years ago she fogged a Vorkathian revenue sloop onto the reef and made her the Quicksilver, crewed by
+  Ned Tallow and eleven freed convicts; she takes Vorkathian ships and slavers, never local ones; tonight, if Klhyt
+  goes out on the tide, she means to take the Emerald Eye past the reef and put him ashore where Gog found him.
+- Ned Tallow: thirty years a gunner and purser in the Vorkathian navy, aboard the sloop River took; signals the cove
+  with a green lamp glass at the pier's end.
+- The Custodian: a Landfall clerk Klhyt hired because he could add; the skim goes to Catan with DeVito, toward a
+  house with lemon trees.
+- Jory Fennick took Klhyt's brass compass and sold it to Marlo; Phillip Everuex paid both Fennicks to find Deloris.
+- Lieutenant Voss buys crumbs from Constable Rosa Quint and wants the Custodian's seal on a warrant for the Unicorn.
+- Ithriel's household: Miravel is her daughter, Corwen and Ysolde the steward's children, Faelan carries the
+  household's book of names.
+- Eirik's trader at anchor is the Guardians of the Horizon (a name from the Xoton ship-names doc).
+
 ## Not in this build (post-war, anachronistic)
 
 Dominico as guild master, and Fat Gog's death at his hands; the Lizardfolk army and Santa Guistina's fall; the attack on the Refuge and the slave train; the Smith's alliance,

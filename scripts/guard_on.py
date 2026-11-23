@@ -9,9 +9,9 @@ def walk_off(ctx, me, why, line):
     for it in me.children():
         if it.name == me.state.leaves_behind:
             ctx.move(it, here)
-            ctx.emit("scene", target=here, reach=1, text=me.name + " hangs the " + str(it.name).lower() + " on a nail by the door as he goes.")
+            ctx.emit("scene", target=here, reach=1, text="He hangs the " + str(it.name).lower() + " on a nail by the door as he goes.")
     ctx.move(me, dest)
-    ctx.patch(me, {"left_post": why, "post": dest.id})
+    ctx.patch(me, {"left_post": why, "off_post": True, "post": dest.id})
     ctx.emit("arrived", target=dest, reach=-1, who=me.id, place=dest.id)
     ctx.emit("left_post", target=me, reach=-1, why=why, post=here.id)
 
@@ -26,10 +26,10 @@ def on(ctx, event):
         if item is None or item.state.kind != kind:
             return
         if ctx.count(me, kind) - int(me.state.purse_before or 0) >= int(me.state.bribe or 999999):
-            walk_off(ctx, me, "bribed", me.state.bribe_line or (me.name + " pockets the coin and finds somewhere else to be."))
+            walk_off(ctx, me, "bribed", me.state.bribe_line or "He pockets the coin and finds somewhere else to be.")
     elif k == "shown":
         item = ctx.get(event.payload.get("item"))
         if item is not None and item.state.marker == "gog":
-            walk_off(ctx, me, "marker", me.state.marker_line or (me.name + " looks at the marker, then at you, and walks."))
+            walk_off(ctx, me, "marker", me.state.marker_line or "He looks at the marker, then at you, and walks.")
     elif k == "cowed":
-        walk_off(ctx, me, "cowed", me.state.cowed_line or (me.name + " decides this is not worth his teeth and goes."))
+        walk_off(ctx, me, "cowed", me.state.cowed_line or "He decides this is not worth his teeth and goes.")

@@ -19,6 +19,9 @@ someone in the world, on their terms, and claim their seat) and the storyline.
 Canon comes from LoreKeeper; what had to be invented is listed in notes/invented.md.
 """
 
+import importlib.util as _ilu
+from pathlib import Path as _Path
+
 from packs.d20.pack import install_rules
 from packs.dnd5e.pack import armor as armor5, character, class_hp, install_rules as install_5e, weapon as weapon5
 
@@ -205,8 +208,19 @@ TABLE_BRIEF = ("At this table: you are the Dungeon Master for your human, and th
                "voice game on a phone): say who speaks before they speak, give each person their own rhythm and pet "
                "words so they sound like nobody else in one voice (Fat Gog slow and rumbling, River quick and dry, "
                "Kael loud and short), and keep to short spoken sentences, with no lists, symbols or headings.")
-BRIEFING = BRIEFING + " " + HIRE_BRIEF + " " + TABLE_BRIEF
-BRIEF_ADDENDA = [("Hired help:", HIRE_BRIEF), ("At this table:", TABLE_BRIEF)]  # each added once, to what the root says
+# Show, don't tell (owner, 2026-11-23: "the narrator tells the users too much. Often should describe what people look
+# like rather then outright just say who they are and what they are going to do")
+SHOW_BRIEF = ("People are seen before they are named: bring everyone in by what your human's character can see and hear "
+              "(a look, what they are doing, how they sound), never by their name, title or what they are up to. A name "
+              "comes when someone says it, or when they give it themselves; a job, a plan or a secret comes only from what "
+              "is said, seen or found. The world shows you names and descriptions so you can keep track; your human gets "
+              "only what their character would notice, one or two telling details at a time, never a whole description "
+              "read out. Never say what someone is about to do, what they want or what they hide. When someone answers "
+              "with a line that does not fit the question, that is them dodging or steering: play it as their character. "
+              "People here have their own days: they come and go, so a room is not always as you left it.")
+BRIEFING = BRIEFING + " " + HIRE_BRIEF + " " + TABLE_BRIEF + " " + SHOW_BRIEF
+BRIEF_ADDENDA = [("Hired help:", HIRE_BRIEF), ("At this table:", TABLE_BRIEF),  # each added once, to what the root says
+                 ("People are seen before they are named:", SHOW_BRIEF)]
 # an invite's steps for Claude: name the connector this, then say "Play <this>" in a chat (the owner's words, 2026-11-22)
 CONNECTOR_NAME = "Embody Klhyts Refuge"
 PLAY_NAME = "Klhyts Refuge"
@@ -433,6 +447,23 @@ PLACES = {
         "finds": {"arcana|religion|nature": {"dc": 13, "line": "The hull is alive, slowly: it grows around the cleats and the "
                                              "lantern hooks. Old elven craft, the kind Vorkath's Inquisition burned whole libraries to forget."},
                   "perception": {"dc": 12, "line": "There are empty places among the bundles, kept clear, as if for people still to come."}}}),
+    "lanes": ("The Back Lanes", {
+        "water_source": True,
+        "description": "Narrow lanes of timber houses behind the square, washing strung between the balconies, a rain "
+                       "barrel at every door and a goat in every third yard. Most of the town sleeps here, at whatever "
+                       "hour it sleeps, and the shutters stay shut through the heat of the day."}),
+    # River's secret (owner, 2026-11-23): her ship lies here, and nobody in town knows. Hidden: only those in its
+    # `known_to` see the way from the docks (River and Ned Tallow; a player who finds the shore path joins them)
+    "cove": ("The Cove Behind the Reef", {
+        "hidden": True, "water_source": True,
+        "description": "A narrow cove down the coast, behind the reef the charts mark DO NOT: black shingle, a cave mouth "
+                       "hung with drying nets, and lanterns kept hooded. In water too still for this coast rides a long, low, "
+                       "black-hulled schooner, her name in silver on the stern: QUICKSILVER.",
+        "finds": {"investigation|perception|search": {"dc": 12,
+                    "line": "In the cave mouth, crates stencilled with the marks of half a dozen merchant houses, none of them "
+                            "the same and none of them paid for. Over one hammock hangs a green glass bottle full of bent "
+                            "pins and seawater, corked with red wax.",
+                    "fail": "Nets, shingle, and a feeling of being watched from the schooner's rail."}}}),
     "gate": ("The Town Gate", {
         "description": "Two tarred timber gates in the town wall, standing open for the night trade, a lantern on each post. "
                        "Beyond, the jungle road goes into the dark, and the dark goes on a long way.",
@@ -442,7 +473,8 @@ PLACES = {
 
 WAYS = [("square", "market"), ("harbour", "market"), ("docks", "moonmoth"), ("docks", "warehouse"), ("docks", "harbour"), ("harbour", "turtle"), ("harbour", "apothecary"), ("harbour", "ogre"),
         ("harbour", "square"), ("square", "hall"), ("hall", "study"), ("square", "stripperwitch"), ("square", "omberhulk"),
-        ("square", "treeline"), ("treeline", "unicorn"), ("square", "gate")]
+        ("square", "treeline"), ("treeline", "unicorn"), ("square", "gate"), ("square", "lanes"), ("market", "lanes"),
+        ("docks", "cove")]
 
 # ---- people ------------------------------------------------------------------------------------------------------
 # Each: (type, where, state, carries). Lines in a table: words in double quotes are said, the rest is seen.
@@ -600,9 +632,9 @@ KLHYT = {
 BRASK = {
     "body": 3, "wits": 1, "will": 2, "skills": {"blade": 2, "brawl": 2, "resolve": 1}, "hp": 9, "max_hp": 9,
     "faction": "the Fist", "bribe": 200, "purse_before": 12, "leaves_behind": "Warehouse key",
-    "bribe_line": "Brask weighs the coin, looks at the warehouse door, and decides the Rampant Ogre is where he was all along.",
-    "marker_line": "Brask looks at Fat Gog's marker for a long time. \"I never saw you,\" he says, and walks off up the pier.",
-    "cowed_line": "Brask decides this is not worth his teeth and goes looking for a drink.",
+    "bribe_line": "The big man weighs the coin, looks at the warehouse door, and decides the Rampant Ogre is where he was all along.",
+    "marker_line": "The big man looks at the bone marker for a long time. \"I never saw you,\" he says, and walks off up the pier.",
+    "cowed_line": "The big man decides this is not worth his teeth and goes looking for a drink.",
     "description": "A slab of a man on a bollard by the warehouse door, cudgel across his knees, one of Dominico's.",
     "dialog": {
         "warehouse|crate|inside|door": "\"Fish. Rope. Nothing. Move along.\"",
@@ -1370,6 +1402,8 @@ PLACE_AT = {
     "gate": ([0, 250, 0], [24, 10, 6]),
     "market": ([48, -62, 0], [70, 40, 2]),
     "moonmoth": ([-112, -238, 0], [44, 10, 14]),
+    "lanes": ([120, 110, 0], [90, 60, 2]),
+    "cove": ([-290, -255, 0], [50, 40, 2]),
 }
 PLACE_TYPES = {"moonmoth": "elfship"}
 PACKET_AT = ([0, -700, 0], [24, 7, 2])
@@ -1378,7 +1412,7 @@ UNDER = "Under the Harbour"
 
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
-STAGES = ["places", "layout", "people", "things", "wiring", "five_e", "statblocks", "hire"]
+STAGES = ["places", "layout", "people", "things", "wiring", "cast", "five_e", "statblocks", "hire"]
 
 
 def by_name(s):
@@ -1682,6 +1716,9 @@ def build_wiring(s, root):
     s.set_rule(root, "finds", kinds=["checked"])
     s.set_rule(root, "bound_guard", kinds=["before_act"])
     s.set_rule(root, "follow_rule", kinds=["following", "stayed"])
+    s.set_rule(root, "routine", kinds=["routine_tick"])  # the town's day (scripts/routine.py)
+    if not any(t["kind"] == "routine_tick" for t in s.timers()):
+        s.schedule(60, "routine_tick", entity=root, every=ROUTINE_EVERY)
     for a, b, standing, note in KNOWS:
         edges = s.recall(about=have[b]["id"], entity=have[a]["id"])["edges"]
         if not any(e["relation"] == "knows" and e["direction"] == "out" for e in edges):
@@ -1764,6 +1801,9 @@ SRD = {
               "scores": {"str": 10, "dex": 12, "con": 13, "int": 12, "wis": 15, "cha": 11},
               "skills": {"medicine": 1, "nature": 1, "perception": 1}, "languages": ["Druidic"], "cast": "wis",
               "slots": {"1": 4, "2": 3}},
+    # the Custodian's town watch (2026-11-23)
+    "guard": {"cr": 0.125, "ac": 16, "armor": "chain shirt, shield", "hp": 11, "dice": "2d8 + 2", "die": "1d8", "n": 2,
+              "scores": {"str": 13, "dex": 12, "con": 12, "int": 10, "wis": 11, "cha": 10}, "skills": {"perception": 1}},
 }
 SRD_OF = {
     "Fat Gog": ("bandit captain", {"traits": [("Hold Breath", "Can hold his breath for 15 minutes; Lizardfolk are at home "
@@ -1876,6 +1916,233 @@ def build_statblocks(s):
             s.patch(e["id"], {"statblock": people_block(st.get("people"))})
 
 
+# ---- the cast (owner, 2026-11-23: "Give them routines, jobs, their own money, their plans or schemes", and "the
+# narrator tells the users too much. Often should describe what people look like rather then outright just say who they
+# are"). Each person's look (no name, no title), the phrase a stranger would point them out by, a brief for an agent,
+# a scheme, a purse, a table of lines with several of their own for when nothing fits, a day (scripts/routine.py walks
+# it) and the small things they are seen doing. The files are cast/*.py; NEW there are people new to the town (the
+# Custodian's watch, Dominico's collector and two thugs, Gog's door, eyes and fence, a lamplighter, two more Xotons).
+
+CAST_DIR = _Path(__file__).with_name("cast")
+
+
+def load_cast():
+    """CAST and NEW from every cast/*.py, in name order."""
+    cast, new = {}, {}
+    for f in sorted(CAST_DIR.glob("*.py")):
+        spec = _ilu.spec_from_file_location("klhyts_refuge_cast_" + f.stem, f)
+        mod = _ilu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        cast.update(getattr(mod, "CAST", {}))
+        new.update(getattr(mod, "NEW", {}))
+    return cast, new
+
+
+CAST, NEW_PEOPLE = load_cast()
+SRD_OF.update({n: (v.get("srd") or "commoner", {}) for n, v in NEW_PEOPLE.items() if n not in SRD_OF})
+for _n, _v in NEW_PEOPLE.items():
+    PEOPLE_OF.setdefault(_n, _v.get("people", "human"))
+
+# what players never read on a person (their `secret`): the lines not said yet, the day ahead, the plans
+CAST_SECRET = ["dialog", "default_line", "routine", "routine_when", "routine_disgraced", "scheme", "beats", "look_free",
+               "look_disgraced"]
+# what the plot adds to the cast files: whose day waits for which fact, the story's or their own (scripts/routine.py),
+# and what they are doing while it waits (the cast files carry the looks and day the plot turns to: look_free,
+# look_disgraced, routine_disgraced)
+CAST_EXTRA = {
+    "Klhyt": {"routine_when": ["klhyt_freed"]},
+    "Brask": {"routine_when": ["klhyt_freed", "dominico_backed", "shipped", "off_post"],
+              "waiting": "He sits on a bollard by the warehouse door, cudgel across his knees, and never looks away "
+                         "from that door for long.",
+              # his leaving lines, as the pier sees them (the live world kept the old, named ones)
+              "bribe_line": BRASK["bribe_line"], "marker_line": BRASK["marker_line"], "cowed_line": BRASK["cowed_line"]},
+}
+ROUTINE_EVERY = 300  # world seconds between ticks of the town's day
+
+
+def routine_ids(slots, P, have):
+    """A day's slots with place keys and payees' names turned to ids, in hour order."""
+    out = []
+    for sl in slots or []:
+        d = dict(sl)
+        d["at"] = float(d["at"])
+        d["place"] = P[d["place"]]
+        if d.get("pay"):
+            pay = dict(d["pay"])
+            to = have.get(pay.get("to"))
+            if to is None:
+                d.pop("pay")
+            else:
+                pay["to"] = to["id"]
+                d["pay"] = pay
+        out.append(d)
+    return sorted(out, key=lambda d: d["at"])
+
+
+def slot_now(routine, t):
+    h = (t % 86400) / 3600.0
+    cur = routine[-1] if routine else None
+    for sl in routine:
+        if sl["at"] <= h:
+            cur = sl
+    return cur
+
+
+def spawn_new(s):
+    """The people new to the town, once ever (the town keeps the list, so one play killed stays dead)."""
+    have = by_name(s)
+    P = place_ids(s)
+    town = have["Klhyts Refuge"]["id"]
+    made = set(s.inspect(town)["state"].get("built_people") or [])
+    for name, n in NEW_PEOPLE.items():
+        if name in have or name in made:
+            continue
+        home = P[n.get("home") or "lanes"]
+        st = {**body(n["scores"], n.get("skills"), hp(n.get("hp") or 10)), "faction": n.get("faction"),
+              "people": n.get("people", "human"), "post": home, "home": home}
+        pid = s.spawn(n.get("type") or "person", home, name, state=st)["id"]
+        s.spawn("thing", pid, "Coin", state=coin(int((CAST.get(name) or {}).get("purse") or 20)))
+        for cname, wkey, desc in n.get("carries") or []:
+            s.spawn("thing", pid, cname, state=arm(wkey, desc) if wkey else {"portable": True, "bulk": 0, "description": desc})
+        made.add(name)
+    s.patch(town, {"built_people": sorted(made)})
+
+
+def original_purse(name):
+    for _, _, n, _, carries in people():
+        if n == name:
+            for _, cname, cst in carries:
+                if cname == "Coin":
+                    return int(cst.get("count") or 0)
+    return None
+
+
+def set_purse(s, pid, name, purse):
+    """A purse sized to the person's life, keeping what play has put in it since (a tip, a sale)."""
+    coins = [c for c in s.world.children(pid) if c["name"] == "Coin"]
+    if not coins or purse is None:
+        return
+    now = int(coins[0]["state"].get("count") or 0)
+    was = original_purse(name)
+    gained = max(0, now - was) if was is not None else 0
+    if now != int(purse) + gained:
+        s.patch(coins[0]["id"], {"count": int(purse) + gained})
+
+
+def build_cast(s, root):
+    spawn_new(s)
+    P = place_ids(s)
+    have = by_name(s)
+    w = s.world
+    now = s.summary()["t"]
+    facts = s.inspect(have["Story"]["id"])["state"] if "Story" in have else {}
+    for name, c in CAST.items():
+        e = have.get(name)
+        if e is None:
+            continue
+        st = e["state"]
+        held = w.embodied(e["id"]) is not None
+        want = {"look": c["look"], "seen_as": c.get("seen_as"), "brief": c.get("brief"), "scheme": c.get("scheme"),
+                "default_line": list(c.get("default_line") or []), "beats": list(c.get("beats") or []),
+                "routine": routine_ids(c.get("routine"), P, have)}
+        for k in ("look_free", "look_disgraced"):
+            if c.get(k):
+                want[k] = c[k]
+        if c.get("routine_disgraced"):
+            want["routine_disgraced"] = routine_ids(c["routine_disgraced"], P, have)
+        extra = dict(CAST_EXTRA.get(name, {}))
+        waiting_text = extra.pop("waiting", None) or c.get("waiting") or ""
+        want.update(extra)
+        if st.get("disgraced") and want.get("look_disgraced"):  # what the story has made of them stays
+            want["look"] = want["look_disgraced"]
+            want["routine"] = want.get("routine_disgraced") or want["routine"]
+        if st.get("bound") is False and want.get("look_free"):
+            want["look"] = want["look_free"]
+        changes = {k: v for k, v in want.items() if st.get(k) != v}
+        secret = sorted(set(st.get("secret") or []) | set(CAST_SECRET))
+        if st.get("secret") != secret:
+            changes["secret"] = secret
+        if not st.get("cast_v"):  # the first time: their purse, and their look in place of the old who-and-what
+            set_purse(s, e["id"], name, c.get("purse"))
+            changes["cast_v"] = 1
+        if "look" in changes or "routine" in changes:
+            changes["routine_key"] = None  # the next tick sets their day afresh
+            when = want.get("routine_when")
+            waiting = bool(when) and not any(facts.get(k) or st.get(k) for k in when)  # tied, or on the door
+            if not held:
+                slot = None if waiting else slot_now(want["routine"], now)
+                doing = slot["doing"] if slot else waiting_text
+                changes["description"] = (want["look"] + " " + doing).strip()
+        if st.get("dialog") != c.get("dialog"):
+            s.patch(e["id"], {"dialog": None})  # whole: a merge would keep a retired topic or a stale branch
+            changes["dialog"] = c.get("dialog") or {}
+        if changes:
+            s.patch(e["id"], changes)
+    # the cove: River and her quartermaster know the way; the shore path off the docks is there for a sharp eye
+    cove = have.get(PLACES["cove"][0])
+    if cove:
+        knows = list(cove["state"].get("known_to") or [])
+        for who in ("River", "Ned Tallow"):
+            if who in have and have[who]["id"] not in knows:
+                knows.append(have[who]["id"])
+        if knows != list(cove["state"].get("known_to") or []):
+            s.patch(cove["id"], {"known_to": knows})
+        docks = have[PLACES["docks"][0]]
+        key = "survival|nature|navigation|tracking"
+        path = {"dc": 15, "reveals": cove["id"],
+                "line": "Below the end of the pier, where the planks give out, a path goes down the rocks and away south "
+                        "along the shore toward the reef the charts call DO NOT. It has been walked lately, at night, by "
+                        "someone who knew where to put their feet.",
+                "fail": "Rocks, weed and the sea. If anyone goes that way, they do it in the dark."}
+        if (docks["state"].get("finds") or {}).get(key) != path:
+            s.patch(docks["id"], {"finds": {key: path}})
+        if "The Quicksilver" not in have:
+            s.spawn("thing", cove["id"], "The Quicksilver", state={
+                "description": "A long, low schooner with a black hull and a silver name, built for speed and for not being "
+                               "seen: raked masts, sails furled tight, gunports painted shut so well you would not know "
+                               "they were there. A hooded lantern burns at the stern."})
+
+
+def build_news(s):
+    """The night's news on the people of a world built before the flags (a live world mid-story): each fact the story
+    has set reaches those it would have reached (scripts/story.py tell_town), once."""
+    have = by_name(s)
+    st = s.inspect(have["Story"]["id"])["state"] if "Story" in have else {}
+    w = s.world
+    folk = [e for e in w.find(limit=None) if w.is_a(e["type"], "person")]
+    for fact, flag in (("custodian_exposed", "klhyt_home"), ("guild_hit", "guild_hit"), ("shipped", "klhyt_shipped")):
+        if st.get(fact):
+            for e in folk:
+                if not e["state"].get(flag):
+                    s.patch(e["id"], {flag: True})
+    for fact, who, flag in (("gog_knows", "Fat Gog", "gog_knows"), ("dominico_backed", "Dominico", "backed_off")):
+        if st.get(fact) and who in have and not have[who]["state"].get(flag):
+            s.patch(have[who]["id"], {flag: True})
+    if st.get("custodian_exposed") and "The Custodian" in have:
+        c = by_name(s)["The Custodian"]
+        cs = c["state"]
+        want = {"disgraced": True}
+        if cs.get("look_disgraced") and cs.get("look") != cs["look_disgraced"]:
+            want.update({"look": cs["look_disgraced"], "description": cs["look_disgraced"]})
+        if cs.get("routine_disgraced") and cs.get("routine") != cs["routine_disgraced"]:
+            want.update({"routine": cs["routine_disgraced"], "routine_key": None})
+        if any(cs.get(k) != v for k, v in want.items()):
+            s.patch(c["id"], want)
+    k = by_name(s).get("Klhyt")
+    if k and k["state"].get("bound") is False and k["state"].get("look_free") and k["state"].get("look") != k["state"]["look_free"]:
+        s.patch(k["id"], {"look": k["state"]["look_free"], "description": k["state"]["look_free"], "routine_key": None})
+    br = by_name(s).get("Brask")
+    if br and br["state"].get("left_post") and not br["state"].get("off_post"):
+        s.patch(br["id"], {"off_post": True})
+    if st.get("shipped") and k and not k["state"].get("routine_off"):
+        s.patch(k["id"], {"routine_off": True})
+    moon = place_ids(s).get("moonmoth")
+    elves = [h[0] for h in HOUSEHOLD] + ["Ithriel"]
+    for e in folk:
+        if e["name"] in elves and parent_of(s, e["id"]) == moon and not e["state"].get("aboard"):
+            s.patch(e["id"], {"aboard": True, "routine_off": True})
+
+
 # ---- hired help: the one way a player brings a second agent in (owner, 2026-11-22) ---------------------------------
 # Each names their own price (scripts/_hired.py has the shape): coin by the day, from a few silver to a fortune, a
 # thing they want, or a favour the narrator marks done with `favoured: {<the hirer's id>: true}` on them. The hire
@@ -1973,6 +2240,9 @@ def build(s):
         build_things(s)
     if "wiring" in STAGES:
         build_wiring(s, root)
+    if "cast" in STAGES:
+        build_cast(s, root)
+        build_news(s)
     if "five_e" in STAGES:
         build_five_e(s)
     if "statblocks" in STAGES:

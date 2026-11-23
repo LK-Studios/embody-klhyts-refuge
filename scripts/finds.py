@@ -1,6 +1,7 @@
 # A passed check always answers. A place's `finds` table, {"perception|investigation": {"dc": 12, "line": ...,
 # "fail": ..., "clue": ...}}, is read against the roll's total (the world's difficulty, never the caller's). A skill
-# the place has nothing for gets an honest "nothing here for that". Only the one who rolled hears the answer.
+# the place has nothing for gets an honest "nothing here for that". Only the one who rolled hears the answer. An entry
+# with `reveals` (a hidden place's id) shows the way there: the finder joins that place's `known_to`.
 
 def matches(key, skill):
     s = str(skill or "").lower()
@@ -24,6 +25,12 @@ def on(ctx, event):
             continue
         if total >= int(entry.get("dc", 12)):
             ctx.emit("scene", target=who, reach=0, text=entry.get("line"))
+            hid = ctx.get(entry.get("reveals")) if entry.get("reveals") else None
+            if hid is not None:  # a hidden way, found: the one who found it knows it from now on
+                known = list(hid.state.known_to or [])
+                if who.id not in known:
+                    known.append(who.id)
+                    ctx.patch(hid, {"known_to": known})
             if entry.get("clue"):
                 st = ctx.find(type="story", limit=1)
                 if st:

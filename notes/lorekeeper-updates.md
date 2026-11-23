@@ -81,3 +81,12 @@ LoreKeeper, on Kael Ironjaw's character sheet, change the equipment line:
 
 Still open for the owner: whether his numbers are the character entry's (AC 15, HP 38) or the "BattleMaster Half-Orc
 Creation" doc's (fighter 2, HP 19, studded leather).
+
+## 9. River's secret (the owner's word, 2026-11-23; top secret in play)
+
+> Also River needs to be a secret witch with her own pirate vessle down the way (but this is all top secret).
+
+If you want it in LoreKeeper, River's character entry would gain, somewhere players of the lore will not read it
+first: River is secretly a witch (built here as a sea witch who scries in the mirror behind the Stripperwitch's bar)
+and the captain of a pirate schooner, the Quicksilver, kept in a cove down the coast behind the reef the charts mark
+DO NOT. Her quartermaster is Ned Tallow, the town's lamplighter. Nobody in the Refuge knows, not even Fat Gog.

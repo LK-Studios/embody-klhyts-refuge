@@ -50,7 +50,7 @@ def test_ithriel_and_her_household_walk_with_you_and_board_the_moonmoth():
     r = you.act("go", "The Docks")
     assert {at(gm, n) for n in HOUSE} == {"The Moonmoth"} and at(gm, "Newcomer") == "The Docks"
     assert gm.inspect("Story")["state"]["elves_aboard"]
-    assert any("Ithriel is the last up the gangplank" in t for t in scenes(r))
+    assert any("is the last up the gangplank" in t for t in scenes(r))  # described, not named
     gm.clock(step=600)
     assert {at(gm, n) for n in HOUSE} == {"The Moonmoth"}  # aboard is their place now
     you.act("go", "The Moonmoth")  # the leaf she gave opens the ship to you
@@ -62,7 +62,7 @@ def test_following_never_carries_anyone_aboard():
     docks = eid(gm, "The Docks")
     for n in ("Ithriel", "Tully"):
         gm.move(eid(gm, n), docks)
-        gm.patch(eid(gm, n), {"post": docks})
+        gm.patch(eid(gm, n), {"post": docks, "routine_hold_until": 10 ** 9})
     you.act("follow", "Ithriel")
     gm.act_as("Tully", "follow", "Ithriel")
     gm.act_as("Ithriel", "go", "The Moonmoth")

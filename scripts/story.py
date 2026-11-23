@@ -12,6 +12,13 @@ DOCKS_ARRIVAL = ("Klhyts Refuge comes at you all at once: tar and fish and fryin
 def story(ctx):
     return ctx.find(type="story", limit=1)[0]
 
+def seen(ctx, who, fallback):
+    # someone as a stranger sees them (their `seen_as`), capitalised for the start of a line: the story tells what the
+    # room sees, and a name comes only when someone says it (owner, 2026-11-23)
+    e = ctx.get(who) if who else None
+    t = (e.state.seen_as if e is not None else None) or fallback
+    return t[:1].upper() + t[1:]
+
 def scene(ctx, place, text):
     if place:
         ctx.emit("scene", target=place, reach=1, text=text)
@@ -22,7 +29,8 @@ def walk(ctx, who, dest):
     if p is None or p.state.down or p.state.dead or p.parent.id == dest or ctx.embodied(p):
         return False
     ctx.move(p, dest)
-    ctx.patch(p, {"post": dest})  # their post moves with them, or their idle routine walks them straight back
+    # their post moves with them, or their idle walk takes them straight back; their day waits half an hour
+    ctx.patch(p, {"post": dest, "routine_hold_until": ctx.t + 1800})
     ctx.emit("arrived", target=dest, reach=-1, who=p.id, place=dest)
     return True
 
@@ -36,6 +44,12 @@ def come_ashore(ctx, st, who):
     ctx.patch(story(ctx), {"ashore": have, "seen_docks": True})
     ctx.emit("scene", target=who.id, reach=0, text=DOCKS_ARRIVAL)
 
+def tell_town(ctx, flag):
+    # the town hears: every person carries the news as a flag their own lines answer to (cast lines use if_state)
+    for p in ctx.find(type="person", limit=500):
+        if not p.state.get(flag):
+            ctx.patch(p, {flag: True})
+
 def add_clue(ctx, st, name):
     have = list(st.clues or [])
     if name in have:
@@ -48,33 +62,28 @@ def gog_learns(ctx, st, by, what):
         return
     ctx.patch(story(ctx), {"gog_knows": True, "gog_told_by": by})
     gog = ctx.get(st.gog)
-    scene(ctx, gog.parent.id, "Fat Gog goes very still. Then he laughs, low and long, and it is not a happy sound. "
+    scene(ctx, gog.parent.id, seen(ctx, st.gog, "the huge old lizardman") + " goes very still. Then he laughs, low and long, and it is not a happy sound. "
           "\"I carried that man up the sand with his tongue black from thirst. And the Custodian puts him in a crate.\" "
           "He slides a carved bone marker across the table. "
           "\"Show that to whoever is minding the warehouse. Bring Klhyt to me breathing.\"")
     ctx.spawn("thing", by, name="Fat Gog's marker", state={
         "marker": "gog", "portable": True, "bulk": 0,
         "description": "A carved bone marker, a fat lizard grinning on one side. Everyone at the docks knows whose it is."})
-    ctx.patch(gog, {"dialog": {
-        "klhyt|mayor|founder|warehouse": "\"You have my marker. Use it. The warehouse, before the tide.\"",
-        "custodian": "\"The Custodian and I will have a conversation. A long one. After.\"",
-        "dominico": "\"Dominico runs errands for a thief. When he hears whose errand, we will see if he still wants my books.\""}})
+    ctx.patch(gog, {"gog_knows": True})
 
 def dominico_backs_off(ctx, st, why):
     if st.dominico_backed:
         return
     ctx.patch(story(ctx), {"dominico_backed": True, "dominico_why": why})
     dom = ctx.get(st.dominico)
-    ctx.patch(dom, {"dialog": {
-        "gog|guild|books|stripperwitch|midnight": "\"The books can stay where they are. For now. I don't fight other men's wars on a lie.\"",
-        "custodian": "\"He told me a crate. A crate. Not the man who built this town.\""}})
-    scene(ctx, dom.parent.id, "Dominico closes his hand slowly, the way a man puts away a knife. \"Tell Gog,\" he says, "
+    ctx.patch(dom, {"backed_off": True})
+    scene(ctx, dom.parent.id, seen(ctx, st.dominico, "the man in the black coat") + " closes his hand slowly, the way a man puts away a knife. \"Tell Gog,\" he says, "
           "\"the midnight business is off.\"")
     brask = ctx.get(st.brask)
     if brask is not None and not brask.state.left_post and not brask.state.down and not ctx.embodied(brask):
-        ctx.patch(brask, {"left_post": "called off"})
-        scene(ctx, brask.parent.id, "A runner in Dominico's colours trots down the pier and says something in Brask's ear. "
-              "Brask spits, shrugs, hangs the warehouse key on a nail by the door and leaves his post.")
+        ctx.patch(brask, {"left_post": "called off", "off_post": True})
+        scene(ctx, brask.parent.id, "A runner in black trots down the pier and says something in the ear of " + seen(ctx, st.brask, "the big man on the bollard").lower() + ". "
+              "He spits, shrugs, hangs the warehouse key on a nail by the door and leaves his post.")
         for it in brask.children():
             if it.name == "Warehouse key":
                 ctx.move(it, brask.parent)
@@ -85,11 +94,9 @@ def klhyt_free(ctx, st, by):
         return
     ctx.patch(story(ctx), {"klhyt_freed": True, "freed_by": by})
     klhyt = ctx.get(st.klhyt)
-    ctx.patch(klhyt, {"dialog": {
-        "custodian|dues|harbour": "\"Three seasons of harbour dues, skimmed before they reach the strongbox. He signs every tally. Tomorrow the whole town hears it.\"",
-        "thanks|thank|grateful": "\"I came here with nothing but the salt in my beard. Ask me for something when this is done. I'll remember.\"",
-        "gog|guild": "\"Gog runs the shadows and I let him, because he keeps them honest. Dominico runs the fist. The Custodian was meant to keep the books.\""}})
-    scene(ctx, klhyt.parent.id, "Klhyt rubs his wrists and stands, unsteady, a big man gone thin. \"Four nights,\" he says. "
+    if klhyt.state.look_free:
+        ctx.patch(klhyt, {"look": klhyt.state.look_free})
+    scene(ctx, klhyt.parent.id, "The grey-bearded man rubs his wrists and stands, unsteady, a big man gone thin. \"Four nights,\" he says. "
           "\"Four nights I've listened to the tide. Walk me to the square.\"")
     ctx.schedule(120, "klhyt_returns", target=ctx.root().id, payload={"by": by})
 
@@ -99,21 +106,38 @@ def klhyt_returns(ctx, st):
         return
     walk(ctx, st.klhyt, st.square)
     ctx.patch(story(ctx), {"custodian_exposed": True, "outcome": "Klhyt is home, and the Custodian's skimming is out in the square"})
-    scene(ctx, st.square, "Klhyt climbs the Town Hall steps with the lamps behind him. People come out of all six taverns "
-          "to see if it's really him. It is. He tells them where the harbour dues went, and whose name is on every tally.")
-    cust = ctx.get(st.custodian)
-    if cust is not None:
-        ctx.patch(cust, {"disgraced": True,
-                         "description": "The Custodian, in a good coat gone suddenly too warm, with nobody standing near him.",
-                         "dialog": {"klhyt|mayor|dues|tally|harbour": "\"A misunderstanding. Accounts are complicated things. You wouldn't understand them.\""}})
+    scene(ctx, st.square, "The big grey-bearded man from the warehouse climbs the Town Hall steps with the lamps behind "
+          "him. People come out of all six taverns shouting his name, Klhyt, Klhyt, to see if it's really him. It is. He tells them where the harbour dues went, and whose name is on every tally.")
+    tell_town(ctx, "klhyt_home")
+    disgrace(ctx, st)
     if not st.dominico_backed:
         dominico_backs_off(ctx, story(ctx).state, "his patron fell")
     ctx.patch(ctx.root(), {"story": "complete"})
 
+def disgrace(ctx, st):
+    # the Custodian, found out: the coat, the empty space round him, and a smaller day (his `routine_disgraced`)
+    cust = ctx.get(st.custodian)
+    if cust is None or cust.state.disgraced:
+        return
+    look = cust.state.look_disgraced or "A thin, neat man in a good grey coat gone suddenly too warm, with nobody standing near him."
+    changes = {"disgraced": True, "look": look, "description": look}
+    if cust.state.routine_disgraced:
+        changes["routine"] = cust.state.routine_disgraced
+        changes["routine_key"] = None
+    ctx.patch(cust, changes)
+
 # Ithriel's household, the five the Moonmoth waits for. Asked about passage, Ithriel and her four fall in behind the
 # one who asked, their usual places kept for them (or the idle walk would take them straight home); at the docks each
 # goes up the gangplank on their own, and the story keeps that they got away.
-ESCORT_TOPICS = ["passage", "ship", "moonmoth", "boat", "pier", "walk", "escort", "catan", "help"]
+# Whole words, so "go" is never found in "good": a player saying it is time to leave counts too (2026-11-23).
+ESCORT_TOPICS = ["passage", "ship", "ships", "moonmoth", "boat", "boats", "pier", "walk", "escort", "catan", "help",
+                 "follow", "lead", "gather", "ready"]
+
+def words(text):
+    t = str(text).lower()
+    for ch in [",", ".", "?", "!", ";", ":", "'", "\"", "(", ")"]:
+        t = t.replace(ch, " ")
+    return t.split()
 
 def household(ctx, st):
     out = []
@@ -139,7 +163,7 @@ def escort_begins(ctx, st, by):
     if not came:
         return
     ctx.patch(story(ctx), {"escort_by": me.id, "escorted": came})
-    scene(ctx, ith.parent.id, "Ithriel closes her book and stands. Around the room hooded figures rise from the corners and "
+    scene(ctx, ith.parent.id, seen(ctx, st.ithriel, "the hooded elf with the book") + " closes her book and stands. Around the room hooded figures rise from the corners and "
           "fall in behind you, quiet as smoke: her household. \"To the pier, then,\" she says. \"And not past the "
           "Apothecary, if you can help it.\"")
     ctx.remember(ith, me.name + " is walking my household to the Moonmoth.")
@@ -147,7 +171,7 @@ def escort_begins(ctx, st, by):
 def boards(ctx, st, who):
     # one of the household, at the docks behind the one walking them, goes up the gangplank on their own
     ctx.move(who, st.moonmoth)
-    ctx.patch(who, {"follows": None, "post": st.moonmoth, "home": st.moonmoth})
+    ctx.patch(who, {"follows": None, "post": st.moonmoth, "home": st.moonmoth, "aboard": True, "routine_off": True})
     ctx.emit("arrived", target=st.moonmoth, reach=1, who=who.id, place=st.moonmoth, boarded=True)
     left = []
     for x in (st.escorted or []):
@@ -157,7 +181,7 @@ def boards(ctx, st, who):
     if left or st.elves_aboard:
         return
     ctx.patch(story(ctx), {"elves_aboard": True, "elves_walked_by": st.escort_by})
-    scene(ctx, st.docks, "Ithriel is the last up the gangplank. At the top she turns. \"You walked with us,\" she says. "
+    scene(ctx, st.docks, seen(ctx, st.ithriel, "the hooded elf") + " is the last up the gangplank. At the top she turns. \"You walked with us,\" she says. "
           "\"Keep the leaf. While the Moonmoth is in harbour, she will open to you.\" Then she is gone among the bundles, "
           "and the empty places on the deck are empty no longer.")
     ith = ctx.get(st.ithriel)
@@ -190,7 +214,7 @@ def on(ctx, event):
             ctx.patch(story(ctx), {"klhyt_found": True})
             scene(ctx, st.warehouse, "Between the bales and the stacked crates, in the one dry corner, a big grey-bearded man "
                   "sits tied to a chair beside an open crate with air holes drilled in the lid. He lifts his head. "
-                  "\"Well,\" says Klhyt, founder of this town. \"You're not Dominico's.\"")
+                  "\"Well,\" he says. \"You're not Dominico's. Klhyt. I founded this town, for my sins.\"")
     elif k == "read":
         item = ctx.get(event.target)
         if item is not None and item.state.clue:
@@ -208,8 +232,9 @@ def on(ctx, event):
         elif event.target == st.tully and ("brask" in about or "warehouse" in about or "crate" in about or "job" in about):
             add_clue(ctx, st, "tully")
         elif event.target == st.ithriel and p.get("by"):
+            said = words(about)
             for w in ESCORT_TOPICS:
-                if w in about:
+                if w in said:
                     escort_begins(ctx, st, p.get("by"))
                     break
     elif k == "shown":
@@ -223,7 +248,7 @@ def on(ctx, event):
         elif event.target == st.custodian and not st.custodian_bribe and item.state.clue in ["letter", "passage", "tally"]:
             ctx.patch(story(ctx), {"custodian_bribe": True})
             shower = ctx.get(p.get("by"))
-            scene(ctx, ctx.get(st.custodian).parent.id, "The Custodian reads it, folds it, and smiles with half his mouth. "
+            scene(ctx, ctx.get(st.custodian).parent.id, "He reads it, folds it, and smiles with half his mouth. "
                   "A heavy purse appears on the table between you. \"Accounts are complicated,\" he says. "
                   "\"Five gold for your trouble, and you never learned to read.\"")
             if shower is not None:
@@ -246,7 +271,7 @@ def on(ctx, event):
         if brask.parent.id != st.docks:
             return
         ctx.patch(brask, {"attacked_by": p.get("by"), "attacked_at": ctx.t})
-        scene(ctx, st.docks, "Brask hears it. He comes off the bollard with his cudgel already swinging. \"OI.\"")
+        scene(ctx, st.docks, seen(ctx, st.brask, "the big man on the bollard") + " hears it. He comes off the bollard with his cudgel already swinging. \"OI.\"")
     elif k == "klhyt_returns":
         klhyt_returns(ctx, st)
     elif k == "ultimatum":
@@ -254,9 +279,9 @@ def on(ctx, event):
             return
         ctx.patch(story(ctx), {"ultimatum_given": True})
         walk(ctx, st.dominico, st.stripperwitch)
-        scene(ctx, st.stripperwitch, "The music falls off a note. Dominico has come in, alone, which is worse than with "
-              "company. He stops at Fat Gog's table and doesn't sit. \"The books, Gog. Every ledger, every name, every cut. "
-              "On my table at the Apothecary by midnight. After midnight I stop asking.\" He nods to River, and leaves.")
+        scene(ctx, st.stripperwitch, "The music falls off a note. " + seen(ctx, st.dominico, "a lean man in a black coat") + " has come in, alone, which is worse than with "
+              "company. He stops at the big lizardman's table and doesn't sit. \"The books, Gog. Every ledger, every name, every cut. "
+              "On my table at the Apothecary by midnight. After midnight I stop asking.\" He nods to the woman behind the bar, and leaves.")
         ctx.schedule(300, "dominico_back", target=ctx.root().id)
     elif k == "dominico_back":
         walk(ctx, st.dominico, st.apothecary)
@@ -264,29 +289,27 @@ def on(ctx, event):
         if st.custodian_exposed:
             return
         if walk(ctx, st.custodian, st.stripperwitch):
-            scene(ctx, st.hall, "The Custodian locks his office door, checks it twice, pulls up his collar and goes out into the night.")
-            scene(ctx, st.stripperwitch, "The Custodian comes in by the side door, the way a man does who is not here. "
-                  "He takes the red booth. River brings him wine without being asked.")
+            scene(ctx, st.hall, seen(ctx, st.custodian, "the thin man with the keys") + " locks the office door, checks it twice, pulls up his collar and goes out into the night.")
+            scene(ctx, st.stripperwitch, seen(ctx, st.custodian, "a thin, neat man in a grey coat") + " comes in by the side door, the way a man does who is not here. "
+                  "He takes the red booth. The woman behind the bar brings him wine without being asked.")
     elif k == "midnight":
         ctx.patch(ctx.root(), {"ambient": {"time_of_day": "midnight", "light": "the taverns' lamps and not much else"}})
         if st.dominico_backed or st.klhyt_freed:
-            scene(ctx, st.stripperwitch, "The midnight bell goes. Nobody comes for Fat Gog's books.")
+            scene(ctx, st.stripperwitch, "The midnight bell goes. Nobody comes for the books.")
             return
         if st.gog_knows:
             dominico_backs_off(ctx, st, "Gog was ready for him")
-            scene(ctx, st.stripperwitch, "At the midnight bell four of Dominico's men come to the Stripperwitch's door, look at "
-                  "who Gog has waiting inside, and find somewhere else to be.")
+            scene(ctx, st.stripperwitch, "At the midnight bell four hard men in black come to the Stripperwitch's door, look at "
+                  "who is waiting inside for them, and find somewhere else to be.")
             return
         ctx.patch(story(ctx), {"guild_hit": True})
         ctx.patch(ctx.get(st.stripperwitch), {"description":
-            "Red velvet, slashed. The mirror behind the bar is in pieces and the stage curtain is down. River is sweeping "
-            "glass with her jaw set. Fat Gog sits where he always sits, bleeding into a napkin, saying nothing at all."})
-        scene(ctx, st.stripperwitch, "The midnight bell, and then the door comes in. Dominico's men go through the "
-              "Stripperwitch like weather: the mirror, the bottles, the curtain, two of Gog's people and one of Gog. "
+            "Red velvet, slashed. The mirror behind the bar is in pieces and the stage curtain is down. The woman who runs the bar is sweeping "
+            "glass with her jaw set. The huge lizardman in the white suit sits where he always sits, bleeding into a napkin, saying nothing at all."})
+        scene(ctx, st.stripperwitch, "The midnight bell, and then the door comes in. men in black go through the "
+              "Stripperwitch like weather: the mirror, the bottles, the curtain, two of the house's people and the big lizardman himself. "
               "Nobody kills anybody. That is the message.")
-        gog = ctx.get(st.gog)
-        if gog is not None:
-            ctx.patch(gog, {"dialog": {"dominico|midnight|books|guild": "\"He wants a war. He doesn't know what a war is. Find me who's paying for his nerve.\""}})
+        tell_town(ctx, "guild_hit")
     elif k == "siren_rises":
         siren = ctx.get(st.siren)
         if siren is None or siren.state.dead:
@@ -299,16 +322,16 @@ def on(ctx, event):
               "every night. She doesn't. Every fisherman on the pier has stopped breathing.")
     elif k == "siren_sings":
         if walk(ctx, st.siren, st.stripperwitch):
-            scene(ctx, st.stripperwitch, "The siren steps onto the little stage. The fiddler stops. River puts the glass down. "
+            scene(ctx, st.stripperwitch, "The pale woman from the harbour steps onto the little stage. The fiddler stops. The woman behind the bar puts the glass down. "
                   "Then she sings, and for as long as it lasts nobody in the Stripperwitch remembers owing anybody anything.")
             for place in [st.square, st.market, st.omberhulk]:
                 scene(ctx, place, "From the direction of the Stripperwitch comes a voice so beautiful that people stop in the "
-                      "street with their mouths open. It is the siren. She only sings here once in a long while.")
+                      "street with their mouths open. Somebody says it's the siren. Somebody always does, and once in a long while they're right.")
     elif k == "siren_leaves":
         siren = ctx.get(st.siren)
         if siren is None or siren.state.dead or ctx.embodied(siren):
             return
-        scene(ctx, siren.parent.id, "The siren gathers her coins in a sealskin purse, says she has an exam in a fortnight, and "
+        scene(ctx, siren.parent.id, "The pale singer gathers her coins in a sealskin purse, says she has an exam in a fortnight, and "
               "goes back down toward the water.")
         ctx.move(siren, st.under)
         ctx.patch(siren, {"post": st.under})
@@ -319,15 +342,20 @@ def on(ctx, event):
         if st.klhyt_freed or st.shipped:
             return
         ctx.patch(story(ctx), {"shipped": True, "outcome": "Klhyt went out on the tide in a crate, bound for Catan"})
+        tell_town(ctx, "klhyt_shipped")
         klhyt = ctx.get(st.klhyt)
         if klhyt is not None and klhyt.parent.id == st.warehouse:
             ctx.move(klhyt, st.packet)
-            ctx.patch(klhyt, {"post": st.packet})
-            scene(ctx, st.warehouse, "Two of Dominico's men come in with a lantern, nail the lid down on the big crate and "
+            ctx.patch(klhyt, {"post": st.packet, "routine_off": True})
+            scene(ctx, st.warehouse, "Two men in black come in with a lantern, nail the lid down on the big crate and "
                   "carry it out between them. It is heavy. It knocks, once, from the inside.")
         ship = ctx.get(st.emerald) if st.emerald else None
         if ship is not None and ship.parent.id == st.docks:
             ctx.move(ship, st.packet)
+            for cap in ctx.find(type="person", name="DeVito", limit=1):  # her small captain sails with her
+                if cap.parent is not None and cap.parent.id == st.docks and not ctx.embodied(cap):
+                    ctx.move(cap, st.packet)
+                    ctx.patch(cap, {"post": st.packet, "routine_off": True})
         scene(ctx, st.docks, "On the one o'clock tide the Emerald Eye slips her lines and slides out past the Xoton trader, "
               "low in the water, a big crate lashed on her deck and her small captain counting gold at the rail. By morning "
               "she is a light on the horizon, and then not even that.")
