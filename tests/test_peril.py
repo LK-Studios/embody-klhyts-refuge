@@ -209,6 +209,22 @@ def test_the_custodian_posts_a_warrant_then_silences_a_witness():
     assert "teague" in st["silenced"] and gm.inspect("Harbourmaster Teague")["state"]["silenced"]
 
 
+def test_a_witness_with_a_mind_is_no_company_for_himself():
+    # 2026-11-24: a minded Teague counted as someone sitting up with himself, so the Throne could never reach him
+    from embody.grants import MIND
+    eng, gm, you, _ = town()
+    you.leave()
+    gm.patch(gm.inspect("Story")["id"], {"custodian_exposed": True,
+                                         "clues": list(story(gm).get("clues") or []) + ["teague"]})
+    put(gm, "Harbourmaster Teague", "Harbour Street")
+    eng.session("teague", role=MIND).join(gm.world.id, "Harbourmaster Teague")
+    now = gm.summary()["t"]
+    two = (now // DAY + 1) * DAY + 2 * 3600
+    gm.clock(step=two - now - 60)
+    run(gm, 180)
+    assert "teague" in (story(gm).get("silenced") or [])
+
+
 def test_the_throne_attacks_the_wanted_on_sight():
     eng, gm, you, _ = town()
     me = eid(gm, "Newcomer")

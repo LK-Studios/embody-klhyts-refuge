@@ -365,7 +365,9 @@ def throne_night(ctx, s, day):
         who = cap1(looks[0] if len(looks) == 1 else " and ".join(looks))
         come = " comes" if len(men) == 1 else " come"
         wl = look_of(w, "the witness")
-        guarded = [x for x in ctx.children(place, "person") if ctx.embodied(x)]
+        # someone held sitting up with the witness; the witness's own mind is not company (2026-11-24: a minded
+        # Teague counted as his own guard, and nobody could ever reach him)
+        guarded = [x for x in ctx.children(place, "person") if ctx.embodied(x) and x.id != w.id]
         if guarded:
             tell_mission(ctx, "witnesses", [x.id for x in guarded])
             ctx.emit("scene", target=place.id, reach=1, text=who + come + " to the door in the small hours, look at who is "
