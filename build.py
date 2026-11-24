@@ -1152,7 +1152,9 @@ TEMPLATES_STATE = {
                                                       "description": "A leaf of living silverwood: your people's word, to give to one you trust."})]),
     "xoton": ({"str": 14, "dex": 12, "con": 15, "int": 10, "wis": 13, "cha": 8},
               {"sailing": 2, "athletics": 2, "perception": 2, "brawl": 2}, 12,
-              "A Xoton sailor ashore between ships: barrel-bodied, sea-legged, and correcting everyone who says it with a Z.",
+              "A Xoton sailor ashore between ships: dark-skinned, chest-high to a tall man and nearly as wide as you are "
+              "tall, barrel-chested and sea-legged, tattooed with every ship so far, and correcting everyone who says it "
+              "with a Z.",
               "docks", 90, [("Hooked knife", {**DAGGER, "description": "A Xoton hooked knife, for nets and rigging."}),
                             ("Glow kelp lamp", {"portable": True, "lit": True, "description": "A glass globe of glow kelp."})]),
     "jonulvicha": ({"str": 16, "dex": 12, "con": 14, "int": 8, "wis": 10, "cha": 13},
@@ -1190,8 +1192,8 @@ PEOPLE_OF = {
     "Big Ludo": "jonulvicha", "Husok Sourfist": "human", "Hanklevode": "human", "Master Quillon": "human",
     "Lieutenant Voss": "human", "Phillip Everuex": "human", "Wendeline Moss": "human", "Ithriel": "elf",
     "Deloris": "human", "Kael Ironjaw": "jonulvicha", "Newcomer": "human",
-    "Captain Danny DeVito": "human", "Hulda Ironwake": "xoton", "Ruk Halfhand": "jonulvicha", "Mother Ines": "human",
-    "Hallvard Saltbeard": "xoton", "Grusha": "jonulvicha", "Saelwyn": "elf", "Captain Aelith": "elf", "Ondrine": "siren",
+    "Captain Danny DeVito": "human", "Amara Ironwake": "xoton", "Ruk Halfhand": "jonulvicha", "Mother Ines": "human",
+    "Khamisi Saltbeard": "xoton", "Grusha": "jonulvicha", "Saelwyn": "elf", "Captain Aelith": "elf", "Ondrine": "siren",
 }
 
 # the Night Market and its vendors ----------------------------------------------------------------------------------
@@ -1203,7 +1205,7 @@ SELLS_INES = {
         "kind": "drink", "left": 1, "description": "A green coconut with the top lopped off, full of cool water.",
         "description_empty": "An empty coconut shell."}},
 }
-SELLS_HALLVARD = {
+SELLS_KHAMISI = {
     "lamp|kelp|glow": {"price": 200, **token("Glow kelp lamp", "A glass globe of Xoton glow kelp: green light, never needs oil.", lit=True)},
     "bolas|bola": {"price": 50, **token("Fishing bolas", "Three weighted cords, Xoton-made, for tangling fish or legs.")},
     "rope|line": {"price": 5, **token("Coil of Xoton rope", "Thirty feet of tarred Xoton line. It does not fray.")},
@@ -1231,13 +1233,13 @@ INES = {"body": 1, "wits": 2, "will": 3, "skills": {"parley": 2}, "sells": SELLS
                    "klhyt|mayor": "\"The mayor buys a mango off me every morning. Every morning. Four mornings, nothing.\"",
                    "market|night|why": "\"Too hot to sell in the day. The whole town shops after dark now.\""},
         "default_line": "Ines fans herself. \"Fruit, gossip or shade?\""}
-HALLVARD = {"body": 2, "wits": 3, "will": 2, "skills": {"parley": 2}, "sells": SELLS_HALLVARD,
-            "description": "Hallvard Saltbeard, a Xoton chandler with a beard full of salt crystals, selling ship's goods off a "
+KHAMISI = {"body": 2, "wits": 3, "will": 2, "skills": {"parley": 2}, "sells": SELLS_KHAMISI,
+            "description": "Khamisi Saltbeard, a stocky, deep brown Xoton chandler with a beard full of salt crystals, selling ship's goods off a "
                            "tarpaulin: glow kelp lamps, rope, bolas, hooked knives.",
             "dialog": {"lamp|kelp|glow|price|buy": "\"Glow kelp lamp, two gold, never needs oil. Bolas fifty copper. Rope five.\"",
                        "xoton|crows|nest": "\"Xoton, with the X. We come, we trade, we go. The Crows Nest floats where it likes.\"",
                        "timber|trade": "\"Our captains buy timber. Straight and tall. Your jungle grows it like weeds.\""},
-            "default_line": "Hallvard holds up a glowing globe. \"Lamps, rope, bolas, knives. Xoton-made.\""}
+            "default_line": "Khamisi holds up a glowing globe. \"Lamps, rope, bolas, knives. Xoton-made.\""}
 GRUSHA = {"body": 3, "wits": 2, "will": 3, "skills": {"brawl": 2}, "sells": SELLS_GRUSHA,
           "description": "Grusha, a Jonulvicha cook with brass-capped tusks, turning goat skewers over a brazier and daring "
                          "people to try the pepper sauce.",
@@ -1271,15 +1273,16 @@ DEVITO = {"body": 2, "wits": 3, "will": 3, "skills": {"parley": 3, "blade": 1},
                                                           "Maggs at the Turtle Dragon. Two gold, and don't touch my rail.\"",
                      "small|size|height": "\"Small captain. Big ship. You do the maths.\""},
           "default_line": "DeVito bites a coin. \"Gold, the Emerald Eye, or Catan. Talk fast.\""}
-HULDA = {"body": 3, "wits": 2, "will": 3, "skills": {"athletics": 2, "brawl": 2},
-         "description": "Hulda Ironwake, bosun of the Xoton cog Whispers of the Deep: arms like hawsers, a whistle on a chain, "
+AMARA = {"body": 3, "wits": 2, "will": 3, "skills": {"athletics": 2, "brawl": 2},
+         "description": "Amara Ironwake, bosun of the Xoton cog Whispers of the Deep: short, black-skinned, nearly as wide as she is tall, "
+                        "arms like hawsers, a whistle on a chain, "
                         "and a voice that carries across the harbour.",
          "dialog": {"ship|cog|whispers": "\"Whispers of the Deep. Cog-rigged, deep-keeled, and she's never lost a crate yet.\"",
                     "xoton|crows|nest": "\"Xoton. We're on every coast that floats. Mind the X.\"",
                     "warehouse|crate|lights": "\"That bonded warehouse has had a man sitting on its door for four nights. Nobody "
                                               "guards fish that hard.\"",
                     "work|job|hire": "\"Need hands for the morning tide. You any good with a line?\""},
-         "default_line": "Hulda blows a short blast on her whistle at somebody. \"What?\""}
+         "default_line": "Amara blows a short blast on her whistle at somebody. \"What?\""}
 RUK = {"body": 4, "wits": 1, "will": 2, "skills": {"athletics": 3, "brawl": 2},
        "description": "Ruk Halfhand, a Jonulvicha stevedore foreman missing two fingers, tusks capped in iron, a tally stick behind each ear.",
        "dialog": {"crate|heavy|warehouse": "\"Carried a crate into that bonded warehouse four nights back. Custodian's seal. Heavy as a "
@@ -1343,6 +1346,17 @@ RUMOURS_DOCKS = [
     "\"Xoton trader out past the mouth. They'll buy anything that floats and most things that don't.\"",
     "\"Some nights something climbs out of the harbour at the end of the pier. Pretty, they say. Don't look.\"",
 ]
+# what the docks say of the Xoton ships (owner, 2026-11-24: Merchant Navy, Military Navy, rarely pirates); an upgrade adds
+# them to the dockside crowd's rumours (build_xotons)
+XOTON_RUMOURS = [
+    "\"Navy frigate in on the evening tide, the Keepers of the Storm. Timber division. Same trees as the House ships "
+    "want, and the House ships know it.\"",
+    "\"Xoton brig off the reef at dusk with no House mark and no fleet knot. No mark means pirate, with Xotons. Then the "
+    "Navy came in an hour later. Make of that what you like.\"",
+    "\"You can tell a Xoton's ship by what they wear. Green silk, that's the envoy's ten-master. Tar and nothing much, "
+    "that's the Whispers. Sharkskin and brass, that's the Navy. Gold in the ears and no marks at all, you walk away.\"",
+]
+RUMOURS_DOCKS = RUMOURS_DOCKS + XOTON_RUMOURS
 RUMOURS_DECK = [
     "\"Ithriel's household is still ashore. Five of them. The officer is watching the Apothecary, not the pier.\"",
     "\"The captain says the Moonmoth will not sail without the ones still in the town.\"",
@@ -1352,22 +1366,35 @@ CROWDS = {
     "market": ("Market crowd", {"mix": {"human": 5, "xoton": 4, "elf": 3, "jonulvicha": 2, "lizardfolk": 1}, "max_faces": 8,
                                 "rumours": RUMOURS_MARKET,
                                 "description": "Hundreds of people under the lanterns: colonists and Landfall runaways, Xoton sailors "
-                                               "on shore leave, Jonulvicha porters, elves in exile with their hoods up, a few Lizardfolk "
-                                               "of the Meters selling fish. Mingle and you'll hear things; hail someone and they'll stop."}),
+                                               "on shore leave, short and dark and nearly as wide as they are tall, Jonulvicha porters, "
+                                               "elves in exile with their hoods up, a few Lizardfolk of the Meters selling fish. Mingle "
+                                               "and you'll hear things; hail someone and they'll stop."}),
     "docks": ("Dockside crowd", {"mix": {"xoton": 5, "human": 4, "jonulvicha": 3, "lizardfolk": 1}, "max_faces": 6,
                                  "rumours": RUMOURS_DOCKS,
-                                 "description": "Dockhands, Xoton sailors, Jonulvicha stevedores and fishermen, working by lamplight "
-                                                "and drinking between loads."}),
+                                 "description": "Dockhands, Xoton sailors of three ships and three tribes, Jonulvicha stevedores and "
+                                                "fishermen, working by lamplight and drinking between loads. The Xotons are easy "
+                                                "to tell apart: tar and bare skin off the Whispers, sea-green silk off the envoy's "
+                                                "launch, sharkskin and brass off the Navy frigate."}),
     "moonmoth": ("Exiles on deck", {"mix": {"elf": 1}, "max_faces": 4, "rumours": RUMOURS_DECK,
                                     "description": "Elves in exile, two dozen of them, sitting quietly among their bundles on the "
                                                    "Moonmoth's deck, waiting for the ones still ashore."}),
 }
 
+# the Xoton ships at the pier, each its own tribe (owner, 2026-11-24); an upgrade gives the Whispers her new look
+WHISPERS = ("A deep-keeled Xoton cog of House Ironwake unloading by lantern-light, her hold breathing out tar, kelp and "
+            "foreign spice. She is a working ship and looks it: patched sails, every rope spliced twice, washing and "
+            "hammocks strung in her rigging, and a crew in tarred sailcloth wraps and not much else, the House's "
+            "iron-grey wave tattooed on every left shoulder.")
+KEEPERS = ("A Xoton frigate of the Military Navy at the deep-water end of the pier, black-hulled, sharp and twelve-masted, "
+           "every line flemished, every patch in her sails a regulation square. Her pennant is the Timber Acquisition "
+           "Division's, an axe crossed with a trident. Marines in sharkskin harness and coral gorgets stand at her "
+           "gangway, oiled and bare-chested, harpoon crossbows on their shoulders, and nobody goes up it without a word "
+           "from the captain.")
 SHIPS = [
     ("The Emerald Eye", "A squat, gold-trimmed brigantine with a great green eye painted on her bow, berthed at the "
                         "pier's end nearest the warehouse. Danny DeVito's ship. She sails for Catan on the one o'clock tide."),
-    ("Whispers of the Deep", "A deep-keeled Xoton cog unloading by lantern-light, her hold breathing out tar, kelp and "
-                             "foreign spice."),
+    ("Whispers of the Deep", WHISPERS),
+    ("Keepers of the Storm", KEEPERS),
     ("The River Queen", "The Everuex family's steamboat: brass, glass and a bow cannon, polished to a shine, looking "
                         "faintly ridiculous among the fishing boats."),
     ("Dragons Claw", "Elliot's ship: a small galleon, small enough to fit the river, sturdy enough to have crossed from Landfall."),
@@ -1413,10 +1440,10 @@ FIVE_E = {
     "Kael Ironjaw": ("fighter", 4, {"ac": 15}),
     "Newcomer": ("rogue", 1, {}),
     "Captain Danny DeVito": (None, 3, {}),
-    "Hulda Ironwake": ("fighter", 3, {}),
+    "Amara Ironwake": ("fighter", 3, {}),
     "Ruk Halfhand": (None, 2, {}),
     "Mother Ines": (None, 1, {}),
-    "Hallvard Saltbeard": (None, 2, {}),
+    "Khamisi Saltbeard": (None, 2, {}),
     "Grusha": ("fighter", 1, {}),
     "Saelwyn": ("druid", 3, {"spells": ["thorn whip", "produce flame", "cure wounds", "healing word", "entangle",
                                        "faerie fire"]}),
@@ -1550,12 +1577,14 @@ HOUSEHOLD = [
       "name|who": "\"Miravel. I'm not supposed to tell people that.\""}),
 ]
 SAILORS = [
-    ("Torvald Brineknot", "A Xoton sailor off the Whispers of the Deep, drinking a massive beer with both hands and singing under his breath.",
-     {"ship|whispers|cog": "\"Whispers of the Deep. Best cog on any coast. Ask Hulda, she'll tell you, loudly.\"",
+    ("Dayo Oceanheart", "A short, barrel-chested Xoton sailor off the Whispers of the Deep, deep brown and bare to the waist, drinking a "
+     "massive beer with both hands and singing under his breath.",
+     {"ship|whispers|cog": "\"Whispers of the Deep. Best cog on any coast. Ask Amara, she'll tell you, loudly.\"",
       "xoton|crows|nest": "\"Xoton. Crows Nest born. I've been ashore three days and the ground still moves.\""}),
-    ("Ragna Seaward", "A Xoton woman with rope-burned palms and copper rings in her ears, arm-wrestling anyone who sits down.",
+    ("Imani Wavebreaker", "A Xoton woman nearly as wide as she is tall, dark as tar, with rope-burned palms and copper rings in her ears, "
+     "arm-wrestling anyone who sits down.",
      {"arm|wrestle|wrestling|bet": "\"Sit down. A copper says I win. Everyone says no. Everyone loses.\"",
-      "timber|trade": "\"Straight trunks, tall ones. The Crows Nest eats timber like Torvald eats oysters.\""}),
+      "timber|trade": "\"Straight trunks, tall ones. The Crows Nest eats timber like Dayo eats oysters.\""}),
 ]
 
 # ---- the map: metres, y north, the sea to the south ----------------------------------------------------------------
@@ -1603,7 +1632,7 @@ UNDER = "Under the Harbour"
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
 STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
-          "peril", "missions", "shops", "law", "undertaker", "healers", "writing", "animals", "siren"]
+          "peril", "missions", "shops", "law", "undertaker", "healers", "writing", "animals", "siren", "xotons"]
 
 
 def by_name(s):
@@ -1703,11 +1732,11 @@ def people():
             ("thing", "Father's hat", {"portable": True, "bulk": 0, "description": "A battered hat. It was his father's."})]),
         ("person", "docks", "Newcomer", NEWCOMER, [("thing", "Coin", coin(200)), ("thing", "Knife", DAGGER)]),
         ("person", "docks", "Captain Danny DeVito", DEVITO, [("thing", "Coin", coin(3000))]),
-        ("person", "docks", "Hulda Ironwake", HULDA, [("thing", "Coin", coin(80)), ("thing", "Whistle", {
+        ("person", "docks", "Amara Ironwake", AMARA, [("thing", "Coin", coin(80)), ("thing", "Whistle", {
             "portable": True, "bulk": 0, "description": "A bosun's whistle on a chain."})]),
         ("person", "docks", "Ruk Halfhand", RUK, [("thing", "Coin", coin(35))]),
         ("person", "market", "Mother Ines", INES, [("thing", "Coin", coin(60))]),
-        ("person", "market", "Hallvard Saltbeard", HALLVARD, [("thing", "Coin", coin(240))]),
+        ("person", "market", "Khamisi Saltbeard", KHAMISI, [("thing", "Coin", coin(240))]),
         ("person", "market", "Grusha", GRUSHA, [("thing", "Coin", coin(45)), ("thing", "Cleaver", arm(
             "handaxe", "A butcher's cleaver, very clean."))]),
         ("person", "market", "Saelwyn", SAELWYN, [("thing", "Coin", coin(180))]),
@@ -2018,13 +2047,13 @@ SRD_OF = {
     "The Custodian": ("noble", {}), "Master Quillon": ("noble", {}), "Phillip Everuex": ("noble", {}),
     "Klhyt": ("veteran", {}), "Captain Aelith": ("veteran", {}),
     "Brask": ("thug", {}), "Tully": ("thug", {}), "Big Ludo": ("thug", {}), "Bosun Maggs": ("thug", {}),
-    "Hulda Ironwake": ("thug", {}), "Ruk Halfhand": ("thug", {}),
+    "Amara Ironwake": ("thug", {}), "Ruk Halfhand": ("thug", {}),
     "Captain Eirik": ("bandit captain", {}), "Captain Danny DeVito": ("bandit captain", {}),
     "Lieutenant Voss": ("knight", {}), "Ssark": ("lizardfolk", {}), "Thoradin": ("scout", {}),
     "Sister Agathe": ("acolyte", {}),
     "Saelwyn": ("druid", {"spells": ["thorn whip", "produce flame", "entangle", "thunderwave", "cure wounds", "healing word"]}),
     "Harbourmaster Teague": ("commoner", {}), "Husok Sourfist": ("commoner", {}), "Wendeline Moss": ("commoner", {}),
-    "Mother Ines": ("commoner", {}), "Hallvard Saltbeard": ("commoner", {}), "Grusha": ("commoner", {}),
+    "Mother Ines": ("commoner", {}), "Khamisi Saltbeard": ("commoner", {}), "Grusha": ("commoner", {}),
     **{n: ("commoner", {}) for n, _, _ in HOUSEHOLD}, **{n: ("bandit", {}) for n, _, _ in SAILORS},
 }
 # LoreKeeper's character sheets (D&D 5e 2014), the canon for these two: proficiencies, speed and, for Kael, the glaive
@@ -2037,7 +2066,14 @@ CANON_SHEETS = {
                                    "languages": ["Common", "Orc"]}},
 }
 PEOPLE_SENSES = {"elf": ["darkvision 60 ft."], "jonulvicha": ["darkvision 60 ft."], "dwarf": ["darkvision 60 ft."]}
-PEOPLE_TONGUE = {"elf": "Elvish", "jonulvicha": "Orc", "dwarf": "Dwarvish", "lizardfolk": "Draconic", "xoton": "Xoton"}
+PEOPLE_TONGUE = {"elf": "Elvish", "jonulvicha": "Orc", "dwarf": "Dwarvish", "lizardfolk": "Draconic",
+                 "xoton": ["Dwarvish", "Siren"]}  # Xotons: Common, Dwarvish and Siren (LoreKeeper, Xotons Race)
+PEOPLE_SPEED = {"xoton": "25 ft., swim 25 ft."}  # as Mountain Dwarves, and they swim (LoreKeeper, Xotons Race)
+
+
+def tongues(people):
+    t = PEOPLE_TONGUE.get(people)
+    return list(t) if isinstance(t, list) else ([t] if t else [])
 CLASS_KEYS = ["cls", "level", "sneak_attack", "cunning", "spellcasting", "extra_attacks", "unarmored", "martial_arts"]
 
 
@@ -2047,9 +2083,8 @@ def rows(pairs):
 
 def people_block(people):
     """What a statblock says of anyone of these people: medium, humanoid, their senses and tongue beside Common."""
-    tongue = PEOPLE_TONGUE.get(people)
-    return {"size": "Medium", "kind": "humanoid (" + (people or "human") + ")", "speed": "30 ft.",
-            "senses": PEOPLE_SENSES.get(people, []), "languages": ["Common"] + ([tongue] if tongue else [])}
+    return {"size": "Medium", "kind": "humanoid (" + (people or "human") + ")", "speed": PEOPLE_SPEED.get(people, "30 ft."),
+            "senses": PEOPLE_SENSES.get(people, []), "languages": ["Common"] + tongues(people)}
 
 
 def srd_state(name, kind, over, st):
@@ -2060,10 +2095,11 @@ def srd_state(name, kind, over, st):
     langs = list(b.get("languages") or ["Common"])
     if "Common" not in langs:
         langs.insert(0, "Common")
-    tongue = PEOPLE_TONGUE.get(people)
-    if tongue and tongue not in langs:
-        langs.append(tongue)
-    block = {"size": "Medium", "kind": "humanoid (" + people + ")", "speed": b.get("speed") or "30 ft.",
+    for tongue in tongues(people):
+        if tongue not in langs:
+            langs.append(tongue)
+    speed = over.get("speed") or PEOPLE_SPEED.get(people) or b.get("speed") or "30 ft."
+    block = {"size": "Medium", "kind": "humanoid (" + people + ")", "speed": speed,
              "hit_dice": b["dice"], "armor": b.get("armor"), "senses": PEOPLE_SENSES.get(people, []), "languages": langs,
              "traits": rows(list(SRD[kind].get("traits") or []) + list(over.get("traits") or [])),
              "actions": rows(b.get("actions") or []), "reactions": rows(b.get("reactions") or []),
@@ -2919,7 +2955,7 @@ SELLS_REEDHOUSE = {
         "Fever charm", "A knot of red thread around a fish bone. Grandmother Ishkaa ties one on anybody who looks "
         "feverish, and nobody has dared take one off to see what happens.")},
 }
-SHOP_SELLS = {"Hob Merrow": SELLS_CHANDLERY, "Tamsin Vey": SELLS_ANVIL, "Brynja Coralhand": SELLS_CORAL,
+SHOP_SELLS = {"Hob Merrow": SELLS_CHANDLERY, "Tamsin Vey": SELLS_ANVIL, "Zuri Coralhand": SELLS_CORAL,
               "Ottoline Crabbe": SELLS_GRAVES, "Doctor Amsel Prewitt": SELLS_SURGERY,
               "Grandmother Ishkaa": SELLS_REEDHOUSE, "Sister Agathe": SELLS_OMBERHULK}
 
@@ -3312,6 +3348,76 @@ def build_siren(s):
         s.set_rule(p["id"], "siren_trade", kinds=["given"])
 
 
+# ---- the Xotons as canon has them (owner, 2026-11-24: "They are Dark Skinned, they are almost as wide as they are tall.
+# They are barrel chested broad warriors of the sea. They come in Merchant Navy, or Military, or rarely pirates. Each ship
+# has it's own vibe and tribe"): the Norse names a host gave them gave way to names after LoreKeeper's Xoton naming doc,
+# their looks and dress to their ships (cast/r_xotons.py), and the Navy's frigate came in (Keepers of the Storm) ----------
+
+XOTON_RENAMED = {
+    "Torvald Brineknot": "Dayo Oceanheart", "Ragna Seaward": "Imani Wavebreaker", "Bjarke Foamtooth": "Kwasi Foamtooth",
+    "Little Olaf": "Little Jabali", "Hulda Ironwake": "Amara Ironwake", "Hallvard Saltbeard": "Khamisi Saltbeard",
+    "Brynja Coralhand": "Zuri Coralhand",
+    # the crowds' passers-by (scripts/crowd_hail.py), for any hailed out already
+    "Hallgrim Ropewise": "Kofi Stormbringer", "Sigrun Deepwell": "Nia Tidesinger", "Torvald Barnacle": "Obi Tidehunter",
+    "Ylva Saltbraid": "Sade Wavewhisper", "Orm Kelpfast": "Chike Driftwood", "Brynja Tidecaller": "Ayana Starfinder",
+    "Gunnar Halfmast": "Juma Seastrider", "Asta Ironwake": "Mirembe Oceanseer",
+}
+
+
+def rename_xotons(s):
+    """Renamed in place, before anything is made by name, so what play did to them stays theirs and nobody is made
+    twice; a passer-by's own words say the new name. Runs again without change."""
+    have = by_name(s)
+    for old, new in XOTON_RENAMED.items():
+        e = have.get(old)
+        if e is None or new in have or e["state"].get("people") != "xoton":
+            continue
+        s.rename(e["id"], new)
+        if e["state"].get("passer_by"):
+            fix = lambda v: v.replace(old, new) if isinstance(v, str) else v
+            s.patch(e["id"], {"dialog": None})
+            s.patch(e["id"], {"dialog": {k: fix(v) for k, v in (e["state"].get("dialog") or {}).items()},
+                              "default_line": fix(e["state"].get("default_line"))})
+    town = have.get("Klhyts Refuge")
+    if town is not None:
+        made = sorted(town["state"].get("built_people") or [])
+        fixed = sorted({XOTON_RENAMED.get(n, n) for n in made})
+        if fixed != made:
+            s.patch(town["id"], {"built_people": fixed})
+
+
+def build_xotons(s):
+    """What a world made before the Xotons were fleshed out keeps from then: the Whispers' look, the crowds' words, and
+    the statblocks' speed and tongues (25 ft. and a swim, Common, Dwarvish and Siren). The frigate and her people are
+    made by the things and cast stages. Runs again without change."""
+    have = by_name(s)
+    w = have.get("Whispers of the Deep")
+    if w is not None and w["state"].get("description") != WHISPERS:
+        s.patch(w["id"], {"description": WHISPERS})
+    for key in ("market", "docks"):
+        name, st = CROWDS[key]
+        c = have.get(name)
+        if c is None:
+            continue
+        change = {}
+        if c["state"].get("description") != st["description"]:
+            change["description"] = st["description"]
+        heard = list(c["state"].get("rumours") or [])
+        more = [r for r in st["rumours"] if r in XOTON_RUMOURS and r not in heard]
+        if more:
+            change["rumours"] = heard + more
+        if change:
+            s.patch(c["id"], change)
+    for e in s.world.find(limit=None):
+        sb = e["state"].get("statblock")
+        if e["state"].get("people") != "xoton" or not isinstance(sb, dict):
+            continue
+        langs = ["Common"] + tongues("xoton") + [l for l in (sb.get("languages") or [])
+                                                 if l not in ("Common", "Xoton", *tongues("xoton"))]
+        if sb.get("speed") != PEOPLE_SPEED["xoton"] or sb.get("languages") != langs:
+            s.patch(e["id"], {"statblock": {**sb, "speed": PEOPLE_SPEED["xoton"], "languages": langs}})
+
+
 def build_healers(s, root):
     """A treatment is done the moment it is bought, and the long sleep heals a patient who stays the hour
     (scripts/healing_rule.py); the Reed House is a sanctuary, where the Fist hunt nobody and the watch take nobody
@@ -3351,6 +3457,8 @@ def build(s):
     s.world.set_pace({"thirst": 3600})
     if "places" in STAGES:
         build_places(s, root)
+    if "xotons" in STAGES:
+        rename_xotons(s)  # before anyone is made by name
     if "layout" in STAGES:
         build_layout(s)
     if "people" in STAGES:
@@ -3392,6 +3500,8 @@ def build(s):
         build_animals(s, root)
     if "siren" in STAGES:
         build_siren(s)
+    if "xotons" in STAGES:
+        build_xotons(s)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

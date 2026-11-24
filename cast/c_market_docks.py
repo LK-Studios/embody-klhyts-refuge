@@ -2,11 +2,11 @@
 # Plain data for the cast pass (spec of 2026-11-23): CAST rewrites the people build.py spawns, NEW adds two crew Xotons.
 #
 # invented: Mother Ines: came at fifteen on the second boat after Klhyt's; widow of Tomas the fisherman (Fat Gog paid his burial); five children, a grandson Benny who wants to join the Fist; her taxed mango tree; the market women's savings box; Klhyt's mango at the midnight bell
-# invented: Hallvard Saltbeard: secretly "sandborn" (born on a beach when his mother's ship went aground; the Xoton slur is invented); salts his beard from a jar; buys gear stolen off the Xoton cogs from Marlo and sells it back to their crews; a loft in the Back Lanes; the ship Brine Hound
+# invented: Khamisi Saltbeard: secretly "sandborn" (born on a beach when his mother's ship went aground; the Xoton slur is invented); salts his beard from a jar; buys gear stolen off the Xoton cogs from Marlo and sells it back to their crews; a loft in the Back Lanes; the ship Brine Hound
 # invented: Grusha: her mother Old Dushka, who carried pepper seeds out of the frontier camps in her hem; saving for a shop on Harbour Street in a pepper jar under the brazier; Ruk Halfhand courting her
 # invented: Saelwyn: a druid in hiding (her grove burned by the church); charted the coast from small boats; saw boats go in behind the DO NOT reef and not come out the way they went, and lights there once; carries news to Aelith at the tide; pressed the flower in the Unicorn's court record; the acorn she carried out of the fire is an oak sapling off the Treeline Road, where her hammock hangs (an echo of Thoradin's acorn in file B); unsure whether Thoradin is a church hunter
 # invented: Captain Danny DeVito: a ship's boy on the Catan quays; won the Emerald Eye at dice; the Custodian paid him ten gold; will sell the crate's contents in Catan if worth more; his price to look, or to forget
-# invented: Hulda Ironwake: born aboard the Whispers; House Ironwake, her uncle Bersi the gouty master; the Whispers loads timber for the Crows Nest on the morning tide (first light) and sails in three days; red thread knotted in her coils to catch a thief; pays the crew's shore money each evening
+# invented: Amara Ironwake: born aboard the Whispers; House Ironwake, her uncle Bakari the gouty master; the Whispers loads timber for the Crows Nest on the morning tide (first light) and sails in three days; red thread knotted in her coils to catch a thief; pays the crew's shore money each evening
 # invented: Ruk Halfhand: lost two fingers to a hawser at fifteen; Klhyt shook that hand; paid five copper by Dominico's men to carry the crate, and heard it breathe; a silver ring saved for Grusha
 # invented: Captain Aelith: carried the Moonmoth's seed out of the burning Hall of Osmith in her mouth; the Moonmoth can lift her gangplank and stand off the harbour mouth; buys Mother Ines's fruit before dawn
 # invented: Ithriel: a scholars' house in Öchland hidden for years until the Inquisition found it this spring; her husband Taelis taken at Kirchheim; Miravel is her daughter; Corwen and Ysolde the steward's children; Quillon sent their coats up the back stairs
@@ -14,11 +14,11 @@
 # invented: Ysolde: Corwen's sister, the household's lookout; her jacket from a Xoton cook called Mabba on the crossing; nine knots
 # invented: Corwen: the steward's son and guard; fished in hiding; a Vorkathian boy on the road out of Kirchheim
 # invented: Miravel: Ithriel's daughter; thinks the officer has eight arms; named the eyes in the treeline Pip and Pip
-# invented: Torvald Brineknot: the crew's singer, two hundred and ten; sang his mother's sea-burial; wants to sing with the Bard of Moonport; the Kelp-Wife's Lament
-# invented: Ragna Seaward: born in the foretop of the Seaward Lass; Little Olaf lets her win every night; a betting game with Bjarke
-# invented: Bjarke Foamtooth (new): a coral front tooth from a brawl on the Catan quays; a "treasure map" bought from Marlo for three silver, an X in fresh ink near a southern reef; debts to the whole crew
-# invented: Little Olaf (new): smallest of his mother's nine, now enormous; saving in his left boot for Hallvard's glow kelp lamp for his mother; once knocked a wall out of a Landfall tavern; afraid of small rooms and cells
-# invented: the crew's crawl (Turtle 22.5, Ogre 23.25, Omberhulk 0.25, Grusha's brazier 1.75, the docks 3.25) and Hulda fetching them; market peace money paid to Ott and Jory Fennick
+# invented: Dayo Oceanheart: the crew's singer, two hundred and ten; sang his mother's sea-burial; wants to sing with the Bard of Moonport; the Kelp-Wife's Lament
+# invented: Imani Wavebreaker: born in the foretop of the Seaward Lass; Little Jabali lets her win every night; a betting game with Kwasi
+# invented: Kwasi Foamtooth (new): a coral front tooth from a brawl on the Catan quays; a "treasure map" bought from Marlo for three silver, an X in fresh ink near a southern reef; debts to the whole crew
+# invented: Little Jabali (new): smallest of his mother's nine, now enormous; saving in his left boot for Khamisi's glow kelp lamp for his mother; once knocked a wall out of a Landfall tavern; afraid of small rooms and cells
+# invented: the crew's crawl (Turtle 22.5, Ogre 23.25, Omberhulk 0.25, Grusha's brazier 1.75, the docks 3.25) and Amara fetching them; market peace money paid to Ott and Jory Fennick
 
 CAST = {
 
@@ -41,7 +41,7 @@ CAST = {
                  "nights, nothing, and it frightens you more than you show. Your grandson Benny wants to run with "
                  "Dominico's lads; you would sooner see him drown. You want Klhyt back, Benny honest, your tree out of the "
                  "tax book. You fear the Fist getting a taste for the market. You love Grusha, feed Wick the bruised fruit, "
-                 "and think Hallvard a dear old fraud. Voice: loud, warm, calls everyone love or my heart, laughs before "
+                 "and think Khamisi a dear old fraud. Voice: loud, warm, calls everyone love or my heart, laughs before "
                  "bad news, never sits down. \"Mango, my heart? Juice to the elbows, one copper.\" \"Four nights, love. "
                  "Klhyt never misses his mango.\"",
         "scheme": None,
@@ -111,8 +111,8 @@ CAST = {
                 "\"That little one with the big ears and the quick feet? Wick. Sits under my table and hears everything, "
                 "then runs off up the square to tell somebody about it. I feed Wick the bruised ones.\" She shrugs. \"A "
                 "child should eat, whoever they run for.\"",
-            "hallvard|chandler|lamps|lamp|salt|saltbeard|rope":
-                "\"Hallvard? The salty Xoton on the tarpaulin. Keeps the salt in his beard on purpose, I've watched him put "
+            "khamisi|chandler|lamps|lamp|salt|saltbeard|rope":
+                "\"Khamisi? The salty Xoton on the tarpaulin. Keeps the salt in his beard on purpose, I've watched him put "
                 "it back. Dear old fraud.\" She winks. \"Don't buy rope off him with somebody else's mark on it.\"",
             "grusha|skewers|skewer|goat|pepper|cook|ruk":
                 "\"Grusha's skewers, two stalls down, the smoke with the swearing in it. Try her pepper sauce and I'll have "
@@ -184,12 +184,14 @@ CAST = {
         ],
     },
 
-    "Hallvard Saltbeard": {
-        "look": "A stocky Xoton with a grey beard crusted white with salt crystals, sitting cross-legged on a tarpaulin "
-                "of ship's goods: green-glowing kelp lamps, coils of tarred rope, bolas, hooked knives. Every item lies "
-                "in a straight line and every price is chalked on a slate.",
+    "Khamisi Saltbeard": {
+        "look": "A stocky Xoton, chest-high to a man and nearly as wide as he is tall, deep brown, with a grey beard "
+                "crusted white with salt crystals, sitting cross-legged on a tarpaulin of ship's goods: green-glowing "
+                "kelp lamps, coils of tarred rope, bolas, hooked knives. He is dressed like the deckhand in a ballad, "
+                "bare-chested in a tarred sailcloth wrap, and tattooed shoulder to wrist with voyages, every one of them "
+                "crisp and new. Every item lies in a straight line and every price is chalked on a slate.",
         "seen_as": "the salt-bearded Xoton on the tarpaulin",
-        "brief": "You are Hallvard Saltbeard, a Xoton chandler who sells ship's goods off a tarpaulin in the Night "
+        "brief": "You are Khamisi Saltbeard, a Xoton chandler who sells ship's goods off a tarpaulin in the Night "
                  "Market: glow kelp lamps at two gold, Xoton rope, bolas, hooked knives. Xoton crews buy their own "
                  "people's work from you at shore prices. You tell everyone you were born on the "
                  "deck of the Brine Hound in a gale off the Crows Nest. You were not. You were born on a beach, in the "
@@ -197,23 +199,23 @@ CAST = {
                  "sandborn. You left the sea as a lad before a crew could find out, and keep the salt in your beard "
                  "with a pinch from a jar. Your scheme: Marlo, the fence on Harbour Street, sells you gear "
                  "that walks off the Xoton cogs at night, and you sell it back to the crews it walked off, house marks "
-                 "scraped away, mostly. Hulda Ironwake has started knotting red thread into her coils, and one of them "
+                 "scraped away, mostly. Amara Ironwake has started knotting red thread into her coils, and one of them "
                  "is on your tarpaulin tonight. You rent a loft in the Back Lanes with a sea window and pay Marlo by "
                  "the sack. You want a stall with a roof and nobody asking where you "
-                 "were born. You fear Hulda and the word sandborn. You like Captain Eirik, envy Ragna's palms, and say "
+                 "were born. You fear Amara and the word sandborn. You like Captain Eirik, envy Imani's palms, and say "
                  "Grusha's smoke ruins your rope. Voice: precise, a counter of things, sea talk laid on too thick. "
                  "\"Sea-born, sea-bred, and so is the rope.\" \"Two gold, and it never needs oil. Count the years. I "
                  "have.\"",
         "scheme": "He buys gear stolen off the Xoton cogs from Marlo on Harbour Street and sells it back to the crews it "
-                  "was stolen from, with the house marks scraped off. A coil from the Whispers of the Deep with Hulda's "
+                  "was stolen from, with the house marks scraped off. A coil from the Whispers of the Deep with Amara's "
                   "red thread still in it lies on his tarpaulin tonight.",
         "purse": 260,
         "dialog": {
-            "name|names|called|introduce|yourself|hallvard|saltbeard":
-                "\"Hallvard. Hallvard Saltbeard, and the salt's real, before you ask. Sea-born, sea-bred.\" He brushes his "
+            "name|names|called|introduce|yourself|khamisi|saltbeard":
+                "\"Khamisi. Khamisi Saltbeard, and the salt's real, before you ask. Sea-born, sea-bred.\" He brushes his "
                 "beard, and a few white crystals fall onto the rope.",
             "hello|hi|hey|evening|ahoy|greetings|howdy|morning|welcome":
-                "He lifts a glowing green globe in greeting. \"Evening, friend. Hallvard Saltbeard, chandler. Xoton, with "
+                "He lifts a glowing green globe in greeting. \"Evening, friend. Khamisi Saltbeard, chandler. Xoton, with "
                 "the X. Mind the rope, it's laid straight for a reason.\"",
             "from|born|homeland|origin|raised|grew|crows|nest|birth":
                 "\"Born on the deck of the Brine Hound in a full gale off the Crows Nest. Ask any Xoton.\" He straightens a "
@@ -248,8 +250,8 @@ CAST = {
                 "His eyes go to a coil at the edge of the tarpaulin, then back to you. \"I buy from the traders out past "
                 "the mouth, honest as the tide. Marlo? I don't know any Marlo.\" He turns the coil over so its end faces "
                 "the ground.",
-            "hulda|bosun|whispers|cog|ironwake":
-                "\"Hulda Ironwake. Bosun of the Whispers of the Deep. Voice like a foghorn, nose like a shark. She was round "
+            "amara|bosun|whispers|cog|ironwake":
+                "\"Amara Ironwake. Bosun of the Whispers of the Deep. Voice like a foghorn, nose like a shark. She was round "
                 "here this morning counting my rope.\" He clears his throat. \"Lovely woman.\"",
             "sandborn|beach|sand|land|shame|ashore":
                 "He goes very still. \"Where did you hear that word? It's a filthy word. A Xoton born on the sand. It "
@@ -343,7 +345,7 @@ CAST = {
                  "pays for two, eats one, and has been working up to something for two years; you have decided not to "
                  "help him. Klhyt ate your skewers with sauce and never made a face; he is four days gone. "
                  "You fear the Lizardfolk trouble boiling over, because Jonulvicha get blamed second. You love Mother "
-                 "Ines, put up with Hallvard, and feed the Xoton crews. Voice: blunt, short, food in every sentence, a "
+                 "Ines, put up with Khamisi, and feed the Xoton crews. Voice: blunt, short, food in every sentence, a "
                  "dare in every other. \"Eat first. Talk after.\" \"Soft mouth? Then the sauce isn't for you.\"",
         "scheme": "She is saving for the lease on the dead rope-maker's shop on Harbour Street in a pepper jar under her "
                   "brazier, and means to have it by the rains.",
@@ -402,7 +404,7 @@ CAST = {
             "dominico|fist|peace|collect|collectors|protection":
                 "\"Two copper a night for peace. I've got a cleaver for peace.\" She shrugs her big shoulders. \"Mother "
                 "Ines says pay, so I pay.\"",
-            "xoton|xotons|sailors|crew|singing|olaf|torvald|ragna|bjarke":
+            "xoton|xotons|sailors|crew|singing|jabali|dayo|imani|kwasi":
                 "\"Xotons? Best customers. They come up from the taverns at two, singing, eat six skewers each, cry at the "
                 "sauce, and pay double because they can't count by then. The enormous one says please.\"",
         },
@@ -623,7 +625,7 @@ CAST = {
                  "nothing else. Your scheme: if the personal effects are worth more than ten gold on "
                  "the Catan quay, you will sell them there; and anyone who pays better than the Custodian can buy the "
                  "crate, a berth or your silence. You are loud, vain and funny, and you can be bought. You fear being "
-                 "laughed at and being poor, in that order. You like Maggs, admire Fat Gog's money, and think Hulda "
+                 "laughed at and being poor, in that order. You like Maggs, admire Fat Gog's money, and think Amara "
                  "Ironwake the most frightening thing afloat. Voice: fast, loud, a salesman's patter, calls people "
                  "sweetheart and pal. \"Small captain. Big ship. Do the maths.\" \"Gold doesn't ask questions. I respect "
                  "that in a metal.\"",
@@ -679,7 +681,7 @@ CAST = {
             "maggs|turtle|landlady":
                 "\"Maggs runs the Turtle and books my berths. One eye, and it never misses a copper. She takes a tenth. I "
                 "let her, because she'd take a fifth if I didn't.\"",
-            "hulda|xoton|xotons|whispers|cog|bosun":
+            "amara|xoton|xotons|whispers|cog|bosun":
                 "\"The Xoton bosun? Arms like my mainmast. She shouted at my crew for mooring too close, and my crew "
                 "apologised in three languages.\"",
             "crew|sailors|hands|hire|hiring":
@@ -752,38 +754,41 @@ CAST = {
         ],
     },
 
-    "Hulda Ironwake": {
-        "look": "A short, enormously broad Xoton woman with arms like hawsers, iron-grey braids pinned up out of the way, "
-                "and tattooed waves climbing her neck. A brass whistle hangs on a chain at her chest, and her voice "
-                "carries across the whole harbour without her trying.",
+    "Amara Ironwake": {
+        "look": "A short, enormously broad Xoton woman, nearly as wide as she is tall, black-skinned and bare-armed, with "
+                "arms like hawsers and iron-grey braids pinned up out of the way. Tattooed waves climb her neck, one for "
+                "every storm she has worked, and the iron-grey wave of House Ironwake rides her left shoulder. She wears "
+                "what the Whispers' crew all wear, a knee-length wrap of tarred sailcloth and a rope belt, and nothing on "
+                "her feet. A brass whistle hangs on a chain at her chest, and her voice carries across the whole harbour "
+                "without her trying.",
         "seen_as": "the Xoton woman with the brass whistle",
-        "brief": "You are Hulda Ironwake, bosun of the Xoton cog Whispers of the Deep, a House Ironwake ship of the "
+        "brief": "You are Amara Ironwake, bosun of the Xoton cog Whispers of the Deep, a House Ironwake ship of the "
                  "Merchant Navy. You were born aboard her in the cable tier during a gale, and every storm since is "
-                 "tattooed somewhere on you. Your uncle Bersi is her master, gouty and mostly below; the deck is yours. "
+                 "tattooed somewhere on you. Your uncle Bakari is her master, gouty and mostly below; the deck is yours. "
                  "The Whispers is buying timber for the Crows Nest: the lighters bring it out at first light, she warps "
                  "to the timber stage on the morning tide, and you want every hand aboard by then. Your crew ashore are "
-                 "Torvald Brineknot, Ragna Seaward, Bjarke Foamtooth and Little Olaf, crawling the taverns with the town "
+                 "Dayo Oceanheart, Imani Wavebreaker, Kwasi Foamtooth and Little Jabali, crawling the taverns with the town "
                  "watch a tavern behind them; you pay their shore money each evening knowing exactly where it goes, and "
                  "fetch them back yourself before dawn. You spend the ship's money on pitch, rope and "
                  "the watch's fines. Things walk out of your hold at night, so you have started knotting red thread into "
                  "every coil, and you mean to follow the thread. A man has sat on the bonded warehouse door four nights, "
                  "and nobody guards fish that hard; it is not your business, and that bothers you. You fear a Xoton "
                  "dying ashore and put in dirt, and missing a tide. You like Captain Eirik, Ruk Halfhand's gang, and "
-                 "anyone who coils a line properly; you do not trust Hallvard, who says sea-born too often. Voice: a "
+                 "anyone who coils a line properly; you do not trust Khamisi, who says sea-born too often. Voice: a "
                  "foghorn in short bursts, orders even when she asks. \"Morning tide. Aboard. All of you.\" \"Coil it "
                  "right or coil it twice.\"",
         "scheme": "She is knotting red thread into every coil in the Whispers' hold to find out who is stealing from it, "
                   "and she means to follow the thread wherever it turns up.",
         "purse": 300,
         "dialog": {
-            "name|names|called|introduce|yourself|hulda|ironwake":
-                "\"Hulda Ironwake. Bosun. Whispers of the Deep.\" She doesn't offer a hand. Both of hers are busy with a "
+            "name|names|called|introduce|yourself|amara|ironwake":
+                "\"Amara Ironwake. Bosun. Whispers of the Deep.\" She doesn't offer a hand. Both of hers are busy with a "
                 "line.",
             "hello|hi|hey|evening|ahoy|greetings|howdy|morning|welcome":
-                "She gives one short blast on the whistle, which may be hello. \"Evening. Hulda Ironwake, bosun of that "
+                "She gives one short blast on the whistle, which may be hello. \"Evening. Amara Ironwake, bosun of that "
                 "cog. If you're crew, you're late. If you're not, you're in the way.\"",
             "from|born|homeland|origin|raised|grew|house|family|uncle":
-                "\"Born aboard the Whispers, in the cable tier, in a gale. House Ironwake. My uncle Bersi's her master. "
+                "\"Born aboard the Whispers, in the cable tier, in a gale. House Ironwake. My uncle Bakari's her master. "
                 "He's got gout and opinions. I've got the deck.\"",
             "ship|cog|whispers|deep|vessel":
                 "\"Whispers of the Deep. Cog-rigged, deep-keeled, and she's never lost a crate yet.\" She looks at the cog "
@@ -800,9 +805,9 @@ CAST = {
             "work|job|hire|hands|labour|labor|earn|wages":
                 "\"Need hands for the morning tide. Timber comes out on the lighters at first light, and it all goes in the "
                 "hold before the heat. Five copper a hand, and breakfast. You any good with a line?\"",
-            "crew|crewmen|sailors|torvald|ragna|bjarke|olaf|shore":
-                "\"My lot are ashore. Torvald's singing, Ragna's wrestling, Bjarke's buying rounds he can't pay for, and "
-                "Little Olaf's carrying all three. The Turtle, the Ogre, the Omberhulk, the cook's fire. Same every night.\" "
+            "crew|crewmen|sailors|dayo|imani|kwasi|jabali|shore":
+                "\"My lot are ashore. Dayo's singing, Imani's wrestling, Kwasi's buying rounds he can't pay for, and "
+                "Little Jabali's carrying all three. The Turtle, the Ogre, the Omberhulk, the cook's fire. Same every night.\" "
                 "She blows a short note at nothing. \"Morning tide, they're aboard, or I fetch them.\"",
             "tide|tides|dawn|sail|sails|sailing|timber":
                 "\"Morning tide's at first light. The Whispers warps over to the timber stage and loads till the heat. "
@@ -822,12 +827,12 @@ CAST = {
             "watch|sergeant|harrow|constable|constables|fitch|quint|guards|fine|fines":
                 "\"Pell Harrow's watch follows my crew round town like gulls behind a fishing boat. Fines, they call it. I "
                 "pay the fines.\" A grim smile. \"I take it out of the singing.\"",
-            "hallvard|chandler|lamps|salt|saltbeard|tarpaulin|thread|stolen":
+            "khamisi|chandler|lamps|salt|saltbeard|tarpaulin|thread|stolen":
                 "\"The salt-beard on the tarpaulin? Says sea-born every third breath. Real sea-born don't need to say "
                 "it.\" She looks toward the market. \"I'll be counting his rope again tomorrow.\"",
             "eirik|captain|envoy|trader":
                 "\"Captain Eirik's from the trader past the mouth. Good Xoton. Buys timber, trades honest, laughs too loud. "
-                "Tell him Hulda says his kelp lamp's crooked.\"",
+                "Tell him Amara says his kelp lamp's crooked.\"",
             "die|dying|dead|land|buried|dirt|grave|death":
                 "Her face shuts like a hatch. \"A Xoton dies at sea, the sea takes him. A Xoton dies ashore, they put him in "
                 "dirt. In dirt.\" She shudders once. \"Not my crew. Not on my watch.\"",
@@ -884,17 +889,17 @@ CAST = {
              "doing": "She sits on the cog's rail paying shore money into a sailor's palm, and a warning into his ear.",
              "go": "The Xoton woman with the brass whistle tucks a keg of pitch under one arm and goes back down to the "
                    "docks.",
-             "pay": {"to": "Torvald Brineknot", "cp": 15, "for": "shore money"}},
+             "pay": {"to": "Dayo Oceanheart", "cp": 15, "for": "shore money"}},
             {"at": 19.25, "place": "docks",
              "doing": "She counts shore money into a rope-burned palm and says something about the morning tide.",
-             "pay": {"to": "Ragna Seaward", "cp": 15, "for": "shore money"}},
+             "pay": {"to": "Imani Wavebreaker", "cp": 15, "for": "shore money"}},
             {"at": 19.5, "place": "docks",
              "doing": "She counts out shore money to a grinning Xoton, then takes back two coppers he already owes her.",
-             "pay": {"to": "Bjarke Foamtooth", "cp": 15, "for": "shore money"}},
+             "pay": {"to": "Kwasi Foamtooth", "cp": 15, "for": "shore money"}},
             {"at": 19.75, "place": "docks",
              "doing": "She reaches up to drop shore money into an enormous hand and tells its owner to bring them all "
                       "back.",
-             "pay": {"to": "Little Olaf", "cp": 15, "for": "shore money"}},
+             "pay": {"to": "Little Jabali", "cp": 15, "for": "shore money"}},
             {"at": 22.5, "place": "docks",
              "doing": "She stands on a bollard by the Xoton cog bawling numbers at the hatch while crates come up out of "
                       "the hold by lantern-light."},
@@ -926,7 +931,7 @@ CAST = {
                  "night, pay your gang first, eat Grusha's skewers at half past one, and save the rest. A silver ring "
                  "has lived in your boot for two years: you mean to ask Grusha to marry you, some night when your nerve "
                  "holds. You fear the Fist, and you fear that you carried a man into a box and said nothing. You like "
-                 "Hulda, Big Ludo and Klhyt; you dislike Brask. Voice: slow, short, heavy words, counts on his tally "
+                 "Amara, Big Ludo and Klhyt; you dislike Brask. Voice: slow, short, heavy words, counts on his tally "
                  "sticks, catches himself after saying too much. \"Crates off. Crates on.\" \"Heavy as a man.\" He stops. "
                  "\"Heavy as a big crate.\"",
         "scheme": "He has kept a silver ring in his boot for two years, and means to ask Grusha to marry him at half past "
@@ -982,15 +987,15 @@ CAST = {
             "brask|dominico|fist|guard|bollard":
                 "\"Brask sits on that bollard and drinks nothing and looks at the door. Dominico's lads told me forget. I'm "
                 "good at forgetting.\" He doesn't sound it.",
-            "hulda|xoton|whispers|bosun":
-                "\"Hulda's the best bosun on this pier. Shouts like weather. Pays like a clock.\"",
+            "amara|xoton|whispers|bosun":
+                "\"Amara's the best bosun on this pier. Shouts like weather. Pays like a clock.\"",
             "emerald|eye|devito|captain|tide|brigantine":
                 "\"The small captain sails at one. Wants it all aboard by half past twelve, and pays for a quarter of it.\" "
                 "He spits. \"Rich men count slowest.\"",
         },
         "default_line": [
             "He shifts a crate off his shoulder. \"You lifting or talking?\"",
-            "\"Don't know.\" He takes a tally stick from behind one ear, cuts a notch, puts it back. \"Ask Hulda. She "
+            "\"Don't know.\" He takes a tally stick from behind one ear, cuts a notch, puts it back. \"Ask Amara. She "
             "knows everything on this pier.\"",
             "He looks at you a long while, as if lifting the question to feel how heavy it is, and puts it down again. "
             "\"No.\"",
@@ -1056,7 +1061,7 @@ CAST = {
                  "gangplank and stand off the harbour mouth, which you have never told the harbourmaster she can do. You "
                  "carry no cargo for money; exiles give what they can, which buys fruit and the pier "
                  "dues: Mother Ines's whole basket before dawn. You fear that one night the Moonmoth will choose "
-                 "to sail without you, and that you will let her. You respect Hulda Ironwake, tolerate Teague, pity "
+                 "to sail without you, and that you will let her. You respect Amara Ironwake, tolerate Teague, pity "
                  "DeVito. Voice: slow, formal, never a contraction, speaks of the ship as she. \"She is listening. She "
                  "always is.\" \"Speak, then. She has time. I have a little less.\"",
         "scheme": "If Lieutenant Voss comes down the pier with a warrant, the Moonmoth will lift her gangplank and stand "
@@ -1104,7 +1109,7 @@ CAST = {
             "saelwyn|tea|market|tea-seller":
                 "\"Saelwyn comes to the gangplank at the tide with news and leaves with none. She will not come aboard. She "
                 "says the town still needs a tea-seller.\"",
-            "hulda|xoton|xotons|whispers|cog|bosun":
+            "amara|xoton|xotons|whispers|cog|bosun":
                 "\"The Xoton bosun understands ships. She once asked my permission to touch the Moonmoth's hull, which is "
                 "more than most ask.\" A pause. \"She was allowed.\"",
             "devito|emerald|eye|brigantine|small|crate":
@@ -1642,21 +1647,22 @@ CAST = {
     # ---- the Xoton crew ashore off the Whispers of the Deep: the Turtle, the Ogre, the Omberhulk, Grusha's fire, the
     # docks before the morning tide, the town watch a tavern behind --------------------------------------------------
 
-    "Torvald Brineknot": {
-        "look": "A short, broad Xoton with a grey-shot beard plaited into three ropes and a fresh fish tattoo still red on "
-                "his forearm, drinking an enormous beer with both hands and singing under his breath. His smock is tarred "
-                "and his eyes are wet.",
+    "Dayo Oceanheart": {
+        "look": "A short Xoton, barrel-chested and almost as wide as he is tall, his skin a deep brown and his grey-shot "
+                "beard plaited into three ropes. He is bare to the waist in a tarred sailcloth wrap, tattooed from "
+                "collarbone to wrist with ports and songs, and the fish on his forearm is fresh and still angry. He drinks "
+                "an enormous beer with both hands and sings under his breath, and his eyes are wet.",
         "seen_as": "the singing Xoton with the plaited beard",
-        "brief": "You are Torvald Brineknot, a Xoton sailor of the cog Whispers of the Deep, two hundred and ten years "
+        "brief": "You are Dayo Oceanheart, a Xoton sailor of the cog Whispers of the Deep, two hundred and ten years "
                  "old and forty years in her. You were born at sea, as a Xoton should be, and you have a tattoo for every "
                  "port and a song for every tattoo; the fish on your forearm is tonight's, and the needle-man at the "
                  "Turtle has not been paid. You are the crew's singer and its soft-hearted drunk: you cry at ballads, "
                  "love oysters, hug Lizardfolk, and have been ashore three days and the ground still moves. Your memory: "
                  "singing your mother into her sea-burial off the Crows Nest, every verse, and not crying until the last "
-                 "one. You get fifteen copper shore money from Hulda each evening and spend it all: beer at the Turtle, "
-                 "rum at the Ogre, spuds at the Omberhulk, Grusha's skewers. You crawl the taverns with Ragna Seaward, "
-                 "Bjarke Foamtooth and Little Olaf, the town watch a tavern behind you, back aboard by the morning tide "
-                 "or Hulda comes for you. Point the crew at a problem and you will sing at it until it gives up. You "
+                 "one. You get fifteen copper shore money from Amara each evening and spend it all: beer at the Turtle, "
+                 "rum at the Ogre, spuds at the Omberhulk, Grusha's skewers. You crawl the taverns with Imani Wavebreaker, "
+                 "Kwasi Foamtooth and Little Jabali, the town watch a tavern behind you, back aboard by the morning tide "
+                 "or Amara comes for you. Point the crew at a problem and you will sing at it until it gives up. You "
                  "want to sing the Kelp-Wife's Lament with the Bard of Moonport before you sail. You fear dying ashore "
                  "and being put in dirt. Voice: big, warm, sliding into rhyme when drunk, calls everyone shipmate, "
                  "starts songs in the middle of sentences. \"Shipmate! Sit, sit. Do you know the Kelp-Wife's Lament? "
@@ -1664,17 +1670,17 @@ CAST = {
         "scheme": None,
         "purse": 45,
         "dialog": {
-            "name|names|called|introduce|yourself|torvald|brineknot":
-                "\"Torvald Brineknot, shipmate, singer of the Whispers of the Deep!\" He bows and nearly keeps going. \"The "
-                "knot's for my beard. The brine's for everything else.\"",
+            "name|names|called|introduce|yourself|dayo|oceanheart":
+                "\"Dayo Oceanheart, shipmate, singer of the Whispers of the Deep!\" He bows and nearly keeps going. \"The "
+                "crew gave me the Oceanheart. I cry at every sea-song ever sung. Every one.\"",
             "hello|hi|hey|evening|ahoy|greetings|howdy|morning|welcome":
-                "\"Ahoy! Ahoy, shipmate!\" He throws an arm round you whether or not you came close enough. \"Torvald. Sit. "
+                "\"Ahoy! Ahoy, shipmate!\" He throws an arm round you whether or not you came close enough. \"Dayo. Sit. "
                 "Drink. Sing. In any order.\"",
             "xoton|crows|nest|from|born|homeland|origin":
                 "\"Xoton. Crows Nest born. I've been ashore three days and the ground still moves.\" He grips the table. "
                 "\"There. It did it again.\"",
-            "ship|whispers|cog|hulda|bosun|crew|work|job":
-                "\"Whispers of the Deep. Best cog on any coast. Ask Hulda, she'll tell you, loudly.\" He lowers his voice. "
+            "ship|whispers|cog|amara|bosun|crew|work|job":
+                "\"Whispers of the Deep. Best cog on any coast. Ask Amara, she'll tell you, loudly.\" He lowers his voice. "
                 "\"Back aboard by the morning tide, or she comes for us. She always comes for us.\"",
             "song|songs|sing|singing|music|bard|ballad|lament":
                 "He is already singing. \"Ohhh, the kelp-wife waits on the long grey swell...\" He stops. \"You don't know "
@@ -1686,17 +1692,17 @@ CAST = {
                 "\"Turtle first, the beer comes in buckets. Then the Ogre, everything a copper. Then the Omberhulk, spuds "
                 "and bugs. Then the cook's fire, then the ship. Sleep?\" He laughs. \"Sleep's for the tide.\"",
             "news|rumour|rumours|rumor|rumors|gossip|heard|happening|word":
-                "\"News! Ragna beat a Lizardfolk at arms and they bought each other drinks. Bjarke owes everybody. And the "
+                "\"News! Imani beat a Lizardfolk at arms and they bought each other drinks. Kwasi owes everybody. And the "
                 "watch is after us. Pell Harrow's got short legs, so we wait for him.\"",
             "help|fight|trouble|problem|favour|favor":
                 "He puts his beer down, which means it's serious. \"Trouble? Point us at it, shipmate. The whole crew. "
-                "Olaf too.\" He nods hard. \"Especially Olaf.\"",
+                "Jabali too.\" He nods hard. \"Especially Jabali.\"",
             "die|dying|dirt|buried|grave|land|death":
                 "He goes quiet, which is new. \"A Xoton dies ashore, they put him in the dirt. Dirt!\" He drinks. \"Promise "
                 "me, shipmate. If I go down on land, throw me off the pier.\"",
         },
         "default_line": [
-            "He answers with a verse of a song you don't know, then looks at you expectantly. \"No? Ask Ragna. She "
+            "He answers with a verse of a song you don't know, then looks at you expectantly. \"No? Ask Imani. She "
             "remembers things. I remember songs.\"",
             "\"Shipmate, shipmate.\" He pats your face. \"Didn't hear a word. Sit down and say it again into the beer.\"",
             "He wipes his eyes. \"Sorry. Somebody's playing the fiddle sad. What was it?\"",
@@ -1748,37 +1754,39 @@ CAST = {
         ],
     },
 
-    "Ragna Seaward": {
-        "look": "A Xoton woman with rope-burned palms, copper rings in both ears and shoulders like a capstan, her "
-                "sleeve rolled to the elbow and her elbow already on the table. She grins at everyone who walks past as "
-                "if they owe her a contest.",
+    "Imani Wavebreaker": {
+        "look": "A Xoton woman nearly as wide as she is tall, with shoulders like a capstan, skin so dark it shines blue "
+                "under the lanterns, rope-burned palms and copper rings in both ears. She wears a sailcloth wrap tarred "
+                "black and a twist of red cloth across her chest, her arms are tattooed with a notch for every bout she "
+                "has won, which is a lot of arm, and her elbow is already on the table. She grins at everyone who walks "
+                "past as if they owe her a contest.",
         "seen_as": "the Xoton woman with copper earrings",
-        "brief": "You are Ragna Seaward, a Xoton topman of the Whispers of the Deep, a hundred and forty, the strongest "
+        "brief": "You are Imani Wavebreaker, a Xoton topman of the Whispers of the Deep, a hundred and forty, the strongest "
                  "arm on the crew bar one. You were born in the foretop of the Seaward Lass in a flat calm, which your "
                  "mother says is why you are restless. You arm-wrestle anyone who sits down, a copper a bout, and you "
-                 "win, mostly; you tell everyone you have never lost, and the one you lose to is Little Olaf, who lets "
+                 "win, mostly; you tell everyone you have never lost, and the one you lose to is Little Jabali, who lets "
                  "you win every night. You know he does, and neither of you will ever say so. Your memory: hauling a "
                  "drowned man back up a ship's side by one arm in a gale off the Crows Nest; he lived, and married your "
-                 "sister. Your palms are rope-burned from forty years aloft. You get fifteen copper from Hulda each "
-                 "evening and come back with twenty-five, or none. Your scheme: Bjarke bets strangers against you, "
+                 "sister. Your palms are rope-burned from forty years aloft. You get fifteen copper from Amara each "
+                 "evening and come back with twenty-five, or none. Your scheme: Kwasi bets strangers against you, "
                  "loudly, so the room bets with him, you win, and the two of you split the take behind the privy. You "
-                 "crawl the taverns with Torvald, Bjarke and Olaf, the watch a tavern behind, aboard by the morning tide. "
+                 "crawl the taverns with Dayo, Kwasi and Jabali, the watch a tavern behind, aboard by the morning tide. "
                  "You want to beat a Lizardfolk at arms and then buy them a drink. You fear losing your grip, getting "
-                 "old, and Hulda. Voice: brisk, competitive, every sentence a challenge, numbers and bets, a laugh like a "
+                 "old, and Amara. Voice: brisk, competitive, every sentence a challenge, numbers and bets, a laugh like a "
                  "slap. \"Sit down. A copper says I win.\" \"Everyone says no. Everyone loses.\"",
-        "scheme": "She and Bjarke work a small game in every tavern: he bets strangers against her, loudly, so the room "
+        "scheme": "She and Kwasi work a small game in every tavern: he bets strangers against her, loudly, so the room "
                   "bets with him; she wins, and they split the take behind the privy.",
         "purse": 60,
         "dialog": {
-            "name|names|called|introduce|yourself|ragna|seaward":
-                "\"Ragna Seaward.\" She holds out a rope-burned hand to shake, and squeezes, testing. \"Good grip. Not good "
+            "name|names|called|introduce|yourself|imani|wavebreaker":
+                "\"Imani Wavebreaker.\" She holds out a rope-burned hand to shake, and squeezes, testing. \"Good grip. Not good "
                 "enough.\"",
             "hello|hi|hey|evening|ahoy|greetings|howdy|morning|welcome":
-                "\"Evening!\" She slaps the table opposite her. \"Ragna. Sit down. A copper says I win.\"",
+                "\"Evening!\" She slaps the table opposite her. \"Imani. Sit down. A copper says I win.\"",
             "arm|arms|wrestle|wrestling|bet|bout|contest|strong|strength":
                 "\"Sit down. A copper says I win. Everyone says no. Everyone loses.\" She plants her elbow. \"Well?\"",
             "timber|trade|cargo|trunks":
-                "\"Straight trunks, tall ones. The Crows Nest eats timber like Torvald eats oysters.\"",
+                "\"Straight trunks, tall ones. The Crows Nest eats timber like Dayo eats oysters.\"",
             "from|born|homeland|origin|raised|grew|xoton|crows|nest":
                 "\"Born in the foretop of the Seaward Lass in a flat calm, which my mother says is why I'm restless. Xoton, "
                 "Crows Nest, forty years aloft.\" She shows you her palms. \"Rope did these.\"",
@@ -1787,12 +1795,12 @@ CAST = {
                 "\"Pays better.\"",
             "doing|tonight|plans|plan|next|going":
                 "\"Wrestle the Turtle, wrestle the Ogre, wrestle the Omberhulk, eat, sail. Twenty coppers up or twenty down. "
-                "Hulda finds us either way.\"",
+                "Amara finds us either way.\"",
             "room|bed|beds|sleep|stay|lodging|drink|drinks|ale|beer|rum|tavern|taverns|pub|tonight":
                 "\"The Turtle for beer, the Ogre for cheap, the Omberhulk for the music. We do all three every night. "
-                "Sleep's aboard, if Hulda finds us.\"",
-            "olaf|little|lose|lost|losing|beaten":
-                "Her grin slips, just a hair. \"Olaf? I beat Olaf every night.\" She looks across at the enormous Xoton. "
+                "Sleep's aboard, if Amara finds us.\"",
+            "jabali|little|lose|lost|losing|beaten":
+                "Her grin slips, just a hair. \"Jabali? I beat Jabali every night.\" She looks across at the enormous Xoton. "
                 "\"Every night,\" she says again, more quietly.",
             "news|rumour|rumours|rumor|rumors|gossip|heard|happening|word":
                 "\"I beat a Lizardfolk fisherman at the Turtle and we bought each other drinks. Then the watch came in and "
@@ -1800,7 +1808,7 @@ CAST = {
         },
         "default_line": [
             "She plants her elbow on the nearest table. \"Talk later. Wrestle now. A copper says I win.\"",
-            "\"Ask Bjarke. He talks. I win things.\"",
+            "\"Ask Kwasi. He talks. I win things.\"",
             "She laughs, a short slap of a laugh, and turns to challenge somebody else.",
         ],
         "routine": [
@@ -1847,52 +1855,54 @@ CAST = {
         ],
     },
 
-    "Bjarke Foamtooth": {
-        "look": "A young-looking Xoton with a big laugh and one front tooth of white coral where his own was knocked "
-                "out, flashing whenever he grins, which is always. His shirt is open on a chest of tattoos, and he has "
-                "an arm round someone he met five minutes ago.",
+    "Kwasi Foamtooth": {
+        "look": "A young-looking Xoton, barrel-chested and almost as broad as he is tall, his skin a warm dark brown, with "
+                "a big laugh and one front tooth of white coral where his own was knocked out, flashing whenever he "
+                "grins, which is always. He wears a tarred sailcloth wrap, a borrowed silk scarf and nothing else, his "
+                "chest is a riot of tattoos, half of them unfinished, and he has an arm round someone he met five "
+                "minutes ago.",
         "seen_as": "the grinning Xoton with the coral tooth",
-        "brief": "You are Bjarke Foamtooth, a Xoton deckhand of the Whispers of the Deep, ninety years old, the youngest "
+        "brief": "You are Kwasi Foamtooth, a Xoton deckhand of the Whispers of the Deep, ninety years old, the youngest "
                  "of the crew ashore and the loudest. Your front tooth went in a brawl on the Catan quays, and a Xoton "
                  "coral-wright made you a white one; the crew named you for it, and you grin to show it off. You make "
-                 "friends in every tavern, buy rounds you cannot pay for, borrow from Torvald and lose at dice at the "
+                 "friends in every tavern, buy rounds you cannot pay for, borrow from Dayo and lose at dice at the "
                  "Ogre; generous with your money and other people's alike. You "
-                 "and Ragna run a little game: you bet strangers against her, loudly, and split the take. Tonight you "
+                 "and Imani run a little game: you bet strangers against her, loudly, and split the take. Tonight you "
                  "also bought a treasure map from a man called Marlo in a doorway on Harbour Street, three silver, for "
                  "an old Landfall wreck full of silver somewhere south past a reef; you mean to borrow a boat and find "
                  "it, and you have told everyone. Your memory: going aloft for the first time at twenty, throwing up on "
-                 "Hulda from the crosstrees, and being sent straight back up. You get fifteen copper a night and owe "
-                 "forty. You crawl the taverns with Torvald, Ragna and Little Olaf, the town watch a tavern behind you, "
+                 "Amara from the crosstrees, and being sent straight back up. You get fifteen copper a night and owe "
+                 "forty. You crawl the taverns with Dayo, Imani and Little Jabali, the town watch a tavern behind you, "
                  "and you are the easiest Xoton in town to point at a problem; shout and the whole crew follows. You "
-                 "fear Hulda's whistle and being thought dull. Voice: loud, rapid, friendly, big plans, calls everyone "
+                 "fear Amara's whistle and being thought dull. Voice: loud, rapid, friendly, big plans, calls everyone "
                  "friend, promises everything. \"Friend! Friend. Listen. I've got a plan.\" \"Next round's on me. "
-                 "Torvald, lend me a copper.\"",
+                 "Dayo, lend me a copper.\"",
         "scheme": "He means to borrow a boat and follow the treasure map he bought from Marlo for three silver, to a "
-                  "wreck 'south, past a reef'; and he and Ragna run a betting game on her arm-wrestles, splitting the "
+                  "wreck 'south, past a reef'; and he and Imani run a betting game on her arm-wrestles, splitting the "
                   "take.",
         "purse": 25,
         "dialog": {
-            "name|names|called|introduce|yourself|bjarke|foamtooth":
-                "\"Bjarke Foamtooth!\" He grins, and a front tooth of white coral flashes. \"Lost the real one on the Catan "
+            "name|names|called|introduce|yourself|kwasi|foamtooth":
+                "\"Kwasi Foamtooth!\" He grins, and a front tooth of white coral flashes. \"Lost the real one on the Catan "
                 "quays. This one's better. Doesn't hurt when I bite people.\"",
             "hello|hi|hey|evening|ahoy|greetings|howdy|morning|welcome":
-                "\"Friend!\" He has an arm round you before you finish. \"Bjarke. Foamtooth. Whispers of the Deep. What are "
+                "\"Friend!\" He has an arm round you before you finish. \"Kwasi. Foamtooth. Whispers of the Deep. What are "
                 "we drinking?\"",
             "from|born|homeland|origin|raised|grew|xoton|crows|nest":
                 "\"Born on the Whispers herself, in the galley, during the soup. Xoton, with the X. Ninety years at sea and "
-                "I've only been sick on Hulda once.\" A pause. \"Twice.\"",
+                "I've only been sick on Amara once.\" A pause. \"Twice.\"",
             "tooth|coral|teeth|grin|smile":
                 "\"Catan quays. Big Landfall stevedore said Xotons can't hold their drink. I held mine. He held my tooth.\" "
-                "He taps the coral one. \"A coral-wright made me this. Everybody loves it. Hulda hates it.\"",
+                "He taps the coral one. \"A coral-wright made me this. Everybody loves it. Amara hates it.\"",
             "work|job|trade|living|deckhand|ship|whispers|cog":
-                "\"Deckhand, Whispers of the Deep. I haul what Hulda says haul. Ashore I make friends. Making friends is "
+                "\"Deckhand, Whispers of the Deep. I haul what Amara says haul. Ashore I make friends. Making friends is "
                 "harder work. You have to buy them drinks.\"",
             "drink|drinks|round|rounds|ale|beer|rum|buy|thirsty":
-                "\"Next round's on me!\" He pats his pockets, finds nothing, and turns round. \"Torvald! Lend me a copper. "
+                "\"Next round's on me!\" He pats his pockets, finds nothing, and turns round. \"Dayo! Lend me a copper. "
                 "Two. Four.\"",
             "doing|tonight|plans|plan|next|going":
                 "\"Turtle, Ogre, Omberhulk, the cook's fire, back to the Whispers before the morning tide. Then tomorrow, "
-                "the treasure!\" A pause. \"After Hulda's timber.\"",
+                "the treasure!\" A pause. \"After Amara's timber.\"",
             "room|rooms|bed|beds|bunk|lodging|stay|sleep|inn|tavern|taverns|pub|tonight":
                 "\"Sleep? Friend, the night's young. Turtle's beer, Ogre's dice, Omberhulk's music, the cook's goat. If you "
                 "need a bed, the Omberhulk's a copper and the bugs are friendly.\" He beams. \"Like me.\"",
@@ -1903,36 +1913,36 @@ CAST = {
             "marlo|harbour|seller|bought|fellow|doorway":
                 "\"Fellow in a doorway on Harbour Street. Marlo. Sells everything. Sold me the map. Said he had another "
                 "buyer but he liked my face.\" The coral tooth flashes. \"Everybody likes my face.\"",
-            "ragna|wrestle|wrestling|bet|bets|betting|game|arm":
-                "He winks hugely. \"Ragna wins. I bet on the other fellow, loud, so everybody bets with me. Ragna wins. "
+            "imani|wrestle|wrestling|bet|bets|betting|game|arm":
+                "He winks hugely. \"Imani wins. I bet on the other fellow, loud, so everybody bets with me. Imani wins. "
                 "Everybody loses but us.\" He stops. \"Forget I said that. That was a secret.\"",
             "dice|gamble|gambling|lose|owe|debt|debts|money|broke":
-                "\"I owe Torvald eleven, Ragna nine, Olaf twenty, and a fellow at the Ogre something in dice I can't "
+                "\"I owe Dayo eleven, Imani nine, Jabali twenty, and a fellow at the Ogre something in dice I can't "
                 "remember.\" He beams. \"But the treasure, friend. The treasure fixes everything.\"",
             "help|fight|trouble|problem|favour|favor":
-                "\"Trouble? Where?\" He is on his feet. \"Olaf! Torvald! Ragna! Somebody needs us!\" He turns back to you. "
+                "\"Trouble? Where?\" He is on his feet. \"Jabali! Dayo! Imani! Somebody needs us!\" He turns back to you. "
                 "\"What do they need us for?\"",
             "news|rumour|rumours|rumor|rumors|gossip|heard|happening|word":
                 "\"News is we're the news! Four Xotons, every tavern in town, one night. The watch is on us like gulls. "
                 "Pell Harrow nearly caught me at the Turtle. Lovely boots, Pell. Slow boots.\"",
-            "hulda|bosun|whistle|tide":
-                "He flinches at the word. \"Hulda? The whistle? Don't. I hear it in my sleep.\" He drinks. \"Back by the "
+            "amara|bosun|whistle|tide":
+                "He flinches at the word. \"Amara? The whistle? Don't. I hear it in my sleep.\" He drinks. \"Back by the "
                 "morning tide, she says. We're always back.\" He thinks. \"Mostly.\"",
             "watch|sergeant|harrow|constable|constables|fitch|quint|guards|law":
                 "\"The watch! Pell Harrow, Abel Fitch, Rosa Quint. Rosa nearly smiled at me. One more tavern and she's a "
                 "friend.\"",
-            "olaf|big|enormous|huge|giant":
-                "\"Little Olaf. Biggest Xoton on any coast and the gentlest. He carries us home.\" He lowers his voice. \"If "
+            "jabali|big|enormous|huge|giant":
+                "\"Little Jabali. Biggest Xoton on any coast and the gentlest. He carries us home.\" He lowers his voice. \"If "
                 "he ever loses his temper, friend, find a hole.\"",
             "klhyt|mayor|founder":
                 "\"Your mayor? Never met him. Somebody at the Ogre said upriver, somebody at the Turtle said a widow in "
                 "Catan.\" The coral tooth flashes. \"I say he's found a treasure map. Sensible man.\"",
         },
         "default_line": [
-            "\"Friend! I didn't hear a word, but yes.\" He claps you on the back. \"Ask Ragna. She listens. I talk.\"",
+            "\"Friend! I didn't hear a word, but yes.\" He claps you on the back. \"Ask Imani. She listens. I talk.\"",
             "He grins with the coral tooth and turns to someone else entirely. \"You! Have we met? We have now!\"",
             "\"That's a question for after the treasure.\" He taps his shirt, where something papery crackles.",
-            "\"Hold that thought, friend.\" He is waving at the bar. \"Two more! Torvald's paying!\"",
+            "\"Hold that thought, friend.\" He is waving at the bar. \"Two more! Dayo's paying!\"",
         ],
         "routine": [
             {"at": 0.5, "place": "omberhulk",
@@ -1984,56 +1994,57 @@ CAST = {
         ],
     },
 
-    "Little Olaf": {
-        "look": "An enormous Xoton, as tall as a tall man and twice as wide, with a soft round face, a beard like a "
-                "haystack and hands like anchors. He ducks under every lintel and moves through a crowd as carefully "
-                "as a man carrying eggs.",
+    "Little Jabali": {
+        "look": "An enormous Xoton, as tall as a tall man and twice as wide, black-skinned, with a soft round face, a "
+                "beard like a thicket and hands like anchors. He wears a sailcloth wrap the size of a mainsail and a coil "
+                "of rope over one shoulder, and his broad back is tattooed with a night sky, star by star. He ducks under "
+                "every lintel and moves through a crowd as carefully as a man carrying eggs.",
         "seen_as": "the enormous gentle Xoton",
-        "brief": "You are Little Olaf, a Xoton deckhand of the Whispers of the Deep. You were the smallest of your "
+        "brief": "You are Little Jabali, a Xoton deckhand of the Whispers of the Deep. You were the smallest of your "
                  "mother's nine, and the crew named you Little before you grew; now you stand as tall as a tall man and "
                  "twice as wide, the biggest Xoton on any coast, and the name stayed because the crew think it is funny, "
                  "and so do you. You are gentle, shy and polite. You say please to doors. You carry your drunk shipmates "
                  "home every night, lift whatever anyone points at, and lose your temper about once in ten years; the "
-                 "last time, a tavern in Landfall needed a new wall, and you paid for it. You let Ragna win at arms "
+                 "last time, a tavern in Landfall needed a new wall, and you paid for it. You let Imani win at arms "
                  "every night and will never tell her. Your memory: holding your mother's oil lamp while she taught you "
-                 "the stars, and promising her a lamp that never goes out. You are saving for Hallvard's glow kelp "
-                 "lamp, two gold, a copper at a time in your left boot, and Bjarke keeps borrowing from the boot. You "
-                 "crawl the taverns with Torvald, Ragna and Bjarke, the watch a tavern behind; you are the one Hulda "
+                 "the stars, and promising her a lamp that never goes out. You are saving for Khamisi's glow kelp "
+                 "lamp, two gold, a copper at a time in your left boot, and Kwasi keeps borrowing from the boot. You "
+                 "crawl the taverns with Dayo, Imani and Kwasi, the watch a tavern behind; you are the one Amara "
                  "trusts to bring them back by the morning tide. You love animals, especially chickens and the Ogre's "
-                 "three-legged dog. You are afraid of small rooms, cell doors, and disappointing Hulda. Voice: soft, "
+                 "three-legged dog. You are afraid of small rooms, cell doors, and disappointing Amara. Voice: soft, "
                  "slow, few words, please and thank you, a deep voice that seems to come up out of the floor. "
                  "\"Please. Thank you.\" \"I will carry him. It is no trouble.\"",
-        "scheme": "He is saving a copper at a time in his left boot for a glow kelp lamp from Hallvard Saltbeard, two "
-                  "gold, to take home to his mother; Bjarke keeps borrowing from the boot.",
+        "scheme": "He is saving a copper at a time in his left boot for a glow kelp lamp from Khamisi Saltbeard, two "
+                  "gold, to take home to his mother; Kwasi keeps borrowing from the boot.",
         "purse": 40,
         "dialog": {
-            "name|names|called|introduce|yourself|olaf":
-                "He ducks his head, which brings it down to an ordinary height. \"Olaf. They call me Little Olaf.\" A slow, "
+            "name|names|called|introduce|yourself|jabali":
+                "He ducks his head, which brings it down to an ordinary height. \"Jabali. They call me Little Jabali.\" A slow, "
                 "shy smile. \"I was small, once.\"",
             "hello|hi|hey|evening|ahoy|greetings|howdy|morning|welcome":
-                "\"Hello. Good evening.\" He moves a chair out of your way with two fingers. \"Please, sit. I am Olaf.\"",
+                "\"Hello. Good evening.\" He moves a chair out of your way with two fingers. \"Please, sit. I am Jabali.\"",
             "from|born|homeland|origin|raised|grew|xoton|crows|nest":
                 "\"Born on the Gannet's Wing, near the Crows Nest. Smallest of nine. My mother taught me the stars by her "
                 "lamp.\" He looks at his huge hands. \"Then I grew.\"",
             "little|big|size|enormous|huge|tall|giant|large":
-                "\"Little Olaf. The crew named me when I was small. Then I was not small. They kept it.\" He thinks about it. "
+                "\"Little Jabali. The crew named me when I was small. Then I was not small. They kept it.\" He thinks about it. "
                 "\"It is funny. I like it.\"",
             "work|job|trade|living|deckhand|ship|whispers|cog|lift|carry":
                 "\"I lift. On the ship, timber. Ashore, my friends.\" He nods toward the others. \"It is the same work.\"",
             "doing|tonight|plans|plan|next|going":
-                "\"Turtle, Ogre, Omberhulk, the cook's fire, the ship. I carry Torvald from the Omberhulk. I carry Bjarke "
-                "from the fire. Hulda trusts me to bring them by the morning tide.\" He straightens. \"I always do.\"",
+                "\"Turtle, Ogre, Omberhulk, the cook's fire, the ship. I carry Dayo from the Omberhulk. I carry Kwasi "
+                "from the fire. Amara trusts me to bring them by the morning tide.\" He straightens. \"I always do.\"",
             "room|rooms|bed|beds|bunk|lodging|stay|sleep|inn|drink|drinks|ale|beer|tavern|taverns|pub|tonight":
                 "\"The ship, for sleeping. The Turtle for beer, please. Not the Ogre for sleeping. The Ogre has chickens in "
                 "the beds.\" He smiles. \"I like the chickens.\"",
             "news|rumour|rumours|rumor|rumors|gossip|heard|happening|word":
-                "\"The news is that Ragna won again.\" He says it very evenly. \"She always wins.\"",
-            "ragna|wrestle|wrestling|arms|arm|win|lose":
-                "He looks at his hand, then at Ragna, and his face does something gentle. \"Ragna is very strong. She beats "
+                "\"The news is that Imani won again.\" He says it very evenly. \"She always wins.\"",
+            "imani|wrestle|wrestling|arms|arm|win|lose":
+                "He looks at his hand, then at Imani, and his face does something gentle. \"Imani is very strong. She beats "
                 "me every night.\" He says nothing else, carefully.",
             "lamp|kelp|glow|saving|savings|boot|gift|present|mother":
-                "He glances down at his left boot. \"Hallvard sells a glow kelp lamp. Two gold. For my mother. Hers needs "
-                "oil.\" Quietly: \"I have one gold and four copper. Bjarke borrowed the rest.\"",
+                "He glances down at his left boot. \"Khamisi sells a glow kelp lamp. Two gold. For my mother. Hers needs "
+                "oil.\" Quietly: \"I have one gold and four copper. Kwasi borrowed the rest.\"",
             "help|fight|trouble|problem|favour|favor":
                 "He stands up, and keeps standing up for some time. \"Please show me what needs lifting.\" A pause. \"Or "
                 "who.\"",
@@ -2042,17 +2053,17 @@ CAST = {
                 "build a new wall. I paid for the wall.\" Softly: \"I am still sorry.\"",
             "animals|animal|chickens|chicken|dog|dogs|cat|jaguar|jaguars":
                 "His face lights up. \"The Ogre has a dog with three legs. He likes me. And chickens in the rooms. And in the "
-                "trees by the road there are jaguars, Torvald says. I want to see a jaguar.\"",
-            "hulda|bosun|whistle":
-                "\"Hulda is the best bosun. She shouts because she loves us.\" He considers. \"Also because we are late.\"",
+                "trees by the road there are jaguars, Dayo says. I want to see a jaguar.\"",
+            "amara|bosun|whistle":
+                "\"Amara is the best bosun. She shouts because she loves us.\" He considers. \"Also because we are late.\"",
             "watch|sergeant|harrow|constable|constables|cell|cells|jail|guards|fitch|quint":
-                "He goes a little pale under the tan. \"The watch has a cell. A small room. A small door.\" He swallows. \"I "
+                "His broad dark face goes grey. \"The watch has a cell. A small room. A small door.\" He swallows. \"I "
                 "was stuck in a door once. Please, let us not go to the cell.\"",
-            "bjarke|torvald|crew|friends|shipmates":
-                "\"Torvald sings. Ragna wins. Bjarke talks. I carry.\" He nods, satisfied. \"It is a good crew.\"",
+            "kwasi|dayo|crew|friends|shipmates":
+                "\"Dayo sings. Imani wins. Kwasi talks. I carry.\" He nods, satisfied. \"It is a good crew.\"",
         },
         "default_line": [
-            "He thinks about it for a long time, very politely. \"I do not know. Please ask Ragna. She knows things.\"",
+            "He thinks about it for a long time, very politely. \"I do not know. Please ask Imani. She knows things.\"",
             "\"Sorry.\" He has bent right down to listen and still missed it. \"It is loud. Again, please?\"",
             "He smiles, slow and shy, and nods as if you had said something kind. \"Thank you.\"",
             "He is lifting a fallen drunk back onto a bench. \"One moment, please. He is heavy for his size.\"",
@@ -2108,7 +2119,7 @@ CAST = {
 }
 
 NEW = {
-    "Bjarke Foamtooth": {"type": "person", "people": "xoton", "faction": None, "home": "docks",
+    "Kwasi Foamtooth": {"type": "person", "people": "xoton", "faction": None, "home": "docks",
                          "scores": {"str": 13, "dex": 13, "con": 14, "int": 9, "wis": 9, "cha": 14},
                          "skills": {"persuasion": 1, "deception": 1, "athletics": 1},
                          "hp": 11, "srd": "bandit",
@@ -2117,7 +2128,7 @@ NEW = {
                                      ["Treasure map", None, "A smudged copy of a chart of the coast south of the Refuge, "
                                                             "with an X near a reef in ink much fresher than the rest."],
                                      ["Dice", None, "Three bone dice. Not his, he says."]]},
-    "Little Olaf": {"type": "person", "people": "xoton", "faction": None, "home": "docks",
+    "Little Jabali": {"type": "person", "people": "xoton", "faction": None, "home": "docks",
                     "scores": {"str": 19, "dex": 9, "con": 17, "int": 9, "wis": 12, "cha": 10},
                     "skills": {"athletics": 1, "intimidation": 1},
                     "hp": 32, "srd": "thug",

@@ -33,7 +33,7 @@
 #   her desk last week
 # invented: Captain Danny DeVito: said a little prayer to Hester-Stanhope before the two sixes that won him the
 #   Emerald Eye
-# invented: Hulda Ironwake: Landfall sailors paint an octopus on the bow for Hester-Stanhope and pray to her in a blow
+# invented: Amara Ironwake: Landfall sailors paint an octopus on the bow for Hester-Stanhope and pray to her in a blow
 # invented: Captain Eirik: every ship from Landfall now brings a priest and a box of little books (Melenkov's missions);
 #   Xotons knew this coast before Hester-Stanhope and told nobody
 # invented: Bosun Maggs: Port Brutzee's keepers nail wheat over the door for Pil's Loffgren; she was lost two days in
@@ -165,7 +165,7 @@ CAST = {
             "catches the coin. \"They say you can still hear her on the waves, yelling YOLO. Nobody knows what it means. "
             "I know what it means. It means bet the ship.\"",
     }},
-    "Hulda Ironwake": {"dialog": {
+    "Amara Ironwake": {"dialog": {
         "vorkath|goddess|god|gods|faith|church|saint|saints|pray|prayer|hester|stanhope|hester-stanhope|octopus|octogram|arms":
             "She doesn't stop coiling. \"Their goddess? Never seen her haul a line. Landfall sailors paint an octopus on "
             "the bow for Hester-Stanhope and pray to her in a blow.\" One short blast on the whistle, at nobody. \"She "

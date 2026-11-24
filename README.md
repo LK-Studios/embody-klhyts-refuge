@@ -18,8 +18,9 @@ The game here is everything on top of that:
 - **The place.** Klhyts Refuge, the nicest town on the continent: six taverns, the inns, the docks and the ships in
   harbour, laid out as a map, with prices, rooms, baths and passage for sale.
 - **The people.** Fat Gog's guild, under threat from Dominico; the Custodian, running the town while its founder Klhyt
-  is missing; refugees from Landfall, Lizardfolk who are tolerated, elves in exile, Xoton sailors. Each has what they
-  know, what they will say, and what they want.
+  is missing; refugees from Landfall, Lizardfolk who are tolerated, elves in exile, Xoton sailors off three ships,
+  each its own tribe (a Merchant House's cog, an envoy's ten-master, the Navy's frigate). Each has what they know, what
+  they will say, and what they want.
 - **The rules.** The world's own verbs (buy, drink, eat, bathe, throw, free, and mingle or hail in a crowd), guards who
   answer what they are given or shown when nobody plays them, an elf ship that takes only elves and those an elf
   vouches for, and finds that answer a good check, all on top of the engine's d20 rules pack. Hired help is the only

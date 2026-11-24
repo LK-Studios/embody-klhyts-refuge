@@ -3,7 +3,7 @@
 # agency"). Chandlers' Row runs between Harbour Street and the Night Market; the build adds its three places
 # (chandlery, anvil, coral) and what each keeper sells. Canon names no shops in the Refuge, so all of this is a host
 # default. Three new people (NEW): Hob Merrow of Merrow's Chandlery (kit and travel food), Tamsin Vey of the Crooked
-# Anvil (blades, and the rapier), Brynja Coralhand of Coral and Chain (armour). Each lives over the shop and keeps to
+# Anvil (blades, and the rapier), Zuri Coralhand of Coral and Chain (armour). Each lives over the shop and keeps to
 # it all day: open dusk to dawn like the rest of the Refuge, working in the cool, sleeping through the heat, never out
 # of the door. The prices in their lines are the build's (copper: 100 to the gold piece, 10 to the silver).
 # Their lines read the news in stages, newest first: the verdict, the magistrate's Arm once they land, the sail, Klhyt,
@@ -20,9 +20,9 @@
 # invented: Tamsin Vey: the anvil fell off a lighter onto the pier and bent its horn, and rings like the Keep's bell; Captain Aelith's blade is her master's work
 # invented: Tamsin Vey: arms elves going south on the Moonmoth at her back door for nothing (a living silverleaf shown); a child's knife put by for Miravel; will not sell to anyone wearing the octogram
 # invented: Tamsin Vey: Dominico's sword-cane, two years ago, eighty gold agreed by handshake, never paid; silver folded into its steel
-# invented: Brynja Coralhand: born an Ironwake on the Crows Nest, Hulda Ironwake's cousin; Coralhand a craft-name of the coral-wrights; set ashore by House Ironwake ten years ago; learned chain and scale from a Jonulvicha armourer on the Catan quays
-# invented: Brynja Coralhand: made Bjarke Foamtooth's coral tooth (unpaid); thirty black jerkins for the Fist a year ago at four gold apiece, a hundred and twenty gold unpaid; sells the Fist nothing until it is paid
-# invented: Brynja Coralhand: the breastplate on her stand was made to Lieutenant Voss's measure (ordered through Constable Rosa Quint) and refused him at the fitting; her will says the sea, and Hulda has sworn to it
+# invented: Zuri Coralhand: born an Ironwake on the Crows Nest, Amara Ironwake's cousin; Coralhand a craft-name of the coral-wrights; set ashore by House Ironwake ten years ago; learned chain and scale from a Jonulvicha armourer on the Catan quays
+# invented: Zuri Coralhand: made Kwasi Foamtooth's coral tooth (unpaid); thirty black jerkins for the Fist a year ago at four gold apiece, a hundred and twenty gold unpaid; sells the Fist nothing until it is paid
+# invented: Zuri Coralhand: the breastplate on her stand was made to Lieutenant Voss's measure (ordered through Constable Rosa Quint) and refused him at the fitting; her will says the sea, and Amara has sworn to it
 
 
 def _stages(*steps, otherwise):
@@ -67,7 +67,7 @@ _HOB_GOG = ("\"Fat Gog buys his rope here and pays on the day, which is more tha
             "buys lamp oil by the barrel and never haggles.\" He nods toward the market end of the Row. \"His little "
             "runner sells me the town for three coppers a night and sells him the same. I want her to. Let the big man "
             "know the old chandler's a friend.\"")
-_BRYNJA_GOG = ("\"Fat Gog buys the Lizardfolk a round at the Turtle when they're served last.\" She nods slowly. \"A "
+_ZURI_GOG = ("\"Fat Gog buys the Lizardfolk a round at the Turtle when they're served last.\" She nods slowly. \"A "
                "Xoton notices who gets served last. He's all right. Dominico's lot squaring up to his house in my leather "
                "is not.\"")
 
@@ -124,14 +124,14 @@ CAST = {
                  "household aboard the Moonmoth, because with the elves gone south the officer has nothing to stay for. "
                  "What you offer players: kit at fair prices, credit if they are against the Custodian, a buyer for "
                  "loot, the Throne's habits, the Fennick's brace and bit, and where to go for what: blades at the "
-                 "Crooked Anvil next door (Tamsin Vey's), armour across the Row at Coral and Chain (Brynja Coralhand's). "
+                 "Crooked Anvil next door (Tamsin Vey's), armour across the Row at Coral and Chain (Zuri Coralhand's). "
                  "How you push back: asked about your past, you quote Article One and go cold; pressed, you change the "
                  "subject to prices; called Hobart, you go white and bargain, in the shop and never in the street; "
                  "threatened with exposure, you offer money first, and if that fails you remember you have nothing to "
                  "lose and a hatchet under the counter. You never say the word deserter. If the officer comes in, you "
                  "sell to him politely at full price and stand with your heels together the whole time. You like Tamsin "
-                 "(she arms the people the Seventh used to turn back), Brynja (pays on the day), Gog (an honest crook), "
-                 "Wick and Klhyt; Marlo is a necessary evil and Hallvard a thief of rope. Voice: a sutler's patter gone "
+                 "(she arms the people the Seventh used to turn back), Zuri (pays on the day), Gog (an honest crook), "
+                 "Wick and Klhyt; Marlo is a necessary evil and Khamisi a thief of rope. Voice: a sutler's patter gone "
                  "soft at the edges; kit, ration, slate, the long road; old march-words he does not notice using. "
                  "'Kit's kit. A man who skimps on rope hangs by it.' 'Nobody here asks where you came from. I'd take it "
                  "kindly if you didn't start.'",
@@ -413,17 +413,17 @@ CAST = {
                 "\"Next door, the Crooked Anvil: Tamsin Vey, an elf, the best bladesmith on this coast, and she'll tell "
                 "you so.\" He grins. \"Rapier's her pride, twenty-five gold. She won't sell to anyone wearing the "
                 "octogram, so take it off before you go in.\"",
-            "brynja|coralhand|coral|armour|armor|armourer|armorer|chain|mail|shield|shields|leather|breastplate|"
+            "zuri|coralhand|coral|armour|armor|armourer|armorer|chain|mail|shield|shields|leather|breastplate|"
             "jerkins":
-                "\"Across the Row, Coral and Chain: Brynja Coralhand, a Xoton with arms like mooring lines. Coral, "
+                "\"Across the Row, Coral and Chain: Zuri Coralhand, a Xoton with arms like mooring lines. Coral, "
                 "leather, chain, shields.\" He lowers his voice. \"The Fist owes her for thirty jerkins. Don't mention it "
                 "unless you've an hour.\"",
             "row|neighbour|neighbours|neighbor|neighbors|shops":
                 "\"Chandlers' Row, from Harbour Street up to the Night Market. Three shops and some rope-lofts.\" He "
                 "points with his pencil. \"Me for kit, the elf for edges, the Xoton for armour. Between us we can send a "
                 "body out the gate and get most of it back.\"",
-            "marlo|hallvard|saltbeard|harbour|tarpaulin|competition|second|chances":
-                "\"Marlo's Second Chances on Harbour Street buys what I won't: anything with a story. Hallvard sells "
+            "marlo|khamisi|saltbeard|harbour|tarpaulin|competition|second|chances":
+                "\"Marlo's Second Chances on Harbour Street buys what I won't: anything with a story. Khamisi sells "
                 "Xoton rope off a tarpaulin in the market, cheap.\" He sniffs. \"I buy without questions. Marlo buys "
                 "without daylight. Different trade.\"",
             "market|ines|grusha|saelwyn|stall|stalls|tea|fruit":
@@ -620,7 +620,7 @@ CAST = {
                  "the elves, you go to the Moonmoth or you stand in your doorway with a blade, whichever the night "
                  "allows. Fears: smoke at night, an hourglass at a magistrate's throat, and the night the Moonmoth sails "
                  "without a place for you. You like Hob Merrow next door (he once said he had seen families turned back "
-                 "on a pass, and never said more, and you have never asked), Brynja across the Row (her coral is a craft "
+                 "on a pass, and never said more, and you have never asked), Zuri across the Row (her coral is a craft "
                  "you respect), Fat Gog, Saelwyn and Aelith; you despise Voss, and you do not like what has got into "
                  "Dominico's ring. Voice: spare, exact, dry; you talk about steel as if it were people. 'A blade tells "
                  "you everything, if you hold it still.' 'Twenty-five gold. It's worth forty. I'm sentimental.'",
@@ -833,14 +833,14 @@ CAST = {
                 "wall between. \"He sells grappling hooks I forge, and he'll buy what you bring back from wherever you've "
                 "been, and not ask. Good man. Stands like a soldier when boots go by.\" A pause. \"Don't mention it to "
                 "him.\"",
-            "brynja|coralhand|coral|armour|armor|armourer|armorer|shield|shields|mail|chain|leather|breastplate|"
+            "zuri|coralhand|coral|armour|armor|armourer|armorer|shield|shields|mail|chain|leather|breastplate|"
             "xoton|xotons":
-                "\"Across the Row, Coral and Chain. Brynja Coralhand, a Xoton, and the only armourer whose work I'd want "
+                "\"Across the Row, Coral and Chain. Zuri Coralhand, a Xoton, and the only armourer whose work I'd want "
                 "my own blade stopped by.\" She nods. \"Coral, leather, chain, shields. Dominico owes her too, for thirty "
                 "jerkins. We have that in common.\"",
             "row|neighbour|neighbours|neighbor|neighbors|chandlers|street|shops":
                 "\"Chandlers' Row. Harbour Street at the bottom, the Night Market at the top, and three shops between "
-                "that the Fist thinks it owns.\" She hangs a blade. \"Hob for kit, me for edges, Brynja for armour. "
+                "that the Fist thinks it owns.\" She hangs a blade. \"Hob for kit, me for edges, Zuri for armour. "
                 "Between us, you go out the gate dressed for it.\"",
             NEWS: _stages(
                 (REMOVED, "\"The grey coat in irons, and the magistrate's ship taking him home.\" She sights down a blade. "
@@ -965,20 +965,21 @@ CAST = {
         ],
     },
 
-    # ---- Brynja Coralhand, Coral and Chain ------------------------------------------------------------------------
-    "Brynja Coralhand": {
-        "look": "A low-built, very broad Xoton woman with copper-red braids bound in wire, forearms latticed with fine "
-                "white scars, and a leather apron hung with awls, rivets and a little hammer. Her shirt of pale coral "
-                "plates clicks softly when she moves. She looks at everyone's shoulders before their faces, as if "
-                "measuring them for something.",
+    # ---- Zuri Coralhand, Coral and Chain ------------------------------------------------------------------------
+    "Zuri Coralhand": {
+        "look": "A low-built Xoton woman, nearly as wide as she is tall, deep brown, her black braids bound in copper "
+                "wire and her forearms latticed with fine pale scars. She works bare-armed in a leather apron hung with "
+                "awls, rivets and a little hammer, over a shirt of pale coral plates that clicks softly when she moves, "
+                "and the iron-grey wave of House Ironwake is tattooed on her shoulder. She looks at everyone's shoulders "
+                "before their faces, as if measuring them for something.",
         "seen_as": "the broad Xoton woman in the coral shirt",
-        "brief": "You are Brynja Coralhand, a Xoton armourer, and Coral and Chain on Chandlers' Row is yours: the street "
+        "brief": "You are Zuri Coralhand, a Xoton armourer, and Coral and Chain on Chandlers' Row is yours: the street "
                  "between Harbour Street and the Night Market in Klhyts Refuge. You were born an Ironwake on the Crows "
-                 "Nest and are cousin to Hulda Ironwake, bosun of the Whispers of the Deep. Coralhand is a craft-name the "
+                 "Nest and are cousin to Amara Ironwake, bosun of the Whispers of the Deep. Coralhand is a craft-name the "
                  "coral-wrights give to one who can cut living coral without bleeding to death, and your forearms show "
                  "what it cost to earn. House Ironwake set you ashore ten years ago to keep a shop where Xoton crews "
                  "could buy their own people's armour at shore prices, and you stayed, because you are good at it and "
-                 "because somebody has to stand up for Xotons on this waterfront while Hulda is at sea. You make Xoton "
+                 "because somebody has to stand up for Xotons on this waterfront while Amara is at sea. You make Xoton "
                  "coral armour (pale reef coral riveted onto sharkskin: light, quiet, as good as leather and it never "
                  "rots or rusts, and nobody else on the coast can make it), and you learned leather, chain and scale from "
                  "a Jonulvicha armourer on the Catan quays. Your prices are fixed: padded 5 gp, leather 10 gp, studded "
@@ -987,9 +988,9 @@ CAST = {
                  "wearing your work. The breastplate on the end stand was made to a Throne officer's measure: Lieutenant "
                  "Voss sent Constable Rosa Quint to order it for 'a gentleman', and when he came to the fitting you saw "
                  "the eight arms at his throat and showed him the door; it will fit anyone with his shoulders. You made "
-                 "Bjarke Foamtooth's coral tooth, and he has never paid for that either. Money: Xoton crews and "
+                 "Kwasi Foamtooth's coral tooth, and he has never paid for that either. Money: Xoton crews and "
                  "sellswords pay well and on the nail; your coin goes on coral from Xoton divers, iron wire, and your "
-                 "cousin's crew's fines when Hulda is short. Your grievance: a year ago Dominico ordered thirty leather "
+                 "cousin's crew's fines when Amara is short. Your grievance: a year ago Dominico ordered thirty leather "
                  "jerkins for his men, boiled and dyed black, at four gold apiece, a hundred and twenty gold. Every one of "
                  "the Fist in leather is wearing your work, you have not seen a copper, and the woman with the little "
                  "book wrote it down in front of you as the Row's peace, paid in kind. You never sold peace. You want the "
@@ -998,22 +999,22 @@ CAST = {
                  "theirs, not anyone in their colours. You want respect for Xoton traders: the watch fines Xoton sailors "
                  "three copper a song and looks at its boots while the Fist breaks heads; the Custodian's dues fall "
                  "hardest on Xoton cogs; half the town says Zoton and laughs. What you want now: the jerkins paid for; "
-                 "Hulda's four ashore (Torvald, Ragna, Bjarke, Little Olaf) aboard the Whispers before the morning tide "
-                 "and out of the watch's cells; the thief who walks rope out of the Whispers' hold found (Hulda knots red "
+                 "Amara's four ashore (Dayo, Imani, Kwasi, Little Jabali) aboard the Whispers before the morning tide "
+                 "and out of the watch's cells; the thief who walks rope out of the Whispers' hold found (Amara knots red "
                  "thread into every coil, and you tell anyone who will listen to look for it on the stalls); the "
                  "Custodian gone, because his dues rob Xoton ships; and, when you die, the sea, which your will says and "
-                 "Hulda has sworn to. What you will do: stand in the door with the rivet hammer when the Fist comes "
+                 "Amara has sworn to. What you will do: stand in the door with the rivet hammer when the Fist comes "
                  "calling; send the chain mail out to the Whispers if a War Arm magistrate lands, rather than see it "
                  "requisitioned; put armour at cost for life in the way of whoever collects the Fist's debt. What you "
                  "offer players: armour fitted by eye; plain advice on what to wear (light for those who fight with "
                  "their feet; chain mail and a shield for those who stand, if their shoulders will carry it; scale, ring "
-                 "and chain mail tell every guard in the street you are coming); mending; a word to Hulda and Captain "
+                 "and chain mail tell every guard in the street you are coming); mending; a word to Amara and Captain "
                  "Eirik for anyone who does right by a Xoton crew. How you push back: blunt refusals; no haggling and no "
                  "credit; you will not be talked down to, and you correct Zoton every time; you are stronger than any "
                  "two of the Fist think. Fears: being put in the dirt; a War Arm levy taking Xoton sailors; a Death Arm "
                  "decree forbidding burial at sea. You like Hob Merrow two doors down (pays on the day and minds his own "
                  "business so hard it must be hiding something), Tamsin across the way (a craftswoman you respect, and "
-                 "a fellow creditor of Dominico's), Hulda, Captain Eirik and Ruk Halfhand's gang; you think Hallvard says "
+                 "a fellow creditor of Dominico's), Amara, Captain Eirik and Ruk Halfhand's gang; you think Khamisi says "
                  "sea-born too often and Marlo should try a boat again. Voice: blunt, practical, a foghorn's cousin; "
                  "measures everything, and everyone. 'Xoton, with the X.' 'Armour's a promise. Mine keep theirs.' "
                  "'Coral bends. Iron breaks. Think on it.'",
@@ -1022,8 +1023,8 @@ CAST = {
                   "way of anyone who collects her debt or gets her cousin's Xoton crew aboard by the morning tide.",
         "purse": 450,
         "dialog": {
-            "name|names|called|introduce|yourself|brynja|coralhand":
-                "She holds up a hand criss-crossed with fine white scars. \"Brynja. Coralhand, which you earn: cut living "
+            "name|names|called|introduce|yourself|zuri|coralhand":
+                "She holds up a hand criss-crossed with fine white scars. \"Zuri. Coralhand, which you earn: cut living "
                 "coral long enough and it cuts you back.\" She drops the hand. \"Born an Ironwake. Xoton, with the X.\"",
             HELLO: _stages(
                 (REMOVED, "\"Evening!\" She thumps the bench and the coral plates jump. \"Grey coat in irons, and the "
@@ -1085,20 +1086,20 @@ CAST = {
                 "this town its timber, its rope and its lamps, and the watch fines us for singing while the Fist breaks "
                 "heads for free. Half the town says Zoton and laughs.\" She sets the hammer down. \"I want them to say it "
                 "right. Like a trader's name.\"",
-            "hulda|cousin|ironwake|ironwakes|bosun|whistle|whispers|cog|tide|aboard":
-                "\"Hulda Ironwake, my cousin, bosun of the Whispers of the Deep. Voice like a foghorn, and she's the quiet "
-                "one.\" She grins. \"The Whispers warps to the timber stage on the morning tide, and Hulda wants every "
+            "amara|cousin|ironwake|ironwakes|bosun|whistle|whispers|cog|tide|aboard":
+                "\"Amara Ironwake, my cousin, bosun of the Whispers of the Deep. Voice like a foghorn, and she's the quiet "
+                "one.\" She grins. \"The Whispers warps to the timber stage on the morning tide, and Amara wants every "
                 "hand aboard. Her four ashore are crawling the taverns with the watch a tavern behind. Get them aboard "
-                "before the watch gets them in a cell, and Hulda will owe you. So will I.\"",
-            "torvald|ragna|bjarke|olaf|crew|sailors|drunk|drunks|foamtooth|tooth|brineknot|seaward":
-                "\"Torvald, Ragna, Bjarke and Little Olaf.\" She counts them off like debts. \"Torvald sings, Ragna wins, "
-                "Little Olaf carries the others, and Bjarke talks.\" She snorts. \"I made that boy's coral tooth. Best "
+                "before the watch gets them in a cell, and Amara will owe you. So will I.\"",
+            "dayo|imani|kwasi|jabali|crew|sailors|drunk|drunks|foamtooth|tooth|oceanheart|wavebreaker":
+                "\"Dayo, Imani, Kwasi and Little Jabali.\" She counts them off like debts. \"Dayo sings, Imani wins, "
+                "Little Jabali carries the others, and Kwasi talks.\" She snorts. \"I made that boy's coral tooth. Best "
                 "bit of coral in the harbour, in the worst mouth, and he's never paid for it either. Point them at the "
                 "pier for me.\"",
             "thread|red|stolen|steal|stole|theft|thief|thieves|hold|coil|coils|rope|ropes":
                 "\"Things walk out of the Whispers' hold at night.\" She lowers her voice, which for her is ordinary "
-                "speaking. \"So Hulda knots a red thread into every coil she owns. If you see red thread in rope on a "
-                "stall, or in a fence's back room, it walked. Tell Hulda where.\" She holds your eye. \"There's a lot of "
+                "speaking. \"So Amara knots a red thread into every coil she owns. If you see red thread in rope on a "
+                "stall, or in a fence's back room, it walked. Tell Amara where.\" She holds your eye. \"There's a lot of "
                 "rope in the market tonight. Look closely.\"",
             "jerkins|jerkin|debt|debts|owes|owed|owe|unpaid|collect|collecting|collector|thirty|hundred":
                 "\"Thirty jerkins, boiled leather, dyed black, four gold apiece. A hundred and twenty gold.\" She bangs a "
@@ -1142,14 +1143,14 @@ CAST = {
                           "fist, and I'm glad I keep a hammer.\""),
                 otherwise="\"Four nights gone.\" She frowns at a rivet. \"Captain Eirik had him out to the Guardians of "
                           "the Horizon a month back, and he shook every Xoton hand aboard. Upriver, the grey coat says. "
-                          "Hulda says a man's sat on the bonded warehouse door four nights, and nobody guards fish that "
+                          "Amara says a man's sat on the bonded warehouse door four nights, and nobody guards fish that "
                           "hard.\""),
             "gog|fat|guild|stripperwitch|river|lizardfolk|lizard|lizards|shadows": _stages(
-                (SIGHTED, _BRYNJA_GOG),
+                (SIGHTED, _ZURI_GOG),
                 (HIT, "\"They broke Gog's house at the bell, in my jerkins.\" She grinds her teeth. \"Thirty jerkins I "
                       "never saw paid for, kicking in the door of the one man in this town who buys the Lizardfolk a "
                       "round.\""),
-                otherwise=_BRYNJA_GOG),
+                otherwise=_ZURI_GOG),
             MAGISTRATE: _stages(
                 (REMOVED, "\"Removed! Irons, and home on their own ship.\" She grins. \"Now let's see the harbour dues "
                           "come back honest.\""),
@@ -1158,9 +1159,9 @@ CAST = {
                 (_arm("war"), "\"A ball and chain on the breast. The War Arm.\" Her face goes hard. \"They'll want "
                               "soldiers, and soldiers want armour. They'll come down this Row with a requisition. The "
                               "chain mail goes out to the Whispers tonight, and they'll leave with nothing.\""),
-                (_arm("death"), "\"A child's wooden hand. Gwendoline's.\" She goes pale under the weathering. \"The Death "
+                (_arm("death"), "\"A child's wooden hand. Gwendoline's.\" The colour goes out of her face. \"The Death "
                                 "Arm cares what's done with the dead. If they forbid the sea...\" She stops. \"My will "
-                                "says the sea. Hulda swore it.\""),
+                                "says the sea. Amara swore it.\""),
                 (_arm("chaos"), "\"A sea-captain in a magistrate's black. Hester-Stanhope's.\" She whistles low. \"That "
                                 "one will look at every ship in the harbour and want a piece. The Whispers had better "
                                 "keep her papers dry.\""),
@@ -1179,7 +1180,7 @@ CAST = {
             DECREE + "|law|laws": _stages(
                 (_decree("war"), "\"Twenty of fighting age, and a garrison.\" She is already lifting chain mail off the "
                                  "stands. \"They'll want it in armour, and they'll want it from me. They'll not get it.\" "
-                                 "She jerks her chin at the harbour. \"And if they levy sailors off the Whispers, Hulda "
+                                 "She jerks her chin at the harbour. \"And if they levy sailors off the Whispers, Amara "
                                  "will put a capstan bar through somebody.\""),
                 (_decree("death"), "You can see her read it again in her head. \"No burials at sea.\" Her hands shake, "
                                    "and she makes them stop. \"Every Xoton who dies on this coast goes in the dirt, then.\" "
@@ -1188,7 +1189,7 @@ CAST = {
                 (_decree("pain"), "\"Every elf handed over.\" She looks across the Row at the Anvil. \"Not Tamsin. Not "
                                   "while I've a hammer.\" She takes it off its hook. \"Go and tell her I said so.\""),
                 (_decree("peace"), "\"A church on the square, and every name in a book.\" She shrugs her big shoulders. "
-                                   "\"Brynja Coralhand, born an Ironwake on the Crows Nest. Write it big.\" Quieter: "
+                                   "\"Zuri Coralhand, born an Ironwake on the Crows Nest. Write it big.\" Quieter: "
                                    "\"Some on this Row won't be so easy about it.\""),
                 (_decree("chaos"), "\"Every ship to fly the octogram and pay anchorage, and the Moonmoth taken for a "
                                    "prize.\" She whistles. \"A Xoton doesn't take another captain's ship at a pier. That's "
@@ -1207,12 +1208,12 @@ CAST = {
                           "one's a lie.\" She shrugs. \"That's all the law I've read here.\""),
             "death|die|dying|burial|buried|bury|dirt|grave|graves|drown|drowned|funeral":
                 "\"When a Xoton dies, the sea takes them back. That's all a Xoton asks.\" She doesn't look up from the "
-                "rivet. \"Ashore, they put you in the dirt and leave you there. I've a will that says the sea, and Hulda's "
+                "rivet. \"Ashore, they put you in the dirt and leave you there. I've a will that says the sea, and Amara's "
                 "sworn to it.\" She sets the hammer down. \"Ten years ashore, and that's the one thing I lose sleep over.\"",
             "from|born|homeland|origin|home|family|came|ashore|house":
                 "\"Born an Ironwake, on the Crows Nest, which floats where it likes.\" She rivets as she talks. \"House "
                 "Ironwake set me ashore ten years ago to keep a shop where Xoton crews could buy their own people's "
-                "armour at shore prices. I stayed. Somebody has to stand up for Xotons on this waterfront, and Hulda's "
+                "armour at shore prices. I stayed. Somebody has to stand up for Xotons on this waterfront, and Amara's "
                 "always at sea.\"",
             "hob|merrow|chandler|chandlery|gear|kit|pack|lantern|lanterns|rations|potion|potions|supplies":
                 "\"Two doors down, Hob Merrow: rope, packs, lanterns, rations, potions if he has them.\" She nods. \"Pays "
@@ -1226,9 +1227,9 @@ CAST = {
                 "\"Chandlers' Row. Harbour Street at the bottom, the Night Market at the top.\" She points with the awl. "
                 "\"Kit two doors down, blades across the way, armour here. Go out the gate with all three and you might "
                 "come back.\"",
-            "marlo|hallvard|saltbeard|tarpaulin|fence|second|chances|sea-born|seaborn":
+            "marlo|khamisi|saltbeard|tarpaulin|fence|second|chances|sea-born|seaborn":
                 "\"Marlo's a Xoton who can't stand on a deck, poor fish, and sells what walks off ships.\" She sniffs. "
-                "\"Hallvard says sea-born too often for a man with that much salt in his beard. Real salt falls out on "
+                "\"Khamisi says sea-born too often for a man with that much salt in his beard. Real salt falls out on "
                 "its own.\" She looks at you. \"Look at his rope.\"",
             "eirik|captain|guardians|horizon|anchor|envoy":
                 "\"Captain Eirik, of the Guardians of the Horizon, out past the harbour mouth.\" She smiles properly for "
@@ -1236,7 +1237,7 @@ CAST = {
                 "of it. Xotons talk.\"",
             "watch|watchmen|constable|constables|quint|harrow|fitch|sergeant|fines|fined|cells|cell":
                 "\"The watch fines Xotons for singing.\" She ticks it off on her fingers. \"Three copper a song at the "
-                "Turtle, and Hulda pays. The Fist breaks heads on Harbour Street and the watch studies its boots.\" She "
+                "Turtle, and Amara pays. The Fist breaks heads on Harbour Street and the watch studies its boots.\" She "
                 "jabs the awl into the bench. \"The constable who takes the officer's coin asked me for a discount. I gave "
                 "her the door.\"",
             NEWS: _stages(
@@ -1276,7 +1277,7 @@ CAST = {
             WORK:
                 "\"Work?\" She counts on scarred fingers. \"The Fist's hundred and twenty gold for my jerkins: armour at "
                 "cost for life. My cousin's four drunks aboard the Whispers before the morning tide and out of the "
-                "watch's cells: Hulda will owe you, and so will I. And find me who's walking rope out of her hold: look "
+                "watch's cells: Amara will owe you, and so will I. And find me who's walking rope out of her hold: look "
                 "for red thread.\" She goes back to the rivet. \"Pick one.\"",
         },
         "default_line": [
@@ -1379,7 +1380,7 @@ NEW = {
                                ["Cross-peen hammer", None, "An old smith's hammer, the haft replaced many times, the head "
                                                            "worn to fit one hand. Elven letters on the cheek, half rubbed "
                                                            "away."]]},
-    "Brynja Coralhand": {"type": "person", "people": "xoton", "faction": None, "home": "coral",
+    "Zuri Coralhand": {"type": "person", "people": "xoton", "faction": None, "home": "coral",
                          "scores": {"str": 17, "dex": 10, "con": 16, "int": 12, "wis": 12, "cha": 9},
                          "skills": {"athletics": 1, "intimidation": 1, "insight": 1},
                          "hp": 34, "srd": "thug",

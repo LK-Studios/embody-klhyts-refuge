@@ -408,12 +408,12 @@ KLHYT_DIALOG = {
         "and the sailors by the window stare. Gog buys the round; I'll do better. Tell Ssark the mayor drinks with him at "
         "the Turtle, at the bar, where the window can see.`"),
 
-    "xoton|xotons|eirik|hulda|dwarf|dwarves|timber|licence|license|felling|guardians|whispers|torvald|ragna|bjarke|olaf": staged(
+    "xoton|xotons|eirik|amara|dwarf|dwarves|timber|licence|license|felling|guardians|whispers|dayo|imani|kwasi|jabali": staged(
         (BOUND, "`There's a Xoton captain past the mouth waiting on a licence I promised him. Eirik.` He groans. `If he's "
                 "given up and sailed, I've lost a friend and a timber trade both.`"),
         "`Captain Eirik, on the ten-master past the mouth. I rowed out a month ago, drank him level, and promised him his "
         "felling licence by the new moon.` He thumps the table. `The Custodian's sat on it waiting for a gift. Tell Eirik "
-        "he'll have it with my name on it, seal or no seal. And tell Hulda her four drunks are welcome as long as somebody "
+        "he'll have it with my name on it, seal or no seal. And tell Amara her four drunks are welcome as long as somebody "
         "pays for the stools.`"),
 
     "elf|elves|elven|ithriel|unicorn|exiles|exile|hooded|household|refugees|refugee|pointed": staged(
@@ -916,13 +916,13 @@ RIVER_DIALOG = {
         "better boats than anything you'll ever sail, and there's no cove behind it worth the walk.` She sets the glass "
         "down. `The elf at the tea table in the market draws it on every chart she sells. Buy one, and believe it.`",
 
-    "ship|ships|boat|boats|sailing|sailor|sailors|harbour|pier|anchor|captain|captains|teague|harbourmaster|xoton|xotons|eirik|hulda": staged(
+    "ship|ships|boat|boats|sailing|sailor|sailors|harbour|pier|anchor|captain|captains|teague|harbourmaster|xoton|xotons|eirik|amara": staged(
         (LANDED, "`Who's in? Same as ever, love, and one more: the Patient Hand at the long pier, black and gilt, eight "
                  "carved arms holding up her stern lanterns.` She ticks the rest off on her rings. `The River Queen, the "
                  "Dragons Claw, the Emerald Eye, a Xoton cog whose crew drink my town dry, a Xoton ten-master past the "
                  "mouth, and the pale ship nobody built.`"),
         "`Who's in?` She ticks them off on her rings. `The River Queen, all paint and Everuex money. The Dragons Claw, "
-        "small and quick. The Emerald Eye, gold leaf and a small captain. A Xoton cog whose four drunks Hulda wants "
+        "small and quick. The Emerald Eye, gold leaf and a small captain. A Xoton cog whose four drunks Amara wants "
         "aboard by dawn. Eirik's ten-master out past the mouth, waiting on a seal. And the pale ship at the end of the "
         "long pier that nobody built.` She laughs. `The harbourmaster counts them twice. I like them from a distance. A "
         "long distance.`"),

@@ -21,7 +21,7 @@
 # invented: Doctor Amsel Prewitt: Lieutenant Voss pays a silver a name, through Constable Rosa Quint, for a wound on anyone the Throne has a warrant on (the owner's "the Throne's officer", read as Voss, who calls with the constable); he writes everyone in his casebook, the Fist's men too, but sells only the wanted; to Voss, an elf is a fee until a warrant names them
 # invented: Doctor Amsel Prewitt: his scheme, to put the casebook in the magistrate's hand with a petition to have his commission restored
 # invented: Doctor Amsel Prewitt: four nights ago at a quarter to two he dressed a human bite through the web of a big sandy Fist man's right hand (Ott Fennick, by Hob Merrow's description, never named by him)
-# invented: Doctor Amsel Prewitt: Torvald Brineknot owes him three silver for eleven stitches in the scalp (a bottle at the Turtle Dragon); he has offered Ottoline Crabbe two gold for an unclaimed body four times; he will pay five silver for a sealed pot of Ishkaa's poultice and a silver for a tin of peppermints
+# invented: Doctor Amsel Prewitt: Dayo Oceanheart owes him three silver for eleven stitches in the scalp (a bottle at the Turtle Dragon); he has offered Ottoline Crabbe two gold for an unclaimed body four times; he will pay five silver for a sealed pot of Ishkaa's poultice and a silver for a tin of peppermints
 # invented: Grandmother Ishkaa: past seventy; born in a Meters camp of vine huts up the Green past where the farms are now, its healer and midwife fifty years; came down twenty years ago because the young ones went to town and did not come home; built over the water upstream of the bridge on Klhyt's Article Four (the river is free water)
 # invented: Grandmother Ishkaa: heals with Kteol's water (his water is his sleep, and sleep heals); the long sleep is the god's dream lent for an hour; sings The Green Lies Down (the Meters song from cast/n_beyond.py) while she works
 # invented: Grandmother Ishkaa: Kindness, a river python she raised from an egg, sleeps on the ridge-beam and wakes if a blade is drawn in the house
@@ -119,7 +119,7 @@ CAST = {
                  "Ishkaa in the Reed House over the Verde packs wounds in river mud, which should kill her patients, and "
                  "they do not fester, which you cannot explain either; you would pay five silver for a sealed pot of her "
                  "mangrove poultice to study, and you will not be seen at her door. Hooks you hand players: collect three "
-                 "silver from Torvald Brineknot, a Xoton off the Whispers of the Deep, for eleven stitches in his scalp "
+                 "silver from Dayo Oceanheart, a Xoton off the Whispers of the Deep, for eleven stitches in his scalp "
                  "(keep one); a sealed pot of the Grandmother's poultice (five silver); a tin of Catan peppermints off any "
                  "ship (a silver, and a silver off their next bill); carry your standing offer to Ottoline Crabbe the "
                  "undertaker, two gold for an unclaimed body to study (she has refused four times). Fears: the first "
@@ -391,12 +391,12 @@ CAST = {
                           "happens.`"),
             WORK:
                 "He considers you as one considers an instrument. `I do not hire. I pay for errands.` He counts them "
-                "off. `Torvald Brineknot, a Xoton off the Whispers of the Deep, left this table with eleven stitches in "
+                "off. `Dayo Oceanheart, a Xoton off the Whispers of the Deep, left this table with eleven stitches in "
                 "his scalp and without paying: three silver. Collect it, and keep one. A sealed pot of the lizard "
                 "woman's mangrove poultice: five silver. A tin of Catan peppermints off any ship: a silver.` A "
                 "peppermint clicks. `And if you are on good terms with the undertaker, tell her my offer stands.`",
-            "torvald|brineknot|xoton|xotons|whispers|scalp|debt|debts|collect|collecting|unpaid|owed":
-                "He turns to the page without looking. `Torvald Brineknot. Plaited beard, sings. Eleven stitches in the "
+            "dayo|oceanheart|xoton|xotons|whispers|scalp|debt|debts|collect|collecting|unpaid|owed":
+                "He turns to the page without looking. `Dayo Oceanheart. Plaited beard, sings. Eleven stitches in the "
                 "scalp after a bottle at the Turtle Dragon: three silver, unpaid. He left while I was washing my "
                 "hands.` He looks up. `He crawls the taverns all night with three friends and a bosun after them. "
                 "Collect it, and keep one of the three for your trouble.`",
@@ -834,7 +834,7 @@ CAST = {
                 "She hums a low note you feel in the floor. `For pain I sing. The thin doctor sells poppy water in a "
                 "brown bottle, two silver. It makes you sleep, and wake wrong.` A slow blink. `The long sleep on my mats "
                 "makes you wake right. A gold piece. Stay the hour.`",
-            "xoton|xotons|torvald|ragna|bjarke|olaf|hulda|bosun|sailors|sailor|whispers":
+            "xoton|xotons|dayo|imani|kwasi|jabali|amara|bosun|sailors|sailor|whispers":
                 "She hums. `The Xotons off the Whispers of the Deep crawl every tavern every night, and their bosun "
                 "wants them aboard by the morning tide. Bring one to me, little fish. Two coppers of bitterleaf, and he "
                 "walks up the gangplank by himself, sorry and sober.` A slow blink. `Their bosun will remember you "

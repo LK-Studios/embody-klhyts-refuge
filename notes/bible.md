@@ -87,6 +87,45 @@ this file is fixed. Picks the owner has not made are marked **host default**.
 - Canon ships used: the River Queen (Everuex), Dragons Claw (Elliot's small galleon), the Emerald Eye ("Danny DeVito's
   ship. Danny DeVito: Small captain… Likes Gold"), Whispers of the Deep (a name from the Xoton ship-names doc).
 
+## The Xotons (owner, 2026-11-24)
+
+> "Ok I realised Xotons are coming through as white people. They are Dark Skinned, they are almost as wide as they
+> are tall. They are barrel chested broad warriors of the sea. They come in Merchant Navy, or Military, or rarely
+> pirates. Get more Lore from Lorekeeper. And flesh them out. I noticed they were coming through as "posh short white
+> guys". When very different culturally. Each ship has it's own vibe and tribe etc. Some dress up with the pomp, some
+> more ragtag, a lot of them, don't wear much at all."
+
+- Canon (LoreKeeper, "Xotons Race"): seafaring dwarves, short and stout as Mountain Dwarves; skin deeply tanned;
+  intricate tattoos of their histories, achievements and ocean gods; born at sea, on a ship or the Crows Nest (born
+  on land is a shame, with slang for it: the Refuge calls it sandborn); family, honour, sea spirits, story and song;
+  Common, Dwarvish and Siren; 25 ft. and a swim of 25 ft.; advantage on saves against poison. The Merchant Navy is
+  family Houses under the Council of Houses; the Military Navy is Admirals, Fleet Commanders and Ship Captains, with
+  the Timber Acquisition Division in rivalry with the Merchant Houses over timber. Coral armour, sharkskin suits,
+  harpoon crossbows, hooked swords, tridents, bolas, depth charges, glow kelp lamps.
+- Canon (LoreKeeper, "Xoton Ship Names"): fifty African-inspired names for the Xoton people. Asked, the owner had the
+  host's Norse names give way to names in that style (2026-11-24), renamed in place on the live world: Torvald
+  Brineknot is Dayo Oceanheart, Ragna Seaward Imani Wavebreaker, Bjarke Foamtooth Kwasi Foamtooth, Little Olaf Little
+  Jabali, Hulda Ironwake Amara Ironwake (her uncle Bersi is Bakari), Hallvard Saltbeard Khamisi Saltbeard, Brynja
+  Coralhand Zuri Coralhand. Captain Eirik (canon) and Marlo keep theirs. The crowds' Xoton faces draw from the canon
+  list too. Earned names stay: Foamtooth, Coralhand, Saltbeard, House Ironwake.
+- Every Xoton reads as one: dark, deep brown to black; chest-high to a tall man and nearly as wide as tall;
+  barrel-chested; tattooed. Every Xoton's brief carries the same paragraph on what they are (cast/r_xotons.py).
+- Each ship its own tribe (host defaults): the **Whispers of the Deep** (House Ironwake, a working cog) ragtag in
+  tarred sailcloth wraps, rope belts and bare feet, the House's iron-grey wave on every left shoulder; the
+  **Guardians of the Horizon** (Eirik's House ten-master, an envoy's ship) in sea-green silk and gold frogging over
+  bare tattooed chests; the **Keepers of the Storm** (Military Navy) in sharkskin, brass and coral gorgets, marines
+  oiled and bare-chested in sharkskin harness, fleet knots tattooed at the wrists; **pirates** with no House mark and
+  no fleet knot, rarely seen (a crowd face, a rumour: the brig Starfall's Abyssal Dream off the reef, a canon name).
+  Ashore: Zuri works bare-armed in House Ironwake's wave; Khamisi dresses like a ballad deckhand and every voyage
+  tattoo on him was inked ashore (his sandborn secret, readable by a Xoton who looks); Marlo dresses as a landsman and
+  shows no tattoos.
+- The Military Navy came in (host default, at the owner's yes): the frigate **Keepers of the Storm** (canon name),
+  Timber Acquisition Division, at the deep-water end of the pier, after the same timber as Eirik. Her Ship Captain
+  **Zuberi Seawarden** (a canon-list name) has the Fleet's purse for "harbour courtesies" and may pay the Custodian's
+  gift that Eirik will not; his marines **Kesi Reefstrider** (keeps the gangway; Imani has challenged her twice) and
+  **Obasi Tidewalker** (keeps his back; speaks Siren and has heard Pelagie at the end of the pier). The Navy does not
+  sing ashore.
+
 ## Hired help: the only way to a second agent (owner, 2026-11-22)
 
 > "I want to make this possible but very limited, you have to go in and hire people in world. And only then can you
@@ -134,12 +173,12 @@ Skills roll 5e's way (ability modifier, plus proficiency by level or challenge, 
 SRD block's skills are set so the arithmetic gives the book's bonus. Which block each person wears is a **host
 default** (build.py, `SRD_OF`); they keep the weapons they carry, so their attack lines are worked from those:
 
-- **Thug:** Brask, Tully, Big Ludo, Bosun Maggs, Hulda Ironwake, Ruk Halfhand.
+- **Thug:** Brask, Tully, Big Ludo, Bosun Maggs, Amara Ironwake, Ruk Halfhand.
 - **Spy:** River, Hanklevode. **Bandit Captain:** Fat Gog (with Hold Breath, a swim speed and a bite), Captain Eirik,
   Captain Danny DeVito. **Veteran:** Dominico (with his three dabbled spells), Klhyt, Captain Aelith.
 - **Knight:** Lieutenant Voss. **Noble:** the Custodian, Master Quillon, Phillip Everuex.
 - **Lizardfolk:** Ssark. **Scout:** Thoradin. **Acolyte:** Sister Agathe. **Druid:** Saelwyn.
-- **Commoner:** Harbourmaster Teague, Husok Sourfist, Wendeline Moss, Mother Ines, Hallvard Saltbeard, Grusha, and
+- **Commoner:** Harbourmaster Teague, Husok Sourfist, Wendeline Moss, Mother Ines, Khamisi Saltbeard, Grusha, and
   Ithriel's household. **Bandit:** the Xoton sailors.
 - Kept on class levels, where no SRD block fits: the Bard of Moonport (bard 4), Ithriel (wizard 5), Ondrine (wizard 3).
 - **Deloris** (rogue 9): her sheet's proficiencies (Dexterity saves; Acrobatics, Sleight of Hand, Stealth, Deception,
@@ -207,8 +246,8 @@ What is built:
   Phillip Everuex's coin to find Deloris). They keep the peace with a fist and collect from the cheaper taverns.
 - **Fat Gog's guild**: River at the bar, Hessa on the Stripperwitch's door, Wick (a street child, his eyes and runner
   in the market and square), Marlo (a fence on Harbour Street). The Stripperwitch pays nobody.
-- **The drunk Xotons**: Torvald Brineknot, Ragna Seaward, Bjarke Foamtooth and Little Olaf, off the Whispers of the
-  Deep, crawling the taverns all night with the watch a tavern behind them and Hulda wanting them aboard by the
+- **The drunk Xotons**: Dayo Oceanheart, Imani Wavebreaker, Kwasi Foamtooth and Little Jabali, off the Whispers of the
+  Deep, crawling the taverns all night with the watch a tavern behind them and Amara wanting them aboard by the
   morning tide. A force in a roundabout, random way.
 - Not built yet: who comes running when there is trouble on whose turf (a fight in a Fist tavern, a theft in the
   market). The turf is in their briefs and lines.
@@ -428,7 +467,7 @@ for the key people are a later step.)
     healer's kits, potions of healing (50 gp), crowbars, grappling hooks, thieves' tools, caltrops, a map.
   - *The Crooked Anvil*, Tamsin Vey, an elven bladesmith in exile: the **rapier** (25 gp), a sword-cane, daggers,
     swords, axes, spears, maces, hammers, a glaive, a whip, javelins, bows, a light crossbow, arrows and bolts.
-  - *Coral and Chain*, Brynja Coralhand, a Xoton armourer: padded, leather, studded, hide, coral, chain shirt, scale,
+  - *Coral and Chain*, Zuri Coralhand, a Xoton armourer: padded, leather, studded, hide, coral, chain shirt, scale,
     ring, chain mail, a breastplate and shields.
   Each shop has something for a sharp eye (a scraped regimental drum, an unpaid line for a black sword-cane, THE FIST
   OWES 30 JERKINS).
@@ -582,9 +621,9 @@ Bollo as Keymaster; the Xoton frigate "that escaped"; Dominico's coup and human-
 - **People canon does not name:** Harbourmaster Odo Teague; Brask and Tully (Dominico's men); the keepers Sister
   Agathe (Omberhulk & Nun), Wendeline Moss (Touchy Unicorn), Big Ludo (Rampant Ogre), Bosun Maggs (Turtle Dragon),
   Master Quillon (High Apothecary); Ssark (a Meters Lizardfolk fisherman); Ithriel (a high elf in hiding) and her
-  household (Faelan, Ysolde, Corwen, Miravel); Lieutenant Aurel Voss (the officer in uniform); Hulda Ironwake (Xoton
-  bosun), Ruk Halfhand (Jonulvicha stevedore), Torvald Brineknot and Ragna Seaward (Xoton sailors); the Night Market's
-  Mother Ines, Hallvard Saltbeard (Xoton), Grusha (Jonulvicha) and Saelwyn (elf); Captain Aelith of the Moonmoth; and
+  household (Faelan, Ysolde, Corwen, Miravel); Lieutenant Aurel Voss (the officer in uniform); Amara Ironwake (Xoton
+  bosun), Ruk Halfhand (Jonulvicha stevedore), Dayo Oceanheart and Imani Wavebreaker (Xoton sailors); the Night Market's
+  Mother Ines, Khamisi Saltbeard (Xoton), Grusha (Jonulvicha) and Saelwyn (elf); Captain Aelith of the Moonmoth; and
   Ondrine, the siren's name. Big Ludo and Kael Ironjaw are Jonulvicha.
 - **Crowds.** The Night Market, the docks and the Moonmoth's deck each have a crowd: place state, not bodies. Mingling
   overhears its rumours; hailing someone makes a real passer-by from the crowd's mix of peoples (8, 6 and 4 a night).

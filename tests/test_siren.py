@@ -1,7 +1,7 @@
 """A second siren (owner, 2026-11-24: a shy, frightened siren in dark blue swirls, ashore to find weapons for her city
 deep beneath the water, with pearls and raw gold): Pelagie stands in the town by her look, carries no coin, answers in
 her own voice, pays a pearl for a weapon and raw gold for coral armour, and goes home under the harbour with three.
-Ondrine, Brynja and Wendeline each point to her."""
+Ondrine, Zuri and Wendeline each point to her."""
 
 from importlib import util
 from pathlib import Path
@@ -65,7 +65,7 @@ def test_she_answers_in_her_own_voice_and_others_point_to_her():
     assert "Please don't bring him here" in words(you.act("talk", "Pelagie", {"about": "the officer in blue"}))
     assert "washbasin" in words(you.act("talk", "Wendeline Moss", {"about": "your barefoot lodger"}))
     gm.move(eid(gm, "Newcomer"), eid(gm, "Coral and Chain"))
-    assert "door doesn't bite" in words(you.act("talk", "Brynja Coralhand", {"about": "the girl at your window"}))
+    assert "door doesn't bite" in words(you.act("talk", "Zuri Coralhand", {"about": "the girl at your window"}))
 
 
 def test_a_pearl_for_a_weapon_gold_for_coral_and_home_with_three():

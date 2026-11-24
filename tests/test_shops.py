@@ -10,7 +10,7 @@ from embody.ops import AUTHOR, Engine
 REPO = next(p for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 WORLD = Path(__file__).resolve().parents[1]
 DAY = 86400
-SHOPS = {"Hob Merrow": "Merrow's Chandlery", "Tamsin Vey": "The Crooked Anvil", "Brynja Coralhand": "Coral and Chain"}
+SHOPS = {"Hob Merrow": "Merrow's Chandlery", "Tamsin Vey": "The Crooked Anvil", "Zuri Coralhand": "Coral and Chain"}
 TAVERNS = {"Wendeline Moss": "The Touchy Unicorn", "Bosun Maggs": "The Turtle Dragon", "Big Ludo": "Rampant Ogre & Curved Cleaver",
            "Sister Agathe": "The Omberhulk & Nun", "Master Quillon": "The High Apothecary"}
 
@@ -90,7 +90,7 @@ def test_armour_and_a_healing_potion():
     eng, gm, you = town()
     purse(gm, 12000)
     put(gm, "Newcomer", "Coral and Chain")
-    you.act("buy", "Brynja Coralhand", {"item": "chain shirt"})
+    you.act("buy", "Zuri Coralhand", {"item": "chain shirt"})
     assert held(gm, "Chain shirt")["armor"]["ac"] == 13
     put(gm, "Newcomer", "Merrow's Chandlery")
     you.act("buy", "Hob Merrow", {"item": "potion of healing"})

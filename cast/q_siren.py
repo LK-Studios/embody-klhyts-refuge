@@ -8,7 +8,7 @@
 # - Her errand is a trade anyone can help with: hand her a weapon or a piece of armour and she pays for it from her
 #   pouches (scripts/siren_trade.py): a pearl for a weapon or plain armour, a nugget of raw gold for coral armour (Coral
 #   and Chain sells it: sea-coral does not rust, and that is what she needs). When she has three, she goes home.
-# - Ondrine, Brynja Coralhand and Wendeline Moss each have a line about her, so players are steered to her.
+# - Ondrine, Zuri Coralhand and Wendeline Moss each have a line about her, so players are steered to her.
 # Speech is written between backticks and turned into double quotes at the bottom (`_said`).
 #
 # invented: host: Pelagie, her name (from the French for "of the open sea", beside Ondrine's), Nacre and the trench,
@@ -159,7 +159,7 @@ CAST = {
         "pelagie|nacre|shawl|swirls|tattoos|stranger|barefoot|deep":
             "The siren tilts her head. `A deep one, ashore? They never come up. If she is real, be gentle: the air "
             "will be killing her a little every hour.`"}},
-    "Brynja Coralhand": {"dialog": {
+    "Zuri Coralhand": {"dialog": {
         "pelagie|shawl|swirls|stranger|barefoot|window|pearls":
             "`There's a barefoot girl in a shawl who stands at my window every night and stares at the coral like it's "
             "the crown jewels. Never comes in. Pays in pearls, I'd bet. Tell her the door doesn't bite.`"}},

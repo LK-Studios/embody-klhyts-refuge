@@ -149,7 +149,9 @@ CAST = {
 
     # ---- the Xoton envoy ------------------------------------------------------------------------------------------
     "Captain Eirik": {
-        "look": "A barrel-bodied, black-skinned dwarf of the sea, beard braided with copper wire, a kelp lamp glowing "
+        "look": "A barrel-bodied, black-skinned dwarf of the sea, as wide as he is tall, his beard braided with copper "
+                "wire. He dresses as his House's envoy should: a long open coat of sea-green silk with gold frogging over "
+                "a bare, tattooed chest, a sash in the House colours, rings on every thick finger, a kelp lamp glowing "
                 "green at his belt and a hooked sword at his hip. He laughs with his whole chest and takes up a table "
                 "for four on his own.",
         "seen_as": "the big laughing sailor with copper braids",
@@ -164,7 +166,7 @@ CAST = {
                  "licence by the new moon; you liked him at once. This week you saw lights in the bonded warehouse at "
                  "odd hours. You never take sides on land: 'On land I am furniture.' Your quiet plan, if the Custodian "
                  "keeps stalling, is to buy timber straight from the Meters Lizardfolk upriver and skip the licence. You "
-                 "like Teague, Hallvard, Ssark and Maggs; you are wary of Dominico and bored by the Custodian. Voice: "
+                 "like Teague, Khamisi, Ssark and Maggs; you are wary of Dominico and bored by the Custodian. Voice: "
                  "big, warm, sea-proverbs, 'friend' every other line. 'With the X, friend.' 'The sea doesn't take sides, "
                  "and neither do I.'",
         "scheme": "If the Custodian keeps stalling over the felling licence and his 'gift', he means to buy timber straight "
@@ -198,7 +200,7 @@ CAST = {
             "ship|guardians|horizon|masts|frigate|anchor": "\"The Guardians of the Horizon. Ten masts, friend, and every "
                 "one earned in a storm. She rides past the harbour mouth because your harbour is too shy for her.\"",
             "lamp|kelp|glow|light": "\"Glow kelp. Never needs oil, never goes out, never lies about where you left it.\" He "
-                "taps the globe at his belt. \"Hallvard sells them in the Night Market, if your purse is brave.\"",
+                "taps the globe at his belt. \"Khamisi sells them in the Night Market, if your purse is brave.\"",
             "sleep|bed|room|rooms|lodging|inn|stay|bunk": "\"I sleep over the Turtle Dragon when I'm ashore. Four copper, "
                 "a hammock that's nearly a bed, and Maggs throws out anyone who snores louder than me. Nobody snores "
                 "louder than me.\"",
@@ -209,7 +211,7 @@ CAST = {
                 "too good for the boat he came on. I notice. I don't take sides.\"",
             "doing|busy|tonight|plans|up": "\"Tonight? Drinking, singing, and not thinking about seals. After the tide I'll "
                 "see my boat's crew don't fall in the harbour. Tomorrow, the Town Hall again, and a smile, again.\"",
-            "crew|sailors|torvald|ragna|bjarke|olaf|drunk": "\"Those four? Not my crew. Hulda's people off the Whispers of "
+            "crew|sailors|dayo|imani|kwasi|jabali|drunk": "\"Those four? Not my crew. Amara's people off the Whispers of "
                 "the Deep, three days ashore.\" He grins. \"They'll arm-wrestle every tavern in town by dawn, with the "
                 "watch one tavern behind them, puffing.\"",
             "lizardfolk|meters|ssark|lizard|rivers": "\"The Meters fish my water and cut good timber up the rivers, and "
@@ -219,7 +221,7 @@ CAST = {
                 "it. Keeps her in a good mood.\"",
             "seen|missing|lost|shipmate|friend|met|anybody|anyone": "\"A Xoton gone missing ashore?\" He laughs, then sees "
                 "your face and stops. \"Friend, Xotons don't go missing on land. They go to sleep under a table. Look "
-                "under the tables at the Ogre, then the Turtle, then ask Hulda Ironwake on the docks. She knows every "
+                "under the tables at the Ogre, then the Turtle, then ask Amara Ironwake on the docks. She knows every "
                 "Xoton nose on this coast.\"",
             "gog|dominico|guild|fist|fight": "\"Fat Gog, Dominico, the Custodian. Three men pulling one rope.\" He spreads "
                 "his hands. \"I watch the rope. I don't pull it. When it breaks I'll still need timber.\"",
@@ -566,7 +568,7 @@ CAST = {
                 "half shut. \"Everyone ashore comes through my door sooner or later, mostly sooner. I'll keep the eye out. "
                 "Leave a word on the slate behind the bar, and buy a beer while you write it.\"",
             "eirik|xoton|xotons|crew|sailors": "\"Eirik's the best customer on this coast: he drinks, he pays, he sings, he "
-                "goes to bed. His people are another thing. Four of Hulda's lot are crawling the taverns tonight. I've "
+                "goes to bed. His people are another thing. Four of Amara's lot are crawling the taverns tonight. I've "
                 "hidden the good glasses.\"",
         },
         "default_line": [
@@ -903,8 +905,8 @@ CAST = {
                 "is not quite clean. \"Rum's best. Ale's wet.\"",
             "seen|missing|friend|shipmate|mate|lost|met|anybody|anyone": "He thinks about it, properly, eyes up at the "
                 "rafters. \"Xotons. Ten in tonight. Short. Loud. Look the same from up here.\" He leans down. \"Ask "
-                "the singing ones. Torvald's lot. They know every Xoton ashore.\"",
-            "xoton|xotons|torvald|ragna|crew|sailors|arm": "\"Four of them. Crawling the taverns. Turtle, here, Omberhulk.\" "
+                "the singing ones. Dayo's lot. They know every Xoton ashore.\"",
+            "xoton|xotons|dayo|imani|crew|sailors|arm": "\"Four of them. Crawling the taverns. Turtle, here, Omberhulk.\" "
                 "He looks at his bar. \"They break things. They pay for things. Watch comes after. Too late.\"",
             "crownies|crownie|regulars": "\"Crownies are regulars. Regulars don't want a scene.\" He looks at you for a "
                 "long time. \"You want a scene?\"",
@@ -1765,7 +1767,7 @@ CAST = {
             "dominico|gog|fist|guild|stripperwitch|apothecary": "\"We don't go in the Stripperwitch and we don't go near the "
                 "window table at the Apothecary.\" He shrugs. \"That's not cowardice, son. That's arithmetic. There's "
                 "three of us.\"",
-            "xoton|xotons|drunk|drunks|torvald|ragna|crew|sailors": "\"Four Xotons crawling the taverns, singing, "
+            "xoton|xotons|drunk|drunks|dayo|imani|crew|sailors": "\"Four Xotons crawling the taverns, singing, "
                 "breaking stools. Abel's after them.\" He doesn't move. \"Abel's always a tavern behind. I've told him "
                 "to go to the next one first. He says that's not how chasing works.\"",
             "abel|fitch|constable|lad|young": "\"Young Abel. Klhyt pinned the badge on him himself. Believes in the law, "
@@ -1877,7 +1879,7 @@ CAST = {
             "custodian|hall|notice": "\"The Custodian is the law while the mayor's away.\" He says it as if he has said it "
                 "to himself a lot. \"That's what the sergeant says the Charter says. Article Nine. I think it's Article "
                 "Nine.\"",
-            "xoton|xotons|drunk|drunks|torvald|ragna|bjarke|olaf|crew|chase": "\"Four Xotons! Disorderly! They broke a stool "
+            "xoton|xotons|drunk|drunks|dayo|imani|kwasi|jabali|crew|chase": "\"Four Xotons! Disorderly! They broke a stool "
                 "at the Turtle and arm-wrestled a fisherman into a barrel!\" He grips the spear. \"I'm right behind "
                 "them. One tavern behind. Every time. I don't understand it.\"",
             "dominico|fist|gog|guild|stripperwitch": "He lowers his voice and his spear. \"Sergeant says we don't go there. "
@@ -2014,7 +2016,7 @@ CAST = {
                 "which clinks. \"Admires the Town Hall. Lots of people admire the Town Hall. I don't ask.\"",
             "harrow|sergeant|abel|fitch": "\"Sergeant's honest, poor old thing. Abel's honest and doesn't know any better. "
                 "That's two honest men in a watch of three.\" She shrugs. \"Somebody had to be the clever one.\"",
-            "xoton|xotons|drunk|drunks|torvald|ragna|bjarke|olaf|crew": "\"Four of them. Turtle, Ogre, Omberhulk, round "
+            "xoton|xotons|drunk|drunks|dayo|imani|kwasi|jabali|crew": "\"Four of them. Turtle, Ogre, Omberhulk, round "
                 "and round like a dance.\" She yawns. \"Abel's chasing them. I'm letting him. They'll fall asleep by "
                 "three. I'll arrest them then. Gently.\"",
             "dominico|fist|gog|guild|sabeth": "\"Gog's lot and Dominico's lot.\" She raises both hands, mango and all. "

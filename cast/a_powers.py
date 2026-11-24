@@ -2065,7 +2065,7 @@ CAST = {
             "jory|fennick|fennicks|ott|locket|picture|sandy": "She snorts. \"Jory Fennick paid me a copper to find a lady "
                 "in a locket. I told him the Unicorn.\" A grin, tusks and all. \"She's not at the Unicorn. He went three "
                 "times. I'm rich.\"",
-            "market|stalls|ines|grusha|saelwyn|hallvard|mango|mangoes": "\"Mother Ines gives me the bruised mangoes. "
+            "market|stalls|ines|grusha|saelwyn|khamisi|mango|mangoes": "\"Mother Ines gives me the bruised mangoes. "
                 "Grusha's pepper sauce makes grown men cry, I've seen it. The elf lady with the tea won't look at anyone in "
                 "a uniform. And the Xoton with the salt beard sells rope that never frays.\" She considers. \"He says.\"",
             "square|pump|watch|harrow|fitch|quint|constable|constables|sergeant": "\"The watch walks the square on the "
@@ -2133,9 +2133,10 @@ CAST = {
 
     # ---- Marlo (new) --------------------------------------------------------------------------------------------
     "Marlo": {
-        "look": "A barrel-bodied, black-skinned Xoton with a chin as bare as a boy's and a jeweller's loupe on a ribbon "
-                "round his neck. He wears fingerless gloves, keeps his back to the water, and goes faintly grey whenever "
-                "anything rocks.",
+        "look": "A barrel-bodied, black-skinned Xoton, nearly as wide as he is tall, with a chin as bare as a boy's and a "
+                "jeweller's loupe on a ribbon round his neck. He is buttoned to the throat like a landsman, in a brocade "
+                "waistcoat, a linen shirt and fingerless gloves, and not one tattoo shows anywhere. He keeps his back to "
+                "the water and goes faintly grey whenever anything rocks.",
         "seen_as": "the barrel-bodied man with the loupe",
         "brief": "You are Marlo, a Xoton born on the Crows Nest and sick over its rail every day for eleven years; your "
                  "mother held your head and said some fish are born to swim on land. You came ashore at the Refuge "
@@ -2196,7 +2197,7 @@ CAST = {
                 "Fennick? I didn't mention a Fennick.\"",
             "klhyt|mayor|founder": "\"The mayor? A fine man. Carried the compass he came ashore with everywhere he "
                 "went.\" He hears himself. \"So I've heard. One hears things.\"",
-            "ship|ships|cog|whispers|eirik|captain|hulda|ballast|crew|xotons": "\"Xoton ships come and go and take on "
+            "ship|ships|cog|whispers|eirik|captain|amara|ballast|crew|xotons": "\"Xoton ships come and go and take on "
                 "ballast, and sometimes the ballast is very valuable and nobody writes it down.\" He looks out at the "
                 "harbour, goes grey, and looks away. \"I don't go aboard. I wave.\"",
             "seasick|seasickness|boat|boats|waves|rocking|sea": "\"Please don't say that word while you're rocking on your "
