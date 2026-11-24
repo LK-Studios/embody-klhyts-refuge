@@ -87,7 +87,9 @@ CAST = {
                  "(hardtack, salt fish, dried mango) 5 sp, waterskin 2 sp, fifty feet of hemp rope 1 gp, torch 1 cp, "
                  "tinderbox 5 sp, hooded lantern 5 gp, flask of oil 1 sp, healer's kit 5 gp, potion of healing 50 gp, "
                  "crowbar 2 gp, grappling hook 2 gp (forged next door), thieves' tools 25 gp (you never ask who for), "
-                 "caltrops 1 gp, chalk 1 cp, and your own map of the Refuge and its coast 5 sp. You also buy whatever "
+                 "caltrops 1 gp, chalk 1 cp, paper 2 sp the sheet, parchment 1 sp, a blank book bound in sharkskin 25 gp (a "
+                 "pen and a dip of ink come with any of them), and your own map of the Refuge and its coast 5 sp. You "
+                 "also buy whatever "
                  "adventurers bring back, no questions: a third of its worth in coin, or half in credit on your slate. "
                  "You are about sixty, a Landfall man, and the Row was mud when you came thirty years ago. Your secret, "
                  "which would hang you: you were born Hobart Merrow in a mountain town in Fronteria, and for nine years "
@@ -159,6 +161,11 @@ CAST = {
                       "\"Somebody'll want lamp oil and rope to put it right. What's yours?\""),
                 otherwise="He looks up over his wire spectacles and puts his pencil down. \"Evening. Merrow's Chandlery: "
                           "anything for the road but the road itself. What'll it be?\""),
+            "paper|parchment|ink|pen|quill|notebook|journal|diary|write|writing|stationery":
+                "He lays a clean sheet on the counter and squares it with one finger. \"Rag paper, two silver the sheet. "
+                "Parchment, one, if you don't mind goat. A blank book bound in sharkskin, twenty-five gold, and it'll "
+                "outlive you.\" He sets a pen and a pot of ink beside it. \"Pen and a dip of ink come with it. A man "
+                "should be able to write his own name, whatever it is.\"",
             "loot|looted|salvage|salvaged|swag|plunder|spoils|treasure|found|unload|pawn|valuables|jewels|gems|"
             "trinkets":
                 "He sets a little brass scale on the counter between you. \"Whatever you bring back from wherever you've "
@@ -170,7 +177,8 @@ CAST = {
                 "rations five silver: hardtack, salt fish, dried mango. Waterskin two silver. Fifty foot of hemp, a gold. "
                 "Torch a copper, tinderbox five silver, hooded lantern five gold, oil a silver the flask. Healer's kit "
                 "five gold. Potion of healing, fifty, and worth it the once you need it. Crowbar two, grappling hook two, "
-                "caltrops one, chalk a copper. Thieves' tools twenty-five, and I never ask who for. My map of the Refuge "
+                "caltrops one, chalk a copper. Paper two silver the sheet, parchment one, a blank book twenty-five gold. "
+                "Thieves' tools twenty-five, and I never ask who for. My map of the Refuge "
                 "and its coast, five silver.\" He sets the pencil down. \"And I buy. Whatever you bring back, no "
                 "questions.\"",
             "pack|packs|backpack|backpacks|rucksack|bag|bags|bedroll|bedrolls|blanket|blankets|camp|camping":

@@ -26,6 +26,8 @@ The game here is everything on top of that:
   way a player brings a second agent in: a few people work for hire, each on their own terms (coin by the day, a thing,
   a favour), and a hire offers the hirer that person's seat for as long as the days last. Fights run by D&D 5e
   (the dnd5e pack): initiative and turns, armour class, damage dice, death saves, conditions and spell slots.
+  Paper and books take writing (the village pack's `write`), and so does the notice board on the square; Hob
+  Merrow sells paper, parchment and blank books.
 - **The story.** One evening, from half past ten until a ship sails on the one o'clock tide. The clock is turn-based:
   each act moves the world 30 seconds, so the evening waits for its players.
 

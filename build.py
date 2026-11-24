@@ -116,6 +116,15 @@ PERSON_ACTIONS = {
              "params": {"days": "how many days to pay for, up front, when they work for coin"}},
     "dismiss": {"script": "dismiss", "doc": "Let someone in your hire go before their days are up; nothing is paid back",
                 "targets": "creature", "scope": "here", "listed": "ok"},
+    # the village pack's words on things (the owner, 2026-11-23: "A few time we encounter paper or books and no ability
+    # to write on things", then "Chalkboards etc messages, scratching into wood"): each offered only where it works
+    "read": {"script": "read", "doc": "Read what is written on it", "targets": "thing", "listed": "ok"},
+    "write": {"script": "write", "doc": "Write on it: paper and books take ink, a slate or a door chalk, wood a blade",
+              "targets": "thing", "listed": "ok", "duration": 10, "params": {"text": "the words"}},
+    "carve": {"script": "write", "doc": "Carve words into wood with a knife or a blade in your hand",
+              "targets": "thing", "listed": "ok", "duration": 60, "params": {"text": "the words, short"}},
+    "wipe": {"script": "wipe", "doc": "Wipe the chalk off a slate or a door", "targets": "thing", "listed": "ok",
+             "duration": 5},
     # the d20 pack's own, listed only where they would work, so a card does not offer to drink a coin
     "drink": {"script": "drink", "doc": "Drink from a cup, a skin or a well within reach: ale and rum for the taste, water for thirst",
               "targets": "thing", "scope": "any", "listed": "ok", "duration": 30},
@@ -140,10 +149,11 @@ def define(s):
     s.define_schema("fighter", extends="person",
                     doc="A person who fights without a mind: back at whoever strikes them, and at anyone their side has outlawed.",
                     behaviors=[{"script": "fighter_tick", "every": 30}])
-    s.define_schema("sign", extends="thing", doc="Something with writing on it, fixed in place.",
-                    state={"text": "", "portable": False}, actions={"read": {"script": "read", "doc": "Read what is written"}})
-    s.define_schema("letter", extends="thing", doc="Paper: rides in a pocket, burns.",
-                    state={"text": "", "portable": True, "bulk": 0, "burnable": True},
+    s.define_schema("sign", extends="thing", doc="Something with writing on it, fixed in place. A notice board or a slate takes more.",
+                    state={"text": "", "portable": False},
+                    actions={"read": {"script": "read", "doc": "Read what is written"}})
+    s.define_schema("letter", extends="thing", doc="Paper: rides in a pocket, burns, and takes writing.",
+                    state={"text": "", "portable": True, "bulk": 0, "burnable": True, "writable": True},
                     actions={"read": {"script": "read", "doc": "Read what is written"}})
     s.define_schema("guard", extends="fighter",
                     doc="One of Dominico's men on a post. Coin enough, Fat Gog's marker, or a hard look will move him.",
@@ -1579,7 +1589,7 @@ UNDER = "Under the Harbour"
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
 STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
-          "peril", "missions", "shops", "law", "undertaker", "healers"]
+          "peril", "missions", "shops", "law", "undertaker", "healers", "writing"]
 
 
 def by_name(s):
@@ -1720,39 +1730,45 @@ def build_people(s):
 # (type, place key, name, state)
 def things():
     return [
+        ("sign", "docks", "Harbour slate", {"text": HARBOUR_SLATE, **CHALK, "pen": True,
+                                            "description": "A slate on a post by the pier, a stub of chalk on a string "
+                                                           "beside it, where sailors chalk ships, tides and crews wanted."}),
         ("thing", "docks", "Water butt", {"portable": False, "water_source": True,
                                          "description": "A rain-water butt with a tin cup on a chain."}),
         ("thing", "docks", "Klhyt's signet ring", {"portable": True, "bulk": 0, "clue": "ring",
                                                    "description": "A heavy gold signet ring, a ship's wheel on the bezel, half "
                                                                   "trodden into the planks by the warehouse door."}),
-        ("thing", "warehouse", "Big crate", {"portable": False, "description": "A crate big enough for a man, air holes drilled "
+        ("thing", "warehouse", "Big crate", {"portable": False, **WOOD, "description": "A crate big enough for a man, air holes drilled "
                                                                               "in the lid, a Custodian's seal on the paper tacked to it."}),
         ("sign", "turtle", "Price board", {"text": BOARD_TURTLE}),
-        ("letter", "turtle", "Passage book", {"text": PASSAGE_TEXT, "clue": "passage", "burnable": False,
+        ("letter", "turtle", "Passage book", {"text": PASSAGE_TEXT, "clue": "passage", "burnable": False, **BOOK_ROOM,
                                               "description": "The Turtle Dragon's passage book, open on the bar."}),
         ("thing", "turtle", "Harpoons", {"portable": False, "description": "Two harpoons nailed up over the bar. Maggs would break your arm."}),
         ("dice", "turtle", "Knucklebone dice", {"description": "Two knucklebone dice, worn smooth by sailors' fingers."}),
         ("sign", "apothecary", "Price board", {"text": BOARD_APOTHECARY}),
         ("bath", "apothecary", "Lemon bath", {"description": "A copper tub of hot water with lemons and limes floating in it. A "
                                                              "woman with a large fishbone stands by with towels."}),
-        ("thing", "apothecary", "Dominico's table", {"portable": False, "description": "A window table with a RESERVED card. "
+        ("thing", "apothecary", "Dominico's table", {"portable": False, **WOOD, "description": "A window table with a RESERVED card. "
                                                                                        "Nobody else sits there. Nobody."}),
         ("thing", "square", "Town pump", {"portable": False, "water_source": True, "description": "An iron pump with a long handle and a stone trough."}),
-        ("sign", "square", "Notice board", {"text": NOTICE_TEXT}),
+        ("sign", "square", "Notice board", {"text": NOTICE_TEXT, **BOARD_TAKES}),
         ("sign", "hall", "Portrait of Klhyt", {"text": PORTRAIT_TEXT, "description": "A big grey-bearded man, painted standing on a beach."}),
         ("letter", "study", "Klhyt's last letter", {"text": LETTER_TEXT, "clue": "letter",
                                                     "description": "A folded sheet under the blotter, addressed 'Gog', never sent."}),
-        ("letter", "study", "Harbour tally book", {"text": TALLY_TEXT, "clue": "tally", "burnable": True,
+        ("letter", "study", "Harbour tally book", {"text": TALLY_TEXT, "clue": "tally", "burnable": True, **BOOK_ROOM,
                                                    "description": "A thin ledger of harbour dues with notes in the margin."}),
         ("thing", "study", "Ship in a bottle", {"portable": True, "description": "A three-master in a green bottle. The name on "
                                                                                  "her bow is too small to read."}),
         ("sign", "stripperwitch", "Price board", {"text": BOARD_STRIPPERWITCH}),
         ("thing", "stripperwitch", "Red booth", {"portable": False, "description": "A curtained booth in red velvet, for people who are not here."}),
-        ("thing", "stripperwitch", "Stage", {"portable": False, "description": "A little stage with a velvet curtain. Tonight, a "
+        ("thing", "stripperwitch", "Stage", {"portable": False, **WOOD, "description": "A little stage with a velvet curtain. Tonight, a "
                                                                               "fiddler and a lot of feathers."}),
         ("sign", "omberhulk", "Price board", {"text": BOARD_OMBERHULK}),
         ("sign", "ogre", "Price board", {"text": BOARD_OGRE}),
-        ("sign", "ogre", "Honeymoon Suite", {"text": SUITE_TEXT, "description": "A door with HONEYMOON SUITE chalked on it."}),
+        ("sign", "ogre", "Honeymoon Suite", {"text": SUITE_TEXT, **SUITE_CHALK, "description": "A door with HONEYMOON SUITE chalked on it."}),
+        ("thing", "ogre", "Bar top", {"portable": False, **WOOD, "room": 1200, "text": "",
+                                      "description": "The Ogre's bar top, a single slab of black wood scarred deep with "
+                                                     "initials, hearts, tallies and rude words in four alphabets."}),
         ("dice", "ogre", "Bone dice", {"description": "Three yellowed bone dice in a leather cup.", "dice": "3d6"}),
         ("sign", "unicorn", "Price board", {"text": BOARD_UNICORN}),
         ("sign", "unicorn", "The library", {"text": LIBRARY_TEXT, "description": "Floor-to-ceiling shelves, ladders, and a sign that says QUIET."}),
@@ -2775,6 +2791,14 @@ SELLS_CHANDLERY = {
         tool="thieves' tools")},
     "caltrops": {"price": 100, **gear("Bag of caltrops", "A bag of iron caltrops, four points each.")},
     "chalk": {"price": 1, **gear("Chalk", "A stick of white chalk.")},
+    "paper|sheet|sheet of paper|note|notepaper": {"price": 20, "type": "letter", "name": "Sheet of paper", "state": {
+        "text": "", "description": "A clean sheet of rag paper, a little damp at the edges like everything in the Refuge.",
+        "room": 600}},
+    "parchment": {"price": 10, "type": "letter", "name": "Sheet of parchment", "state": {
+        "text": "", "description": "A sheet of scraped goatskin parchment, yellow and tough.", "room": 600}},
+    "book|blank book|journal|diary|notebook|ledger": {"price": 2500, "type": "letter", "name": "Blank book", "state": {
+        "text": "", "description": "A book of blank pages bound in sharkskin, with a ribbon to keep your place.",
+        "room": 6000}},
     "map|chart|maps|coast": {"price": 50, "type": "letter", "name": "Map of the Refuge and its coast", "state": {
         "bulk": 0, "portable": True, "description": "A chart on thin paper, folded small.",
         "text": "The Refuge: the docks and the bonded warehouse, Harbour Street, the square and the Town Hall, the six "
@@ -2941,6 +2965,37 @@ HEALING_EVERY = 300  # world seconds between looks at who lies on the Reed House
 HEALING_KINDS = ["bought", "healing_tick", "treatment_done"]
 
 
+BOARD_TAKES = {"writable": True, "room": 2400}  # the square's notice board: anyone may pin a line to it
+WOOD = {"writable": "blade"}  # carved with a knife or a blade in hand (village write)
+CHALK = {"writable": "chalk"}  # chalked, and wiped off again
+CARVED = ["Big crate", "Dominico's table", "Stage"]  # wood the town stood with before it took a blade
+SUITE_CHALK = {**CHALK, "keeps": SUITE_TEXT}  # a wipe takes what players chalked, not what the door says of the room
+HARBOUR_SLATE = "EMERALD EYE FOR CATAN, ONE O'CLOCK TIDE. BERTHS AT THE TURTLE."
+BOOK_ROOM = {"room": 4000}  # a book holds more than a sheet: the passage book's names, the tally's figures
+BOOKS = ["Passage book", "Harbour tally book"]
+
+
+def build_writing(s):
+    """Paper takes ink, a slate or a door chalk, and wood a blade (the village pack's write, carve and wipe, bound on
+    the body and offered only where they work). A thing spawns with its schema's state, so the paper already in a town
+    that stood before this (the passage book, Klhyt's letter, a map bought, a notice the watch put up) gets `writable`
+    here, the square's board takes notices, the town's wood takes a knife and the Suite's door chalk. The harbour slate
+    and the Ogre's bar top are new things (the things stage). Runs again without change."""
+    for e in s.world.find(type="letter", limit=None):
+        want = {"writable": True} if "writable" not in e["state"] else {}
+        if e["name"] in BOOKS and "room" not in e["state"]:
+            want.update(BOOK_ROOM)
+        if want:
+            s.patch(e["id"], want)
+    board = next((e for e in s.world.find(type="sign", limit=None) if e["name"] == "Notice board"), None)
+    if board is not None and any(board["state"].get(k) != v for k, v in BOARD_TAKES.items()):
+        s.patch(board["id"], dict(BOARD_TAKES))
+    for e in s.world.find(limit=None):  # the town's own wood and its chalked door, as they stood before
+        want = WOOD if e["name"] in CARVED else SUITE_CHALK if e["name"] == "Honeymoon Suite" else None
+        if want and "writable" not in e["state"] and not s.world.is_a(e["type"], "creature"):
+            s.patch(e["id"], dict(want))
+
+
 def build_healers(s, root):
     """A treatment is done the moment it is bought, and the long sleep heals a patient who stays the hour
     (scripts/healing_rule.py); the Reed House is a sanctuary, where the Fist hunt nobody and the watch take nobody
@@ -3015,6 +3070,8 @@ def build(s):
         build_undertaker(s, root)
     if "healers" in STAGES:
         build_healers(s, root)
+    if "writing" in STAGES:
+        build_writing(s)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()
