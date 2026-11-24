@@ -125,6 +125,9 @@ this file is fixed. Picks the owner has not made are marked **host default**.
   gift that Eirik will not; his marines **Kesi Reefstrider** (keeps the gangway; Imani has challenged her twice) and
   **Obasi Tidewalker** (keeps his back; speaks Siren and has heard Pelagie at the end of the pier). The Navy does not
   sing ashore.
+- Kalypso, the owner's own Xoton player character ("can we make sure my character Kalypso isaacs also is included
+  in the makover", 2026-11-24): the live look gains the skin, the build and the open coat over tattoos, once and
+  only from its exact old words (build.py PLAYER_XOTONS), and the statblock the canon speed and tongues.
 
 ## Hired help: the only way to a second agent (owner, 2026-11-22)
 

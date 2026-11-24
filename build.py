@@ -3386,10 +3386,23 @@ def rename_xotons(s):
             s.patch(town["id"], {"built_people": fixed})
 
 
+# a player's own Xoton, at the owner's ask (2026-11-24: "can we make sure my character Kalypso isaacs also is included
+# in the makover"): a player's look is theirs, so it changes once, and only from the exact words it had
+PLAYER_XOTONS = {
+    "Kalypso": ("Kalypso, a barrel-bodied Xoton sailor with a rolling sea-legged walk and a conspicuously bare chin. Faded "
+                "merchant-navy coat, a few buttons missing, smelling faintly of old rum and tar. Looks like someone who has "
+                "slept in a lot of taverns.",
+                "Kalypso, a Xoton sailor, deep brown and barrel-chested, chest-high to a tall man and nearly as wide, with a "
+                "rolling sea-legged walk and a conspicuously bare chin. A faded merchant-navy coat, a few buttons missing, "
+                "hangs open over a bare chest tattooed with ships and storms, smelling faintly of old rum and tar. Looks "
+                "like someone who has slept in a lot of taverns."),
+}
+
+
 def build_xotons(s):
     """What a world made before the Xotons were fleshed out keeps from then: the Whispers' look, the crowds' words, and
-    the statblocks' speed and tongues (25 ft. and a swim, Common, Dwarvish and Siren). The frigate and her people are
-    made by the things and cast stages. Runs again without change."""
+    the statblocks' speed and tongues (25 ft. and a swim, Common, Dwarvish and Siren), and a player's own Xoton's look
+    (PLAYER_XOTONS). The frigate and her people are made by the things and cast stages. Runs again without change."""
     have = by_name(s)
     w = have.get("Whispers of the Deep")
     if w is not None and w["state"].get("description") != WHISPERS:
@@ -3408,6 +3421,10 @@ def build_xotons(s):
             change["rumours"] = heard + more
         if change:
             s.patch(c["id"], change)
+    for name, (was, now) in PLAYER_XOTONS.items():
+        e = have.get(name)
+        if e is not None and e["state"].get("people") == "xoton" and e["state"].get("description") == was:
+            s.patch(e["id"], {"description": now})
     for e in s.world.find(limit=None):
         sb = e["state"].get("statblock")
         if e["state"].get("people") != "xoton" or not isinstance(sb, dict):

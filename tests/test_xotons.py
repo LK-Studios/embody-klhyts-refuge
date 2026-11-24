@@ -106,6 +106,15 @@ def test_a_town_from_before_renames_its_xotons_in_place_once():
         "people": "xoton", "passer_by": True, "description": "A broad Xoton deckhand, black skin shining with sweat, a ship's cook.",
         "dialog": {"name|who|you": "\"Hallgrim Ropewise. A ship's cook.\""},
         "default_line": "\"Hallgrim Ropewise. A ship's cook. Ask me about my work, the mayor, or the news.\""})["id"]
+    # a player's own Xoton, made from the template with their own look (the owner's Kalypso)
+    b = __import__("importlib").util.spec_from_file_location("refuge_build", WORLD / "build.py")
+    build = __import__("importlib").util.module_from_spec(b)
+    b.loader.exec_module(build)
+    was, now = build.PLAYER_XOTONS["Kalypso"]
+    kalypso = gm.spawn("person", eid(gm, "Market Square"), "Kalypso", state={
+        "people": "xoton", "description": was, "stays": True,
+        "statblock": {"kind": "humanoid (xoton)", "languages": ["Common", "Xoton"], "senses": [], "size": "Medium",
+                      "speed": "30 ft."}})["id"]
     for name in NAVY + ["Keepers of the Storm"]:
         gm.destroy(eid(gm, name))
     town_id = eid(gm, "Klhyts Refuge")
@@ -129,6 +138,11 @@ def test_a_town_from_before_renames_its_xotons_in_place_once():
     sb = w.get(amara)["state"]["statblock"]
     assert sb["speed"] == "25 ft., swim 25 ft." and sb["languages"] == ["Common", "Dwarvish", "Siren"]
     assert "black-skinned" in w.get(amara)["state"]["description"]
+    k = w.get(kalypso)["state"]
+    assert k["description"] == now and "deep brown" in now and "bare chin" in now
+    assert k["statblock"]["speed"] == "25 ft., swim 25 ft." and k["statblock"]["languages"] == ["Common", "Dwarvish", "Siren"]
+    gm.patch(kalypso, {"description": "Kalypso, as the player has since written them."})
     before = digest(w)
     load_world(gm, WORLD, upgrade=True)
     assert digest(w) == before
+    assert w.get(kalypso)["state"]["description"] == "Kalypso, as the player has since written them."
