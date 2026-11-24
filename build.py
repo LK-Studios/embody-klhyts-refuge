@@ -27,6 +27,7 @@ from packs.d20.pack import install_rules
 from packs.dnd5e.pack import armor as armor5, character, class_hp, install_rules as install_5e, weapon as weapon5
 from packs.jobs.pack import install_rules as install_jobs
 from packs.burial.pack import install_rules as install_burial
+from packs.beasts.pack import install_rules as install_beasts
 
 WORLD = {
     "id": "klhyts-refuge",
@@ -35,7 +36,7 @@ WORLD = {
     "description": "Shalamar, before the war. Klhyts Refuge, the nicest town on the continent: taverns, inns and "
                    "docks, refugees from Landfall, Lizardfolk tolerated. Fat Gog's guild is under threat and the "
                    "founder is missing.",
-    "requires": ["village", "d20", "sheet", "dnd5e", "locks", "jobs", "burial"],
+    "requires": ["village", "d20", "sheet", "dnd5e", "locks", "jobs", "burial", "beasts"],
 }
 
 # ---- 5e on the sheet pack ----------------------------------------------------------------------------------------
@@ -125,6 +126,9 @@ PERSON_ACTIONS = {
               "targets": "thing", "listed": "ok", "duration": 60, "params": {"text": "the words, short"}},
     "wipe": {"script": "wipe", "doc": "Wipe the chalk off a slate or a door", "targets": "thing", "listed": "ok",
              "duration": 5},
+    # the town's animals (scripts/pet.py; feed, gentle, come and stay are the beasts pack's own, on the animal)
+    "pet": {"script": "pet", "doc": "Pet an animal here: a scratch behind the ears, and see what it makes of you",
+            "targets": "beast", "scope": "here", "listed": "ok", "duration": 5},
     # the d20 pack's own, listed only where they would work, so a card does not offer to drink a coin
     "drink": {"script": "drink", "doc": "Drink from a cup, a skin or a well within reach: ale and rum for the taste, water for thirst",
               "targets": "thing", "scope": "any", "listed": "ok", "duration": 30},
@@ -152,6 +156,11 @@ def define(s):
     s.define_schema("sign", extends="thing", doc="Something with writing on it, fixed in place. A notice board or a slate takes more.",
                     state={"text": "", "portable": False},
                     actions={"read": {"script": "read", "doc": "Read what is written"}})
+    s.define_schema("animal", extends="beast",
+                    doc="One of the town's animals (the beasts pack's beast): feed it, gentle it, pet it; talked to, it "
+                        "answers in its own way.",
+                    state={"dialog": {}, "default_line": [], "lines": "quoted", "secret": ANIMAL_SECRET},
+                    listeners=[{"script": "person_on", "kinds": ["talked"], "unless_embodied": True}])
     s.define_schema("letter", extends="thing", doc="Paper: rides in a pocket, burns, and takes writing.",
                     state={"text": "", "portable": True, "bulk": 0, "burnable": True, "writable": True},
                     actions={"read": {"script": "read", "doc": "Read what is written"}})
@@ -263,6 +272,11 @@ def dish(name, desc, line):
     return {"type": "food", "name": name, "state": {"description": desc, "eaten_line": line}}
 
 
+def fed_on(item, food, feeds=1):
+    """What an animal eats of it too (the beasts pack's feed): its diet tag and how many meals it is."""
+    return {**item, "state": {**item["state"], "food": food, "feeds": feeds}}
+
+
 def token(name, desc, **extra):
     return {"type": "thing", "name": name, "state": {"description": desc, "bulk": 0, **extra}}
 
@@ -306,7 +320,7 @@ SELLS_OMBERHULK = {
         treatment="stitches", heals="1d4")},
 }
 SELLS_UNICORN = {
-    "scraps": {"price": 0, **dish("Scraps", "Yesterday's bread and the end of a cheese.", "Scraps, but honest ones.")},
+    "scraps": {"price": 0, **fed_on(dish("Scraps", "Yesterday's bread and the end of a cheese.", "Scraps, but honest ones."), "scraps")},
     "ale|beer": {"price": 1, **cup("Mug of ale", "A mug of decent ale, cool from the cellar.")},
     "mead": {"price": 2, **cup("Cup of mead", "Clear golden mead.")},
     "wine": {"price": 2, **cup("Cup of wine", "A quiet white wine.", "An empty cup.")},
@@ -1183,8 +1197,8 @@ PEOPLE_OF = {
 # the Night Market and its vendors ----------------------------------------------------------------------------------
 
 SELLS_INES = {
-    "mango|mangoes|fruit": {"price": 1, **dish("Mango", "A mango so ripe it is mostly juice.", "Juice to the elbows. Worth it.")},
-    "pineapple": {"price": 2, **dish("Pineapple", "A whole pineapple, its top still green.", "Sharp, sweet, and gone.")},
+    "mango|mangoes|fruit": {"price": 1, **fed_on(dish("Mango", "A mango so ripe it is mostly juice.", "Juice to the elbows. Worth it."), "fruit")},
+    "pineapple": {"price": 2, **fed_on(dish("Pineapple", "A whole pineapple, its top still green.", "Sharp, sweet, and gone."), "fruit", 2)},
     "coconut": {"price": 1, "type": "thing", "name": "Coconut", "state": {
         "kind": "drink", "left": 1, "description": "A green coconut with the top lopped off, full of cool water.",
         "description_empty": "An empty coconut shell."}},
@@ -1197,7 +1211,7 @@ SELLS_HALLVARD = {
         **DAGGER, "description": "A Xoton hooked knife, for nets, rigging and arguments."}},
 }
 SELLS_GRUSHA = {
-    "skewer|goat|meat|food": {"price": 2, **dish("Goat skewer", "Charred goat on a stick, dripping fat.", "Smoky, peppery, and too hot to hold.")},
+    "skewer|goat|meat|food": {"price": 2, **fed_on(dish("Goat skewer", "Charred goat on a stick, dripping fat.", "Smoky, peppery, and too hot to hold."), "meat", 2)},
     "pepper|sauce|hot": {"price": 1, **dish("Pot of pepper sauce", "A clay pot of Jonulvicha pepper sauce. People cry.",
                                             "You cry. Everyone watching laughs.")},
 }
@@ -1589,7 +1603,7 @@ UNDER = "Under the Harbour"
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
 STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
-          "peril", "missions", "shops", "law", "undertaker", "healers", "writing"]
+          "peril", "missions", "shops", "law", "undertaker", "healers", "writing", "animals"]
 
 
 def by_name(s):
@@ -2768,9 +2782,9 @@ def suit(name, base, desc, **over):
 SELLS_CHANDLERY = {
     "backpack|pack|knapsack|bag": {"price": 200, **gear("Backpack", "A canvas backpack with tarred seams and two good straps.")},
     "bedroll|blanket|bed roll": {"price": 100, **gear("Bedroll", "A rolled oilskin and a wool blanket, tied with cord.")},
-    "rations|ration|food|hardtack|biscuit|travel food|provisions": {"price": 50, **dish(
+    "rations|ration|food|hardtack|biscuit|travel food|provisions": {"price": 50, **fed_on(dish(
         "Trail rations", "A day's travel food in a twist of oilcloth: hardtack, salt fish and a strip of dried mango.",
-        "Hardtack and salt fish. It keeps you going, which is all it promises.")},
+        "Hardtack and salt fish. It keeps you going, which is all it promises."), "fish")},
     "waterskin|water skin|skin|canteen": {"price": 20, **gear("Waterskin", "A goatskin water bag, full, with a wooden stopper.",
                                                               capacity=4, left=4, kind="water")},
     "rope|hemp|hempen": {"price": 100, **gear("Hempen rope", "Fifty feet of tarred hemp rope, coiled and whipped at both ends.")},
@@ -2995,6 +3009,291 @@ def build_writing(s):
         if want and "writable" not in e["state"] and not s.world.is_a(e["type"], "creature"):
             s.patch(e["id"], dict(want))
 
+# ---- animals (the owner, 2026-11-24: "Do we put in some animals ? Do we need some horses? a few cats? And some
+# livestock? Maybe a dog or 4") -----------------------------------------------------------------------------------------
+# The beasts pack's species and beasts. Their 5e numbers are the SRD's where it has the animal (mastiff, cat, riding
+# horse, mule, goat); the Giant Riding Cricket of Shalamar is canon (LoreKeeper, "Shadows of Vorkath": AC 15, HP 26,
+# its scores), though canon gives it no attack and the kick is invented; a hen is invented too. Nobody breeds, so the
+# town's count holds, and nothing ambles, so no stream of steps fills a player's events. Each place an animal lives grows
+# what it eats (`forage`), so a day passes without hunger. The strays and two cats are nobody's: feed one from your
+# hand and gentle it over a few days and it is yours, and follows you. The Fist's mastiff in the bonded warehouse is
+# Brask's, and growls at anyone who comes in who is not his side's. The rest belong to the town (`herd`).
+# invented: every animal below but the cricket, their names and their lines; the watch's horses at the gate.
+ANIMAL_SECRET = ["scores", "ac", "cr", "dies_at_zero", "trust", "gentled", "fed_by", "pet_n", "default_n", "home",
+                 "herd", "owner", "loyalty", "tame_dc", "tame_at", "skill_prof", "body", "wits", "will", "skills"]
+DAWN = 6 * 3600
+SPECIES_COMMON = {"fed_max": 3, "lifespan": 7300, "breed_chance": 0, "amble": False, "tame_skill": "animals",
+                  "starve_days": 4, "stages": [{"name": "adult", "from": 0, "state": {}}]}
+SPECIES = {
+    "dog": {"eats": ["scraps", "meat", "fish", "egg"], "tame_dc": {"adult": 10}, "tame_at": {"adult": 2}},
+    "cat": {"eats": ["fish", "scraps", "meat", "egg"], "tame_dc": {"adult": 13}, "tame_at": {"adult": 3}},
+    "horse": {"eats": ["graze", "fruit"]},
+    "mule": {"eats": ["graze", "fruit"]},
+    "goat": {"eats": ["graze", "scraps", "fruit"]},
+    "chicken": {"eats": ["grain", "scraps"],
+                "yields": {"name": "Egg", "state": {"portable": True, "bulk": 0, "food": "egg", "feeds": 1,
+                                                    "description": "A brown hen's egg, still warm."},
+                           "max": 1, "stages": ["adult"], "sex": "f"}},
+    "cricket": {"eats": ["graze", "fruit"]},
+}
+# numbers for a body: armour class, hit points, scores, challenge, and its natural weapon (a hidden part it "holds")
+ANIMAL_5E = {
+    "dog": {"ac": 12, "hp": 5, "cr": 0.125, "scores": {"str": 13, "dex": 14, "con": 12, "int": 3, "wis": 12, "cha": 7},
+            "skill_prof": {"perception": 1}, "part": ("Teeth", "1d6", "piercing")},
+    "cat": {"ac": 12, "hp": 2, "cr": 0, "scores": {"str": 3, "dex": 15, "con": 10, "int": 3, "wis": 12, "cha": 7},
+            "skill_prof": {"perception": 1, "stealth": 1}, "part": ("Claws", "1d1", "slashing")},
+    "horse": {"ac": 10, "hp": 13, "cr": 0.25, "scores": {"str": 16, "dex": 10, "con": 12, "int": 2, "wis": 11, "cha": 7},
+              "part": ("Hooves", "2d4", "bludgeoning"), "carry": 24},
+    "mule": {"ac": 10, "hp": 11, "cr": 0.125, "scores": {"str": 14, "dex": 10, "con": 13, "int": 2, "wis": 10, "cha": 5},
+             "part": ("Hooves", "1d4", "bludgeoning"), "carry": 20},
+    "goat": {"ac": 10, "hp": 4, "cr": 0, "scores": {"str": 12, "dex": 10, "con": 11, "int": 2, "wis": 10, "cha": 5},
+             "part": ("Horns", "1d4", "bludgeoning")},
+    "chicken": {"ac": 10, "hp": 1, "cr": 0, "scores": {"str": 2, "dex": 11, "con": 9, "int": 2, "wis": 10, "cha": 4},
+                "part": ("Beak", "1d1", "piercing")},
+    "cricket": {"ac": 15, "hp": 26, "cr": 0.5, "scores": {"str": 14, "dex": 16, "con": 13, "int": 1, "wis": 13, "cha": 3},
+                "skill_prof": {"stealth": 1, "acrobatics": 1}, "part": ("Hind legs", "1d6", "bludgeoning"), "carry": 24},
+}
+# (species, place, name, sex, keeper: "herd:<faction>", "owner:<name>" or None for nobody's, state)
+ANIMALS = [
+    ("dog", "turtle", "Old ship's dog", "m", "herd:the Refuge", {
+        "seen_as": "a grizzled grey dog the size of a calf, asleep under the bar",
+        "description": "A grizzled grey dog the size of a calf, asleep under the Turtle Dragon's bar with his chin on a "
+                       "sailor's boot. Maggs calls him Anchor, because he does not move.",
+        "default_line": ["The old dog opens one eye, looks at you, and closes it again.",
+                         "The old dog thumps his tail on the boards, twice, without waking.",
+                         "The old dog sighs the long sigh of a dog who has heard it all before."],
+        "petted": ["The old dog leans his whole weight against your leg and groans with pleasure.",
+                   "The old dog rolls over for his belly, and the sailor whose boot it was swears at you both."]}),
+    ("dog", "warehouse", "Fist's mastiff", "m", "owner:Brask", {
+        "seen_as": "a scarred brindle mastiff on a chain by the door", "guards": True, "staying": True,
+        "description": "A scarred brindle mastiff on a short chain by the warehouse door, a spiked collar and a ripped "
+                       "ear. It belongs to the Fist, and it knows it.",
+        "default_line": ["The mastiff lowers its head and shows you every tooth it has.",
+                         "The mastiff's growl starts somewhere under the floor.",
+                         "The mastiff watches your hands, not your face."],
+        "petted": ["The mastiff snaps at your hand and misses by the width of a finger. The chain rattles tight."],
+        "shy": "The mastiff snaps at your hand and misses by the width of a finger. The chain rattles tight."}),
+    ("dog", "docks", "Yellow dog", "f", None, {
+        "seen_as": "a skinny yellow dog with a torn ear, nosing at fish scraps",
+        "description": "A skinny yellow dog with one torn ear, nosing at the fish scraps by the pier. Nobody's, and "
+                       "hungry, and watching you to see which you are.",
+        "default_line": ["The yellow dog's ears come up. Her tail goes once, hopefully, side to side.",
+                         "The yellow dog backs off a step and sits, just out of reach, watching your hands.",
+                         "The yellow dog sneezes, and looks at you as if it was your fault."],
+        "petted": ["The yellow dog pushes her head under your hand and keeps it there.",
+                   "The yellow dog licks your wrist and then pretends she did not."],
+        "shy": "The yellow dog ducks away from your hand and watches you from a few feet off. Food first, she seems to say."}),
+    ("dog", "market", "Three-legged dog", "m", None, {
+        "seen_as": "a three-legged black dog begging by the brazier",
+        "description": "A black dog on three legs, quick as anything on four, begging at Grusha's brazier with a "
+                       "patience that has clearly paid off before.",
+        "default_line": ["The three-legged dog sits up, which is a trick, and waits to be paid for it.",
+                         "The three-legged dog looks from you to the skewers and back again.",
+                         "The three-legged dog yawns, high and squeaky."],
+        "petted": ["The three-legged dog leans into your knee and nearly falls over.",
+                   "The three-legged dog wags so hard his whole back end goes with it."],
+        "shy": "The three-legged dog hops back out of reach and looks pointedly at the skewers."}),
+    ("cat", "docks", "Ginger tom", "m", None, {
+        "seen_as": "a one-eyed ginger tom on a coil of rope",
+        "description": "A one-eyed ginger tom who owns the fishing boats and lets the fishermen use them. He is "
+                       "sitting on a coil of rope as if it were a throne.",
+        "default_line": ["The ginger tom looks at you with his one eye. You have been weighed, and found to have no fish.",
+                         "The ginger tom washes a paw, slowly, to show you how little you matter.",
+                         "The ginger tom says something short and rude in cat."],
+        "petted": ["The ginger tom permits it. Once. Then he bites you, gently, to show who decides.",
+                   "The ginger tom rumbles like a small engine and kneads the rope."],
+        "shy": "The ginger tom flows off the rope and out of reach, and sits with his back to you."}),
+    ("cat", "unicorn", "Library cat", "f", "herd:the Refuge", {
+        "seen_as": "a fat grey cat asleep on a stack of books",
+        "description": "A fat grey cat asleep on the histories of Landfall, which she has read thoroughly from the "
+                       "outside. Wendeline calls her Footnote.",
+        "default_line": ["The grey cat opens her eyes, considers waking, and decides against it.",
+                         "The grey cat stretches until she falls off the books, and acts as if she meant to.",
+                         "The grey cat stares at a spot on the wall where nothing is."],
+        "petted": ["The grey cat purrs loudly enough that a reader looks up and frowns at you.",
+                   "The grey cat rolls onto her back, which is a trap, and you have walked into it."]}),
+    ("cat", "market", "Tortoiseshell cat", "f", None, {
+        "seen_as": "a small tortoiseshell cat hunting under the fruit",
+        "description": "A small tortoiseshell mouser hunting under Mother Ines's fruit pyramids, all business.",
+        "default_line": ["The tortoiseshell flicks an ear at you and goes back to her hunting.",
+                         "The tortoiseshell freezes, wiggles, and pounces on something you never saw.",
+                         "The tortoiseshell blinks at you slowly, which in cat is almost friendly."],
+        "petted": ["The tortoiseshell arches into your hand and then remembers she is working."],
+        "shy": "The tortoiseshell is under the mangoes before your hand gets close."}),
+    ("horse", "gate", "Grey mare", "f", "herd:the Refuge", {
+        "seen_as": "a tall grey mare at the hitching rail",
+        "description": "A tall grey mare at the hitching rail inside the gate, one of the watch's horses for the ride "
+                       "out to the farms. She has opinions about apples.",
+        "default_line": ["The grey mare blows warm air down her nose at you.",
+                         "The grey mare stamps a hoof and swishes the flies off her flank.",
+                         "The grey mare noses your pockets, in case."],
+        "petted": ["The grey mare lowers her head so you can reach her ears, and sighs.",
+                   "The grey mare leans her nose into your chest and nearly knocks you over."]}),
+    ("horse", "gate", "Bay gelding", "m", "herd:the Refuge", {
+        "seen_as": "a bay gelding with a white blaze",
+        "description": "A big bay gelding with a white blaze and a rolling eye, the watch's second horse. He was a "
+                       "plantation horse once and does not like the jungle drums.",
+        "default_line": ["The bay gelding rolls an eye at you and shifts his weight.",
+                         "The bay gelding tosses his head, and the rail creaks.",
+                         "The bay gelding whickers at the grey mare, who ignores him."],
+        "petted": ["The bay gelding stands very still under your hand, and then relaxes all at once.",
+                   "The bay gelding lips at your sleeve, looking for sugar."]}),
+    ("horse", "gate", "Piebald pony", "m", "herd:the Refuge", {
+        "seen_as": "a shaggy piebald pony",
+        "description": "A shaggy piebald pony, round as a barrel, who carries the gate watch's water and the post. "
+                       "He bites.",
+        "default_line": ["The piebald pony pins his ears back at you.",
+                         "The piebald pony eats a weed off the wall with great concentration.",
+                         "The piebald pony turns his back on you, which is his opinion."],
+        "petted": ["The piebald pony allows it, then tries to bite your sleeve.",
+                   "The piebald pony leans on you companionably and stands on your foot."]}),
+    ("mule", "graves", "Undertaker's mule", "f", "herd:the Refuge", {
+        "seen_as": "a patient brown mule by the cart",
+        "description": "A patient brown mule by the cart under the lodge eaves, who pulls the dead to the Quiet "
+                       "Ground and has never once hurried.",
+        "default_line": ["The mule looks at you for a long time, the way the dead never can.",
+                         "The mule flicks one long ear, then the other.",
+                         "The mule brays once, enormously, and goes back to chewing."],
+        "petted": ["The mule leans her long face against your shoulder and closes her eyes."]}),
+    ("goat", "lanes", "Nanny goat", "f", "herd:the Refuge", {
+        "seen_as": "a white nanny goat on a balcony",
+        "description": "A white nanny goat standing on a first-floor balcony, which she got onto somehow, eating a sock.",
+        "default_line": ["The nanny goat stares at you with her strange square eyes and keeps chewing.",
+                         "The nanny goat bleats, once, flatly.",
+                         "The nanny goat swallows the sock."],
+        "petted": ["The nanny goat butts your hand for more."]}),
+    ("goat", "lanes", "Black billy goat", "m", "herd:the Refuge", {
+        "seen_as": "a black billy goat with a beard and a temper",
+        "description": "A black billy goat with a long beard, a worse smell and a temper, tied to a yard gate he is "
+                       "slowly eating.",
+        "default_line": ["The billy goat lowers his horns at you, thoughtfully.",
+                         "The billy goat chews the gate.",
+                         "The billy goat makes a noise like an old man arguing."],
+        "petted": ["The billy goat tolerates it, then butts you in the thigh, hard, to make a point."]}),
+    ("goat", "lanes", "Brown kid", "f", "herd:the Refuge", {
+        "seen_as": "a brown kid goat bouncing off the walls",
+        "description": "A small brown goat, barely grown, bouncing off the walls of the lane for no reason at all.",
+        "default_line": ["The brown goat springs straight up in the air, twice.",
+                         "The brown goat skitters sideways and stares at you as if you did that.",
+                         "The brown goat tries to eat your hem."],
+        "petted": ["The brown goat headbutts your knee with great affection."]}),
+    ("chicken", "lanes", "Speckled hen", "f", "herd:the Refuge", {
+        "seen_as": "a speckled hen", "description": "A speckled hen scratching in the dirt of the lane.",
+        "default_line": ["The speckled hen tilts her head to look at you with one eye.",
+                         "The speckled hen scratches, finds nothing, and scratches again."],
+        "petted": ["The speckled hen crouches and lets you stroke her back, clucking low."]}),
+    ("chicken", "lanes", "Red hen", "f", "herd:the Refuge", {
+        "seen_as": "a red hen", "description": "A red hen with an air of grievance, guarding a doorstep.",
+        "default_line": ["The red hen tells you off at length.", "The red hen fluffs up to twice her size."],
+        "petted": ["The red hen pecks your hand. Not hard. Just on principle."]}),
+    ("chicken", "lanes", "Lanes rooster", "m", "herd:the Refuge", {
+        "seen_as": "a rooster on a rain barrel", "description": "A gold and green rooster on a rain barrel, who crows "
+                                                                "at every hour of the night but dawn.",
+        "default_line": ["The rooster crows at you. It is not morning.", "The rooster struts the length of the barrel."],
+        "petted": ["The rooster sidesteps your hand and crows, offended."]}),
+    ("chicken", "ogre", "Suite hen", "f", "herd:the Refuge", {
+        "seen_as": "a brown hen on the Honeymoon Suite's bed",
+        "description": "A brown hen who lives in the Honeymoon Suite, on the dog pelts, and pays no rent.",
+        "default_line": ["The brown hen glares at you from the dog pelts.", "The brown hen settles deeper into the bed."],
+        "petted": ["The brown hen puffs up and lets you, with an expression of great suffering."]}),
+    ("chicken", "ogre", "White hen", "f", "herd:the Refuge", {
+        "seen_as": "a white hen stacked in the corner",
+        "description": "A white hen, one of the chickens somebody stacked in the corner of the Honeymoon Suite.",
+        "default_line": ["The white hen clucks a long complaint about the stacking.",
+                         "The white hen pecks at a crumb on the floor."],
+        "petted": ["The white hen goes very still and lets you, then flaps off."]}),
+    ("cricket", "docks", "Giant riding cricket", "m", "herd:Lizardfolk", {
+        "seen_as": "a horse-sized green cricket tethered by the fish market",
+        "description": "A Giant Riding Cricket of Shalamar, tall as a horse and longer, its shell a vivid jungle green, "
+                       "tethered by the fish stalls while its Lizardfolk rider sells the catch. Its antennae never stop "
+                       "moving. They say its chirp carries a mile.",
+        "default_line": ["The cricket's antennae sweep over you, light as hair.",
+                         "The cricket shifts on its six legs and the dock planks creak.",
+                         "The cricket chirps, once, and every gull on the pier goes up."],
+        "petted": ["The cricket holds very still while you stroke its shell, which is warm, and clicks softly.",
+                   "The cricket lowers its great head so you can reach between its antennae."]}),
+]
+FORAGE = {"docks": {"fish": 6, "scraps": 4, "fruit": 3}, "market": {"scraps": 6, "fruit": 4}, "lanes": {"graze": 8, "grain": 8, "scraps": 4},
+          "gate": {"graze": 10}, "graves": {"graze": 4}, "turtle": {"scraps": 4, "fish": 2}, "unicorn": {"scraps": 3},
+          "ogre": {"scraps": 3, "grain": 3}, "warehouse": {"scraps": 2}}
+# what the market stalls and the Unicorn sell that an animal eats too, for a town that stood before (the shops stage
+# keeps Hob's own; these keepers' wares were laid once, when they were made)
+STALL_FOOD = {"Grusha": {"skewer|goat|meat|food": ("meat", 2)}, "Mother Ines": {"mango|mangoes|fruit": ("fruit", 1),
+              "pineapple": ("fruit", 2)}, "Wendeline Moss": {"scraps": ("scraps", 1)}}
+
+
+def animal_state(sp, sex, keeper, P, have, extra):
+    n = ANIMAL_5E[sp]
+    st = {"species": sp, "sex": sex, "age": 900, "stage": "adult", "fed": 3, "home": None, "dies_at_zero": True,
+          "ac": n["ac"], "hp": n["hp"], "max_hp": n["hp"], "cr": n["cr"], "scores": dict(n["scores"]),
+          "skill_prof": dict(n.get("skill_prof") or {}), **({"carry": n["carry"]} if n.get("carry") else {})}
+    if keeper and keeper.startswith("herd:"):
+        st["herd"] = keeper[5:]
+    elif keeper and keeper.startswith("owner:"):
+        st.update({"owner": have[keeper[6:]]["id"], "loyalty": 4})
+    st.update({k: v for k, v in extra.items()})
+    return st
+
+
+def build_animals(s, root):
+    """The town's animals (the beasts pack): its species, hidden on the root; what each place they live in grows for
+    them; the day that feeds them, at dawn; the food the stalls sell that they eat too; and the twenty, each made once
+    (the town's `built_animals`, so one a player kills or leads away is not made again). Runs again without change."""
+    have = by_name(s)
+    P = place_ids(s)
+    for sid, spec in SPECIES.items():
+        want = {**SPECIES_COMMON, **spec}
+        if sid not in have:
+            s.spawn("species", root, sid, state=want)
+        else:
+            cur = s.inspect(have[sid]["id"])["state"]
+            diff = {k: v for k, v in want.items() if cur.get(k) != v}
+            if diff:
+                s.patch(have[sid]["id"], diff)
+    for key, tags in FORAGE.items():
+        if key not in P:
+            continue
+        cur = s.inspect(P[key])["state"].get("forage") or {}
+        add = {t: {"left": n, "max": n, "regrow": n} for t, n in tags.items() if t not in cur}
+        if add:
+            s.patch(P[key], {"forage": {**cur, **add}})
+    for keeper, wares in STALL_FOOD.items():
+        k = have.get(keeper)
+        if k is None:
+            continue
+        sells = s.inspect(k["id"])["state"].get("sells") or {}
+        changed = False
+        for key, (tag, feeds) in wares.items():
+            item = sells.get(key)
+            if isinstance(item, dict) and (item.get("state") or {}).get("food") is None:
+                sells = {**sells, key: {**item, "state": {**(item.get("state") or {}), "food": tag, "feeds": feeds}}}
+                changed = True
+        if changed:
+            s.patch(k["id"], {"sells": None})
+            s.patch(k["id"], {"sells": sells})
+    if not any("beasts_rule" in str(r) for r in (s.inspect(root).get("rules") or [])):
+        install_beasts(s, root, day="beast_day")
+    if not any(t["kind"] == "beast_day" for t in s.timers()):
+        now = s.summary()["t"]
+        s.schedule((DAWN - now) % 86400 or 86400, "beast_day", entity=root, every=86400)
+    town = have["Klhyts Refuge"]["id"]
+    was = set(s.inspect(town)["state"].get("built_animals") or [])
+    made = set(was)
+    for sp, where, name, sex, keeper, extra in ANIMALS:
+        if name in made:
+            continue
+        if name not in have and where in P:
+            st = animal_state(sp, sex, keeper, P, have, extra)
+            st["home"] = P[where]
+            b = s.spawn("animal", P[where], name, state=st)["id"]
+            part, dice, dtype = ANIMAL_5E[sp]["part"]
+            s.spawn("thing", b, part, state={"weapon": True, "dice": dice, "dtype": dtype, "category": "natural",
+                                             "properties": [], "bonus": 0, "portable": False, "hidden": True,
+                                             "natural": True, "bulk": 0})
+        made.add(name)
+    if made != was:
+        s.patch(town, {"built_animals": sorted(made)})
+
 
 def build_healers(s, root):
     """A treatment is done the moment it is bought, and the long sleep heals a patient who stays the hour
@@ -3072,6 +3371,8 @@ def build(s):
         build_healers(s, root)
     if "writing" in STAGES:
         build_writing(s)
+    if "animals" in STAGES:
+        build_animals(s, root)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

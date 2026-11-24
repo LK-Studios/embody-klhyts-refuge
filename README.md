@@ -28,6 +28,9 @@ The game here is everything on top of that:
   (the dnd5e pack): initiative and turns, armour class, damage dice, death saves, conditions and spell slots.
   Paper and books take writing (the village pack's `write`), and so does the notice board on the square; Hob
   Merrow sells paper, parchment and blank books.
+  The town has its animals (the beasts pack): dogs, cats, the watch's horses, the undertaker's mule, goats and
+  hens in the lanes, and a Lizardfolk's Giant Riding Cricket at the docks. Feed a stray from your hand and
+  gentle it over a few days and it follows you; the Fist's mastiff in the bonded warehouse growls at strangers.
 - **The story.** One evening, from half past ten until a ship sails on the one o'clock tide. The clock is turn-based:
   each act moves the world 30 seconds, so the evening waits for its players.
 
