@@ -1603,7 +1603,7 @@ UNDER = "Under the Harbour"
 # ---- the build, in stages that each check what is there by name, so a rerun adds only what is missing ----------------
 
 STAGES = ["places", "layout", "people", "things", "wiring", "cast", "magistrate", "five_e", "statblocks", "hire", "glance",
-          "peril", "missions", "shops", "law", "undertaker", "healers", "writing", "animals"]
+          "peril", "missions", "shops", "law", "undertaker", "healers", "writing", "animals", "siren"]
 
 
 def by_name(s):
@@ -1916,7 +1916,9 @@ def build_wiring(s, root):
     s.set_rule(root, "finds", kinds=["checked"])
     s.set_rule(root, "bound_guard", kinds=["before_act"])
     s.set_rule(root, "follow_rule", kinds=["following", "stayed"])
-    s.set_rule(root, "routine", kinds=["routine_tick"])  # the town's day (scripts/routine.py)
+    # the town's day (scripts/routine.py): it walks every person and their slots each tick, so it asks for more than a
+    # rule's default 20,000 (a second siren's five slots ran it out on 2026-11-24, and live has more people than a build)
+    s.set_rule(root, "routine", kinds=["routine_tick"], fuel=ROUTINE_FUEL)
     if not any(t["kind"] == "routine_tick" for t in s.timers()):
         s.schedule(60, "routine_tick", entity=root, every=ROUTINE_EVERY)
     for a, b, standing, note in KNOWS:
@@ -2197,6 +2199,7 @@ CAST_EXTRA = {
               "bribe_line": BRASK["bribe_line"], "marker_line": BRASK["marker_line"], "cowed_line": BRASK["cowed_line"]},
 }
 ROUTINE_EVERY = 300  # world seconds between ticks of the town's day
+ROUTINE_FUEL = 200_000  # the routine rule's budget a tick: every person and their slots
 
 
 def routine_ids(slots, P, have):
@@ -2240,9 +2243,14 @@ def spawn_new(s):
         st = {**body(n["scores"], n.get("skills"), hp(n.get("hp") or 10)), "faction": n.get("faction"),
               "people": n.get("people", "human"), "post": home, "home": home}
         pid = s.spawn(n.get("type") or "person", home, name, state=st)["id"]
-        s.spawn("thing", pid, "Coin", state=coin(int((CAST.get(name) or {}).get("purse") or 20)))
-        for cname, wkey, desc in n.get("carries") or []:
-            s.spawn("thing", pid, cname, state=arm(wkey, desc) if wkey else {"portable": True, "bulk": 0, "description": desc})
+        purse = (CAST.get(name) or {}).get("purse")
+        purse = 20 if purse is None else int(purse)
+        if purse > 0:  # a purse of 0 is no coin at all (a siren up from the deep has never seen one)
+            s.spawn("thing", pid, "Coin", state=coin(purse))
+        for cname, wkey, desc, *more in n.get("carries") or []:  # a fourth, a dict: more state (a count, a kind)
+            extra = dict(more[0]) if more else {}
+            s.spawn("thing", pid, cname, state={**(arm(wkey, desc) if wkey else {"portable": True, "bulk": 0,
+                                                                                "description": desc}), **extra})
         made.add(name)
     s.patch(town, {"built_people": sorted(made)})
 
@@ -3295,6 +3303,15 @@ def build_animals(s, root):
         s.patch(town, {"built_animals": sorted(made)})
 
 
+def build_siren(s):
+    """Pelagie's trade (cast/q_siren.py, scripts/siren_trade.py): a rule on her that pays a pearl or raw gold for a
+    weapon or armour handed to her, and sends her home with three. She is made by the cast stage (NEW). Runs again
+    without change."""
+    p = by_name(s).get("Pelagie")
+    if p is not None and not any("siren_trade" in str(r) for r in (s.inspect(p["id"]).get("rules") or [])):
+        s.set_rule(p["id"], "siren_trade", kinds=["given"])
+
+
 def build_healers(s, root):
     """A treatment is done the moment it is bought, and the long sleep heals a patient who stays the hour
     (scripts/healing_rule.py); the Reed House is a sanctuary, where the Fist hunt nobody and the watch take nobody
@@ -3373,6 +3390,8 @@ def build(s):
         build_writing(s)
     if "animals" in STAGES:
         build_animals(s, root)
+    if "siren" in STAGES:
+        build_siren(s)
     mend_stale(s)
     s.clock(run=False, turn=30)
     return s.summary()

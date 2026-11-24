@@ -31,6 +31,8 @@ The game here is everything on top of that:
   The town has its animals (the beasts pack): dogs, cats, the watch's horses, the undertaker's mule, goats and
   hens in the lanes, and a Lizardfolk's Giant Riding Cricket at the docks. Feed a stray from your hand and
   gentle it over a few days and it follows you; the Fist's mastiff in the bonded warehouse growls at strangers.
+  A second siren has come ashore: shy, frightened, and trading pearls and raw gold for weapons that will not
+  rust under the sea (hand her one; coral armour above all); with three she goes home.
 - **The story.** One evening, from half past ten until a ship sails on the one o'clock tide. The clock is turn-based:
   each act moves the world 30 seconds, so the evening waits for its players.
 
