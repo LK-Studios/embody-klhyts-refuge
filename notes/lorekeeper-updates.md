@@ -111,9 +111,15 @@ for "Melenkov is"; and the eight Patron Saints are named in full only in the "Du
 > They come in Merchant Navy, or Military, or rarely pirates. Each ship has it's own vibe and tribe etc. Some dress up
 > with the pomp, some more ragtag, a lot of them, don't wear much at all.
 
+And on 2026-11-28:
+
+> They want to be mega stocky dwarves, lot of them rough and tumble sailors, messy hair. Black skinned. Very wide,
+> nearly as wide as they are tall.
+
 LoreKeeper's "Xotons Race" says only "short and stout" and "deeply tanned". If you want it there, under Physical
-Attributes: Xotons are dark-skinned, deep brown to black; chest-high to a tall man and nearly as wide as they are tall,
-barrel-chested and broad, warriors of the sea as much as sailors. Under Society: every ship is its own tribe with its
+Attributes: Xotons are black-skinned, mega-stocky dwarves of the sea, chest-high to a tall man and nearly as wide as
+they are tall, barrel-chested and broad, warriors of the sea as much as sailors, most of them rough and tumble with
+messy, salt-stiff hair. ("Deeply tanned" would have to go: an AI drawing from that line paints them pale.) Under Society: every ship is its own tribe with its
 own dress and ways. Merchant House ships range from an envoy's finery (silk and gold in the House colours) to a working
 crew's tarred sailcloth wraps and bare feet; the Military Navy wears sharkskin, brass and coral, with a fleet knot
 tattooed at the wrist; pirates have no House mark and no fleet knot. Many Xotons wear very little: a sailcloth wrap and

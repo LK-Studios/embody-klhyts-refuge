@@ -13,13 +13,14 @@ NAMES = {
 LOOKS = {
     "human": ["A sunburnt colonist in a sweat-dark shirt", "A Landfall woman with a basket on her hip", "A thin clerk with ink to the elbow",
               "A fisherman with a net over one shoulder", "A grandmother selling nothing in particular", "A young man in a borrowed coat"],
-    # Xotons (owner, 2026-11-24): dark-skinned, nearly as wide as they are tall, each ship its own tribe; rarely a pirate
-    "xoton": ["A barrel-chested Xoton deckhand, black skin shining with sweat, in a tarred sailcloth wrap and nothing else",
-              "A Xoton woman nearly as wide as she is tall, deep brown and tattooed to the jaw, a coil of rope and a glow kelp lamp on her hip",
-              "A Xoton boatman off the envoy's launch in a sea-green sash and gold earrings, bare-chested and very pleased with himself",
-              "A grey-bearded Xoton, dark as tarred oak, chest-high and as wide as a door, with tattooed knuckles and a shark-tooth necklace",
-              "A Xoton marine off the Navy frigate, oiled and bare-chested under a sharkskin harness, a fleet knot tattooed at each wrist",
-              "A Xoton with no House mark and no fleet knot, gold in both ears and a cutlass worn too comfortably: a pirate, if anyone asked"],
+    # Xotons (owner, 2026-11-24 and 11-28): black-skinned, mega-stocky dwarves nearly as wide as they are tall, most of
+    # them rough and tumble sailors with messy hair; each ship its own tribe; rarely a pirate
+    "xoton": ["A barrel-chested Xoton deckhand, a black-skinned sea dwarf as wide as a door, hair a salt-stiff mess, in a tarred sailcloth wrap and nothing else",
+              "A Xoton woman, a black-skinned sea dwarf nearly as wide as she is tall, tattooed to the jaw, wild hair tied up in rope yarn, a coil of rope and a glow kelp lamp on her hip",
+              "A Xoton boatman off the envoy's launch, a black-skinned sea dwarf in a sea-green sash and gold earrings, bare-chested and very pleased with himself",
+              "A grey-bearded Xoton, a black-skinned sea dwarf chest-high and as wide as a door, with a shock of grey hair, tattooed knuckles and a shark-tooth necklace",
+              "A Xoton marine off the Navy frigate, a black-skinned sea dwarf oiled and bare-chested under a sharkskin harness, a fleet knot tattooed at each wrist",
+              "A Xoton with no House mark and no fleet knot, a black-skinned sea dwarf with a tangle of hair, gold in both ears and a cutlass worn too comfortably: a pirate, if anyone asked"],
     "elf": ["A hooded elf with a Landfall accent and careful eyes", "A tall elf in a fisherman's coat that doesn't fit him",
             "An elf woman with silver rings and no luggage", "A young elf who flinches at uniforms"],
     "jonulvicha": ["A big Jonulvicha stevedore, tusks capped in brass", "A Jonulvicha woman with a cleaver in her belt",

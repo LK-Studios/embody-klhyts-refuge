@@ -185,12 +185,12 @@ CAST = {
     },
 
     "Khamisi Saltbeard": {
-        "look": "A stocky Xoton, chest-high to a man and nearly as wide as he is tall, deep brown, with a grey beard "
+        "look": "A mega-stocky Xoton, a black-skinned dwarf of the sea chest-high to a man and nearly as wide as he is tall, with a mess of grey hair and a grey beard "
                 "crusted white with salt crystals, sitting cross-legged on a tarpaulin of ship's goods: green-glowing "
                 "kelp lamps, coils of tarred rope, bolas, hooked knives. He is dressed like the deckhand in a ballad, "
                 "bare-chested in a tarred sailcloth wrap, and tattooed shoulder to wrist with voyages, every one of them "
                 "crisp and new. Every item lies in a straight line and every price is chalked on a slate.",
-        "seen_as": "the salt-bearded Xoton on the tarpaulin",
+        "seen_as": "the salt-bearded Xoton on the tarpaulin, a wide black-skinned sea dwarf",
         "brief": "You are Khamisi Saltbeard, a Xoton chandler who sells ship's goods off a tarpaulin in the Night "
                  "Market: glow kelp lamps at two gold, Xoton rope, bolas, hooked knives. Xoton crews buy their own "
                  "people's work from you at shore prices. You tell everyone you were born on the "
@@ -755,13 +755,13 @@ CAST = {
     },
 
     "Amara Ironwake": {
-        "look": "A short, enormously broad Xoton woman, nearly as wide as she is tall, black-skinned and bare-armed, with "
+        "look": "A short, enormously broad Xoton woman, a black-skinned dwarf of the sea nearly as wide as she is tall, bare-armed, with "
                 "arms like hawsers and iron-grey braids pinned up out of the way. Tattooed waves climb her neck, one for "
                 "every storm she has worked, and the iron-grey wave of House Ironwake rides her left shoulder. She wears "
                 "what the Whispers' crew all wear, a knee-length wrap of tarred sailcloth and a rope belt, and nothing on "
                 "her feet. A brass whistle hangs on a chain at her chest, and her voice carries across the whole harbour "
                 "without her trying.",
-        "seen_as": "the Xoton woman with the brass whistle",
+        "seen_as": "the Xoton woman with the brass whistle, a wide black-skinned sea dwarf",
         "brief": "You are Amara Ironwake, bosun of the Xoton cog Whispers of the Deep, a House Ironwake ship of the "
                  "Merchant Navy. You were born aboard her in the cable tier during a gale, and every storm since is "
                  "tattooed somewhere on you. Your uncle Bakari is her master, gouty and mostly below; the deck is yours. "
@@ -1648,11 +1648,11 @@ CAST = {
     # docks before the morning tide, the town watch a tavern behind --------------------------------------------------
 
     "Dayo Oceanheart": {
-        "look": "A short Xoton, barrel-chested and almost as wide as he is tall, his skin a deep brown and his grey-shot "
+        "look": "A short, mega-stocky Xoton, a black-skinned dwarf of the sea almost as wide as he is tall, his grey-shot hair a salt-stiff tangle and his "
                 "beard plaited into three ropes. He is bare to the waist in a tarred sailcloth wrap, tattooed from "
                 "collarbone to wrist with ports and songs, and the fish on his forearm is fresh and still angry. He drinks "
                 "an enormous beer with both hands and sings under his breath, and his eyes are wet.",
-        "seen_as": "the singing Xoton with the plaited beard",
+        "seen_as": "the singing Xoton with the plaited beard, a wide black-skinned sea dwarf",
         "brief": "You are Dayo Oceanheart, a Xoton sailor of the cog Whispers of the Deep, two hundred and ten years "
                  "old and forty years in her. You were born at sea, as a Xoton should be, and you have a tattoo for every "
                  "port and a song for every tattoo; the fish on your forearm is tonight's, and the needle-man at the "
@@ -1755,12 +1755,12 @@ CAST = {
     },
 
     "Imani Wavebreaker": {
-        "look": "A Xoton woman nearly as wide as she is tall, with shoulders like a capstan, skin so dark it shines blue "
+        "look": "A Xoton woman, a black-skinned dwarf of the sea nearly as wide as she is tall, with shoulders like a capstan, a wild bush of hair, skin so dark it shines blue "
                 "under the lanterns, rope-burned palms and copper rings in both ears. She wears a sailcloth wrap tarred "
                 "black and a twist of red cloth across her chest, her arms are tattooed with a notch for every bout she "
                 "has won, which is a lot of arm, and her elbow is already on the table. She grins at everyone who walks "
                 "past as if they owe her a contest.",
-        "seen_as": "the Xoton woman with copper earrings",
+        "seen_as": "the Xoton woman with copper earrings, a wide black-skinned sea dwarf",
         "brief": "You are Imani Wavebreaker, a Xoton topman of the Whispers of the Deep, a hundred and forty, the strongest "
                  "arm on the crew bar one. You were born in the foretop of the Seaward Lass in a flat calm, which your "
                  "mother says is why you are restless. You arm-wrestle anyone who sits down, a copper a bout, and you "
@@ -1856,12 +1856,12 @@ CAST = {
     },
 
     "Kwasi Foamtooth": {
-        "look": "A young-looking Xoton, barrel-chested and almost as broad as he is tall, his skin a warm dark brown, with "
+        "look": "A young-looking Xoton, a black-skinned dwarf of the sea, barrel-chested and almost as broad as he is tall, his hair sticking up in salt-stiff tufts, with "
                 "a big laugh and one front tooth of white coral where his own was knocked out, flashing whenever he "
                 "grins, which is always. He wears a tarred sailcloth wrap, a borrowed silk scarf and nothing else, his "
                 "chest is a riot of tattoos, half of them unfinished, and he has an arm round someone he met five "
                 "minutes ago.",
-        "seen_as": "the grinning Xoton with the coral tooth",
+        "seen_as": "the grinning Xoton with the coral tooth, a wide black-skinned sea dwarf",
         "brief": "You are Kwasi Foamtooth, a Xoton deckhand of the Whispers of the Deep, ninety years old, the youngest "
                  "of the crew ashore and the loudest. Your front tooth went in a brawl on the Catan quays, and a Xoton "
                  "coral-wright made you a white one; the crew named you for it, and you grin to show it off. You make "
@@ -1995,11 +1995,11 @@ CAST = {
     },
 
     "Little Jabali": {
-        "look": "An enormous Xoton, as tall as a tall man and twice as wide, black-skinned, with a soft round face, a "
+        "look": "An enormous Xoton, black-skinned, as tall as a tall man and twice as wide, with a soft round face, hair like a haystack, a "
                 "beard like a thicket and hands like anchors. He wears a sailcloth wrap the size of a mainsail and a coil "
                 "of rope over one shoulder, and his broad back is tattooed with a night sky, star by star. He ducks under "
                 "every lintel and moves through a crowd as carefully as a man carrying eggs.",
-        "seen_as": "the enormous gentle Xoton",
+        "seen_as": "the enormous gentle Xoton, black-skinned, as tall as a man and twice as wide",
         "brief": "You are Little Jabali, a Xoton deckhand of the Whispers of the Deep. You were the smallest of your "
                  "mother's nine, and the crew named you Little before you grew; now you stand as tall as a tall man and "
                  "twice as wide, the biggest Xoton on any coast, and the name stayed because the crew think it is funny, "

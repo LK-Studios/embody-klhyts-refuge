@@ -1,14 +1,16 @@
-"""The Xotons as canon has them (owner, 2026-11-24: dark-skinned, almost as wide as they are tall, barrel-chested
-warriors of the sea, Merchant Navy, Military Navy or rarely pirates, each ship its own tribe): every Xoton in town looks
-it, carries a name from LoreKeeper's Xoton naming doc, and has the canon's speed and tongues; the Navy's frigate is at
-the pier with her captain and two marines; a town built before all this is renamed in place, once."""
+"""The Xotons as canon has them (owner, 2026-11-24 and 11-28: black-skinned, mega-stocky dwarves almost as wide as
+they are tall, barrel-chested warriors of the sea, most of them rough and tumble sailors with messy hair; Merchant
+Navy, Military Navy or rarely pirates, each ship its own tribe): every Xoton in town looks it, at a glance too, carries
+a name from LoreKeeper's Xoton naming doc, and has the canon's speed and tongues; the briefing says what a Xoton is;
+the Navy's frigate is at the pier with her captain and two marines; a town built before all this is renamed in place,
+once."""
 
 import hashlib
 import json
 from pathlib import Path
 
 from embody.cli import load_world
-from embody.ops import AUTHOR, Engine
+from embody.ops import AUTHOR, Engine, _glance
 
 REPO = next(p for p in Path(__file__).resolve().parents if (p / "pyproject.toml").exists())
 WORLD = Path(__file__).resolve().parents[1]
@@ -66,9 +68,12 @@ def test_every_xoton_is_dark_broad_and_named_as_canon_names_them():
     assert {e["name"] for e in xotons} >= set(OLD) | set(NAVY) | {"Captain Eirik", "Marlo"}
     assert not set(OLD.values()) & set(have)
     for e in xotons:
+        # owner, 2026-11-28: black-skinned, mega-stocky dwarves nearly as wide as they are tall; and a client that has
+        # never heard of a Xoton draws from the glance alone, so the glance says it in plain words
         look = e["state"]["description"].lower()
-        assert any(w in look for w in ("black", "brown", "dark")), e["name"]
-        assert any(w in look for w in ("wide", "broad", "barrel")), e["name"]
+        assert "black" in look and any(w in look for w in ("wide", "broad", "barrel")), e["name"]
+        seen = _glance({"state": e["state"]}).lower()
+        assert "black" in seen and any(w in seen for w in ("dwarf", "wide")), (e["name"], seen)
         sb = e["state"]["statblock"]
         assert sb["speed"] == "25 ft., swim 25 ft." and sb["languages"][:3] == ["Common", "Dwarvish", "Siren"], e["name"]
     # the Navy's frigate at the pier, her captain and marines on the docks, armed as canon arms them
@@ -88,7 +93,11 @@ def test_every_xoton_is_dark_broad_and_named_as_canon_names_them():
     gm.patch(eid(gm, "Dockside crowd"), {"mix": None})
     gm.patch(eid(gm, "Dockside crowd"), {"mix": {"xoton": 1}})
     gm.move(eid(gm, "Newcomer"), eid(gm, "The Docks"))
+    # what a Xoton is, in the briefing every client reads when it joins
+    briefing = gm.world.get(gm.world.root_id)["state"]["briefing"]
+    assert "black-skinned" in briefing and "nearly as wide as they are tall" in briefing and "never a pale sailor" in briefing
     face = you.act("hail", "Dockside crowd")["result"]
+    assert "black-skinned sea dwarf" in gm.world.get(face["id"])["state"]["description"]
     assert face["people"] == "xoton" and face["name"] in {"Kofi Stormbringer", "Nia Tidesinger", "Obi Tidehunter", "Sade Wavewhisper",
                                         "Chike Driftwood", "Ayana Starfinder", "Juma Seastrider", "Mirembe Oceanseer",
                                         "Femi Stormwarden", "Zola Tideshaper", "Taye Deepwave", "Adia Moonrider"}
@@ -110,9 +119,10 @@ def test_a_town_from_before_renames_its_xotons_in_place_once():
     b = __import__("importlib").util.spec_from_file_location("refuge_build", WORLD / "build.py")
     build = __import__("importlib").util.module_from_spec(b)
     b.loader.exec_module(build)
-    was, now = build.PLAYER_XOTONS["Kalypso"]
+    mine = build.PLAYER_XOTONS["Kalypso"]
+    now = mine["now"]
     kalypso = gm.spawn("person", eid(gm, "Market Square"), "Kalypso", state={
-        "people": "xoton", "description": was, "stays": True,
+        "people": "xoton", "description": mine["was"][-1], "stays": True,
         "statblock": {"kind": "humanoid (xoton)", "languages": ["Common", "Xoton"], "senses": [], "size": "Medium",
                       "speed": "30 ft."}})["id"]
     for name in NAVY + ["Keepers of the Storm"]:
@@ -139,7 +149,8 @@ def test_a_town_from_before_renames_its_xotons_in_place_once():
     assert sb["speed"] == "25 ft., swim 25 ft." and sb["languages"] == ["Common", "Dwarvish", "Siren"]
     assert "black-skinned" in w.get(amara)["state"]["description"]
     k = w.get(kalypso)["state"]
-    assert k["description"] == now and "deep brown" in now and "bare chin" in now
+    assert k["description"] == now and "black-skinned" in now and "salt-stiff hair" in now and "bare chin" in now
+    assert "black-skinned sea dwarf" in _glance({"state": k})
     assert k["statblock"]["speed"] == "25 ft., swim 25 ft." and k["statblock"]["languages"] == ["Common", "Dwarvish", "Siren"]
     gm.patch(kalypso, {"description": "Kalypso, as the player has since written them."})
     before = digest(w)

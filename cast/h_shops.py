@@ -967,12 +967,12 @@ CAST = {
 
     # ---- Zuri Coralhand, Coral and Chain ------------------------------------------------------------------------
     "Zuri Coralhand": {
-        "look": "A low-built Xoton woman, nearly as wide as she is tall, deep brown, her black braids bound in copper "
+        "look": "A low-built Xoton woman, a black-skinned dwarf of the sea nearly as wide as she is tall, her black braids bound in copper "
                 "wire and her forearms latticed with fine pale scars. She works bare-armed in a leather apron hung with "
                 "awls, rivets and a little hammer, over a shirt of pale coral plates that clicks softly when she moves, "
                 "and the iron-grey wave of House Ironwake is tattooed on her shoulder. She looks at everyone's shoulders "
                 "before their faces, as if measuring them for something.",
-        "seen_as": "the broad Xoton woman in the coral shirt",
+        "seen_as": "the Xoton woman in the coral shirt, a wide black-skinned sea dwarf",
         "brief": "You are Zuri Coralhand, a Xoton armourer, and Coral and Chain on Chandlers' Row is yours: the street "
                  "between Harbour Street and the Night Market in Klhyts Refuge. You were born an Ironwake on the Crows "
                  "Nest and are cousin to Amara Ironwake, bosun of the Whispers of the Deep. Coralhand is a craft-name the "

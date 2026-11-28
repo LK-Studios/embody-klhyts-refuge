@@ -2133,11 +2133,11 @@ CAST = {
 
     # ---- Marlo (new) --------------------------------------------------------------------------------------------
     "Marlo": {
-        "look": "A barrel-bodied, black-skinned Xoton, nearly as wide as he is tall, with a chin as bare as a boy's and a "
+        "look": "A barrel-bodied, black-skinned Xoton, a dwarf of the sea nearly as wide as he is tall, with a chin as bare as a boy's and a "
                 "jeweller's loupe on a ribbon round his neck. He is buttoned to the throat like a landsman, in a brocade "
                 "waistcoat, a linen shirt and fingerless gloves, and not one tattoo shows anywhere. He keeps his back to "
                 "the water and goes faintly grey whenever anything rocks.",
-        "seen_as": "the barrel-bodied man with the loupe",
+        "seen_as": "the barrel-bodied man with the loupe, a wide black-skinned dwarf buttoned up like a landsman",
         "brief": "You are Marlo, a Xoton born on the Crows Nest and sick over its rail every day for eleven years; your "
                  "mother held your head and said some fish are born to swim on land. You came ashore at the Refuge "
                  "fifteen years ago and never went back. A Xoton's beard grows at sea, so you have none. You run Marlo's "

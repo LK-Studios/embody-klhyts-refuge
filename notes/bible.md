@@ -108,8 +108,17 @@ this file is fixed. Picks the owner has not made are marked **host default**.
   Jabali, Hulda Ironwake Amara Ironwake (her uncle Bersi is Bakari), Hallvard Saltbeard Khamisi Saltbeard, Brynja
   Coralhand Zuri Coralhand. Captain Eirik (canon) and Marlo keep theirs. The crowds' Xoton faces draw from the canon
   list too. Earned names stay: Foamtooth, Coralhand, Saltbeard, House Ironwake.
-- Every Xoton reads as one: dark, deep brown to black; chest-high to a tall man and nearly as wide as tall;
-  barrel-chested; tattooed. Every Xoton's brief carries the same paragraph on what they are (cast/r_xotons.py).
+- Every Xoton reads as one: black-skinned; a mega-stocky dwarf of the sea, chest-high to a tall man and nearly as
+  wide as tall; barrel-chested; tattooed; most of them rough and tumble sailors with messy, salt-stiff hair (the Navy
+  keeps its hair regulation). Every Xoton's brief carries the same paragraph on what they are (cast/r_xotons.py).
+- 2026-11-28, the owner: another player's picture had Kalypso "as a white sailor boy in the back left"; "AI clients,
+  won't know them. Because its a race of people i made up"; "They want to be mega stocky dwarves, lot of them rough
+  and tumble sailors, messy hair. Black skinned. Very wide, nearly as wide as they are tall." A client that has never
+  heard the word draws from the glance (perceive's short `looks`, each person's `seen_as`), and the Xotons' glances
+  named a trait but no skin or build. Now every Xoton's glance ends "a wide black-skinned sea dwarf", every look
+  says black-skinned and dwarf of the sea, "deep brown" is gone, and the join briefing says what a Xoton is to
+  anyone who has never heard of one (build.py XOTONS_BRIEF). LoreKeeper's "deeply tanned" gives way to the owner's
+  black.
 - Each ship its own tribe (host defaults): the **Whispers of the Deep** (House Ironwake, a working cog) ragtag in
   tarred sailcloth wraps, rope belts and bare feet, the House's iron-grey wave on every left shoulder; the
   **Guardians of the Horizon** (Eirik's House ten-master, an envoy's ship) in sea-green silk and gold frogging over

@@ -1152,8 +1152,8 @@ TEMPLATES_STATE = {
                                                       "description": "A leaf of living silverwood: your people's word, to give to one you trust."})]),
     "xoton": ({"str": 14, "dex": 12, "con": 15, "int": 10, "wis": 13, "cha": 8},
               {"sailing": 2, "athletics": 2, "perception": 2, "brawl": 2}, 12,
-              "A Xoton sailor ashore between ships: dark-skinned, chest-high to a tall man and nearly as wide as you are "
-              "tall, barrel-chested and sea-legged, tattooed with every ship so far, and correcting everyone who says it "
+              "A Xoton sailor ashore between ships: a black-skinned, mega-stocky dwarf of the sea, chest-high to a tall man and nearly as wide as you are "
+              "tall, barrel-chested and sea-legged, hair a salt-stiff mess, tattooed with every ship so far, and correcting everyone who says it "
               "with a Z.",
               "docks", 90, [("Hooked knife", {**DAGGER, "description": "A Xoton hooked knife, for nets and rigging."}),
                             ("Glow kelp lamp", {"portable": True, "lit": True, "description": "A glass globe of glow kelp."})]),
@@ -1234,7 +1234,7 @@ INES = {"body": 1, "wits": 2, "will": 3, "skills": {"parley": 2}, "sells": SELLS
                    "market|night|why": "\"Too hot to sell in the day. The whole town shops after dark now.\""},
         "default_line": "Ines fans herself. \"Fruit, gossip or shade?\""}
 KHAMISI = {"body": 2, "wits": 3, "will": 2, "skills": {"parley": 2}, "sells": SELLS_KHAMISI,
-            "description": "Khamisi Saltbeard, a stocky, deep brown Xoton chandler with a beard full of salt crystals, selling ship's goods off a "
+            "description": "Khamisi Saltbeard, a mega-stocky, black-skinned Xoton chandler with a beard full of salt crystals, selling ship's goods off a "
                            "tarpaulin: glow kelp lamps, rope, bolas, hooked knives.",
             "dialog": {"lamp|kelp|glow|price|buy": "\"Glow kelp lamp, two gold, never needs oil. Bolas fifty copper. Rope five.\"",
                        "xoton|crows|nest": "\"Xoton, with the X. We come, we trade, we go. The Crows Nest floats where it likes.\"",
@@ -1366,12 +1366,12 @@ CROWDS = {
     "market": ("Market crowd", {"mix": {"human": 5, "xoton": 4, "elf": 3, "jonulvicha": 2, "lizardfolk": 1}, "max_faces": 8,
                                 "rumours": RUMOURS_MARKET,
                                 "description": "Hundreds of people under the lanterns: colonists and Landfall runaways, Xoton sailors "
-                                               "on shore leave, short and dark and nearly as wide as they are tall, Jonulvicha porters, "
+                                               "on shore leave, black-skinned sea dwarves nearly as wide as they are tall, Jonulvicha porters, "
                                                "elves in exile with their hoods up, a few Lizardfolk of the Meters selling fish. Mingle "
                                                "and you'll hear things; hail someone and they'll stop."}),
     "docks": ("Dockside crowd", {"mix": {"xoton": 5, "human": 4, "jonulvicha": 3, "lizardfolk": 1}, "max_faces": 6,
                                  "rumours": RUMOURS_DOCKS,
-                                 "description": "Dockhands, Xoton sailors of three ships and three tribes, Jonulvicha stevedores and "
+                                 "description": "Dockhands, Xoton sailors of three ships and three tribes (black-skinned sea dwarves, nearly as wide as they are tall), Jonulvicha stevedores and "
                                                 "fishermen, working by lamplight and drinking between loads. The Xotons are easy "
                                                 "to tell apart: tar and bare skin off the Whispers, sea-green silk off the envoy's "
                                                 "launch, sharkskin and brass off the Navy frigate."}),
@@ -1577,7 +1577,7 @@ HOUSEHOLD = [
       "name|who": "\"Miravel. I'm not supposed to tell people that.\""}),
 ]
 SAILORS = [
-    ("Dayo Oceanheart", "A short, barrel-chested Xoton sailor off the Whispers of the Deep, deep brown and bare to the waist, drinking a "
+    ("Dayo Oceanheart", "A short, barrel-chested Xoton sailor off the Whispers of the Deep, black-skinned and bare to the waist, drinking a "
      "massive beer with both hands and singing under his breath.",
      {"ship|whispers|cog": "\"Whispers of the Deep. Best cog on any coast. Ask Amara, she'll tell you, loudly.\"",
       "xoton|crows|nest": "\"Xoton. Crows Nest born. I've been ashore three days and the ground still moves.\""}),
@@ -3386,16 +3386,36 @@ def rename_xotons(s):
             s.patch(town["id"], {"built_people": fixed})
 
 
+# and again (owner, 2026-11-28: another player's picture had Kalypso "as a white sailor boy"; "AI clients, won't know
+# them. Because its a race of people i made up"; "They want to be mega stocky dwarves, lot of them rough and tumble
+# sailors, messy hair. Black skinned. Very wide, nearly as wide as they are tall."): a glance at a Xoton is all most
+# clients see (perceive's short `looks`, from `seen_as`), so every Xoton's says it in plain words, "a wide black-skinned
+# sea dwarf", and the join briefing says what a Xoton is to anyone who has never heard the word
+XOTONS_BRIEF = ("Xotons (say it with an X) are this world's own people, so no picture of them exists anywhere else: "
+                "dwarves of the sea, black-skinned, mega-stocky and nearly as wide as they are tall, barrel-chested and "
+                "tattooed, most of them rough and tumble sailors with messy, salt-stiff hair. Some crews dress in their "
+                "House's silks, the Navy in sharkskin and brass, and many wear only a sailcloth wrap. Whenever you describe "
+                "or picture one, say so: never a pale sailor, never a man of ordinary size.")
+BRIEF_ADDENDA = BRIEF_ADDENDA + [("Xotons (say it with an X) are this world's own people", XOTONS_BRIEF)]
+
 # a player's own Xoton, at the owner's ask (2026-11-24: "can we make sure my character Kalypso isaacs also is included
-# in the makover"): a player's look is theirs, so it changes once, and only from the exact words it had
+# in the makover"): a player's look is theirs, so it changes only from the exact words it had (`was`, oldest first), and
+# a glance at them is given only where they have none
 PLAYER_XOTONS = {
-    "Kalypso": ("Kalypso, a barrel-bodied Xoton sailor with a rolling sea-legged walk and a conspicuously bare chin. Faded "
+    "Kalypso": {
+        "was": ["Kalypso, a barrel-bodied Xoton sailor with a rolling sea-legged walk and a conspicuously bare chin. Faded "
                 "merchant-navy coat, a few buttons missing, smelling faintly of old rum and tar. Looks like someone who has "
                 "slept in a lot of taverns.",
                 "Kalypso, a Xoton sailor, deep brown and barrel-chested, chest-high to a tall man and nearly as wide, with a "
                 "rolling sea-legged walk and a conspicuously bare chin. A faded merchant-navy coat, a few buttons missing, "
                 "hangs open over a bare chest tattooed with ships and storms, smelling faintly of old rum and tar. Looks "
-                "like someone who has slept in a lot of taverns."),
+                "like someone who has slept in a lot of taverns."],
+        "now": "Kalypso, a Xoton sailor: a black-skinned, mega-stocky dwarf of the sea, chest-high to a tall man and nearly "
+               "as wide, with a rolling sea-legged walk, a mop of salt-stiff hair and a conspicuously bare chin. A faded "
+               "merchant-navy coat, a few buttons missing, hangs open over a bare chest tattooed with ships and storms, "
+               "smelling faintly of old rum and tar. Looks like someone who has slept in a lot of taverns.",
+        "seen_as": "the Xoton in the faded merchant-navy coat, a wide black-skinned sea dwarf",
+    },
 }
 
 
@@ -3421,10 +3441,17 @@ def build_xotons(s):
             change["rumours"] = heard + more
         if change:
             s.patch(c["id"], change)
-    for name, (was, now) in PLAYER_XOTONS.items():
+    for name, mine in PLAYER_XOTONS.items():
         e = have.get(name)
-        if e is not None and e["state"].get("people") == "xoton" and e["state"].get("description") == was:
-            s.patch(e["id"], {"description": now})
+        if e is None or e["state"].get("people") != "xoton":
+            continue
+        change = {}
+        if e["state"].get("description") in mine["was"]:
+            change["description"] = mine["now"]
+        if not e["state"].get("seen_as"):
+            change["seen_as"] = mine["seen_as"]
+        if change:
+            s.patch(e["id"], change)
     for e in s.world.find(limit=None):
         sb = e["state"].get("statblock")
         if e["state"].get("people") != "xoton" or not isinstance(sb, dict):
